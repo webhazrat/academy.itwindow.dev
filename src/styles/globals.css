@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+@layer base {
+  body{
+    font-family: 'Hind Siliguri', sans-serif;
+    font-weight: 400;
+    font-size:16px;
+    background: rgb(14,22,40);
+  }
+  .banner-bg{
+    background-image: url('/grid-line.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+  }
+  .banner-bg:after{
+    content:"";
+    z-index: -1;
+    width: 450px;
+    height: 450px;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 217, 145, 0.15);
+    filter: blur(250px);
+  }
+  .bg-gradient{
+    background: linear-gradient(91deg, #43AF7B 28.69%, #1ABC9C 80.28%);
+  }
+  .bg-com-gradient{
+    background: linear-gradient(90deg, rgba(64, 176, 125, 0.30) 0%, rgba(26, 188, 156, 0.30) 100.96%);
+  }
+  .text-gradient{
+    background: linear-gradient(91deg, #43AF7B 28.69%, #1ABC9C 80.28%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
