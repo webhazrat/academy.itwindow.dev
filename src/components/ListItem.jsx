@@ -1,0 +1,12 @@
+import { Check } from "lucide-react";
+
+export default function ListItem({ children }) {
+  return (
+    <div className="flex gap-5">
+      <div className="w-5 h-5 bg-[#43AF7B] rounded-full flex justify-center items-center flex-shrink-0 mt-1">
+        <Check size={18} strokeWidth={2} className="text-background" />
+      </div>
+      <p className="dark:text-slate-400">{children}</p>
+    </div>
+  );
+}
