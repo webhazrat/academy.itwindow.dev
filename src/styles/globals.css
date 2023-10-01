@@ -5,11 +5,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap");
 
 @layer base {
-  body {
-    font-family: "Hind Siliguri", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-  }
   .banner-bg {
     background-image: url("/grid-line.svg");
     background-position: center;
@@ -117,6 +112,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply dark:bg-background text-foreground;
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
   }
 }
