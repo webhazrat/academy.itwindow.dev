@@ -20,7 +20,7 @@ export default function HeaderNavigation() {
   return (
     <div className="py-4 flex justify-between items-center dark:text-white text-[15px]">
       <Link href={"/"}>
-        <a>
+        <a className="h-9">
           <Image
             src={
               theme === "light"
@@ -73,7 +73,7 @@ export default function HeaderNavigation() {
             <Search size={16} />
           </a>
         </Link>
-        <Link href={"/"}>
+        <Link href={"/login"}>
           <Button className="bg-gradient text-white text-[14px]" size="sm">
             লগইন / সাইন আপ
           </Button>

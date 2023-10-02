@@ -124,7 +124,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="dark:bg-[#081226]">
+      <div className="bg-slate-50 dark:bg-[#081226]">
         <div className="container">
           <Footer />
         </div>
