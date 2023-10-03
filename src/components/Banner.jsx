@@ -19,7 +19,7 @@ export default function Banner() {
             অনলাইন বা অফলাইন ব্যাচে ভর্তি হয়ে বা ভর্তি করে 10% কমিশন
           </p>
         </div>
-        <Link href={"/commision"}>
+        <Link href={"/commission"}>
           <a className="dark:text-slate-400 underline underline-offset-2 inline-block">
             বিস্তারিত জানুন
           </a>

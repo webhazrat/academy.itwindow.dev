@@ -14,6 +14,7 @@ import { mainNavs } from "../constants";
 import { Button } from "./ui/button";
 import ThemeChanger from "./ThemeChanger";
 import { useTheme } from "next-themes";
+import MobileMenu from "./MobileMenu";
 
 export default function HeaderNavigation() {
   const { theme, setTheme } = useTheme();
@@ -33,9 +34,9 @@ export default function HeaderNavigation() {
           />
         </a>
       </Link>
-      <button className="lg:hidden">
-        <Menu size={20} />
-      </button>
+
+      <MobileMenu navLinks={mainNavs} theme={theme} setTheme={setTheme} />
+
       <div className="hidden lg:flex items-center gap-[26px]">
         <NavigationMenu>
           <NavigationMenuList className="flex">
@@ -50,10 +51,13 @@ export default function HeaderNavigation() {
                 <>
                   <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
                   <NavigationMenuContent className="dark:bg-background">
-                    <div className="grid gap-3 p-6 w-[300px]">
+                    <div className="grid grid-cols-2 gap-4 p-10 w-[600px]">
                       {link.sub.map((subLink) => (
                         <Link key={subLink.id} href={subLink.href}>
-                          {subLink.title}
+                          <a className="flex items-center gap-3 transition-all hover:text-gradient">
+                            <Image src={subLink.icon} width={18} height={18} />{" "}
+                            {subLink.title}
+                          </a>
                         </Link>
                       ))}
                     </div>
