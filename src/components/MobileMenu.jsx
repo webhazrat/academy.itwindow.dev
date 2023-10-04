@@ -1,4 +1,4 @@
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -9,14 +9,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import ThemeChanger from "./ThemeChanger";
 
-export default function MobileMenu({ navLinks, theme, setTheme }) {
+export default function MobileMenu({ navLinks }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="sm" variant="ghost" className="lg:hidden">
-          <Menu size={20} />
+        <Button variant="outline">
+          <Menu size={18} />
         </Button>
       </SheetTrigger>
       <SheetContent className="w-80 p-0">
@@ -57,17 +56,11 @@ export default function MobileMenu({ navLinks, theme, setTheme }) {
               </AccordionItem>
             ))}
           </Accordion>
-
-          <div className="flex gap-5 py-5">
-            <ThemeChanger theme={theme} setTheme={setTheme} />
-            <Link href={"/"}>
-              <a>
-                <Search size={16} />
-              </a>
-            </Link>
-          </div>
           <Link href={"/login"}>
-            <Button className="bg-gradient text-white text-[14px]" size="sm">
+            <Button
+              className="bg-gradient text-white text-[14px] mt-4 w-full"
+              size="sm"
+            >
               লগইন / সাইন আপ
             </Button>
           </Link>

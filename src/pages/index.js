@@ -35,7 +35,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="container my-20">
+        <div id="why-our-course" className="container my-20 scroll-mt-10">
           <div className="grid md:grid-cols-2 items-center gap-8 md:gap-0">
             <div className="space-y-8">
               <h2 className="text-3xl font-semibold">
