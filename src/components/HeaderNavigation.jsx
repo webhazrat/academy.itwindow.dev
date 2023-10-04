@@ -15,6 +15,7 @@ import ThemeChanger from "./ThemeChanger";
 import { useTheme } from "next-themes";
 import MobileMenu from "./MobileMenu";
 import LoggedDropdown from "./LoggedDropdown";
+import { Button } from "./ui/button";
 
 export default function HeaderNavigation() {
   const { theme, setTheme } = useTheme();
@@ -35,7 +36,7 @@ export default function HeaderNavigation() {
         </a>
       </Link>
 
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex items-center gap-4 lg:hidden">
           <ThemeChanger theme={theme} setTheme={setTheme} />
           <Link href={"/"}>
@@ -45,7 +46,7 @@ export default function HeaderNavigation() {
           </Link>
           <MobileMenu navLinks={mainNavs} />
         </div>
-        <div className="hidden lg:flex items-center gap-[26px]">
+        <div className="hidden lg:flex items-center gap-5">
           <NavigationMenu>
             <NavigationMenuList className="flex">
               {mainNavs.map((link) => {

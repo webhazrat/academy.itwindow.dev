@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Phone } from "lucide-react";
 import Accordions from "../components/Accordion";
 import Layout from "../components/Layout";
+import FeedbackItem from "../components/FeebackItem";
 
 export default function Home() {
   return (
@@ -110,6 +111,19 @@ export default function Home() {
             <Button className="bg-gradient text-white flex-shrink-0">
               ফ্রি সেমিনার
             </Button>
+          </div>
+        </div>
+
+        <div id="student-feedback" className="container mb-20 scroll-mt-10">
+          <div>
+            <h2 className="text-3xl font-semibold text-center mb-6">
+              শিক্ষার্থীদের অভিমত
+            </h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              <FeedbackItem />
+              <FeedbackItem />
+              <FeedbackItem />
+            </div>
           </div>
         </div>
       </Layout>

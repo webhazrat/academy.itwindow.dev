@@ -63,7 +63,7 @@ export const mainNavs = [
   {
     id: "student-feedback",
     title: "স্টুডেন্ট ফিডব্যাক",
-    href: "#student-feedback",
+    href: "/#student-feedback",
     sub: [],
   },
 ];
@@ -227,5 +227,38 @@ export const loginSlider = [
   {
     title: "অন্যকে যেকোন কোর্সে ভর্তি করে আপনিও পেয়ে যান 10% কমিশন",
     image: "/earn-from-course.svg",
+  },
+];
+
+export const profileSideNav = [
+  {
+    id: 1,
+    title: "প্রোফাইল",
+    href: "/profile",
+  },
+  {
+    id: 2,
+    title: "আমার কোর্সসমূহ",
+    href: "/profile/my-courses",
+  },
+  {
+    id: 3,
+    title: "পেমেন্ট বিবরণ",
+    href: "/profile/payment-history",
+  },
+  {
+    id: 4,
+    title: "উপস্থিতি রিপোর্ট",
+    href: "/profile/present-report",
+  },
+  {
+    id: 5,
+    title: "রেফারেল ইনরোল",
+    href: "/profile/referral-enroll",
+  },
+  {
+    id: 6,
+    title: "পাসওয়ার্ড পরিবর্তন",
+    href: "/profile/change-password",
   },
 ];

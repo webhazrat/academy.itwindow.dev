@@ -14,7 +14,7 @@ export default function MobileMenu({ navLinks }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" size="sm">
           <Menu size={18} />
         </Button>
       </SheetTrigger>
