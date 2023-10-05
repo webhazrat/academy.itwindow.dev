@@ -2,6 +2,7 @@ import Carousel from "../components/Carousel";
 import { loginSlider } from "../constants";
 import Layout from "../components/Layout";
 import MobileForm from "../components/MobileForm";
+import MobileVerifyForm from "../components/MobileVerifyForm";
 
 export default function Login() {
   return (
@@ -21,6 +22,7 @@ export default function Login() {
                   </p>
                 </div>
                 <MobileForm />
+                <MobileVerifyForm length={4} />
               </div>
             </div>
             <div className="text-center">

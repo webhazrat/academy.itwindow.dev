@@ -14,7 +14,7 @@ export default function MyCourses() {
             <div className="border border-red-400 rounded-md p-4">
               <div className="space-y-2">
                 <h2>এইচএসসি আইসিটি ক্র্যাশ কোর্স</h2>
-                <div className="dark:text-slate-400 flex gap-4">
+                <div className="dark:text-slate-400 flex flex-wrap gap-x-4 gap-y-2">
                   <p className="text-[15px] flex items-center gap-2">
                     <Calendar size={16} /> 04 Oct 2023
                   </p>

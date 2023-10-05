@@ -2,8 +2,20 @@ import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Copy } from "lucide-react";
+import React from "react";
 
 export default function ReferralEnroll() {
+  const inputRef = React.useRef();
+  const handleCopy = async () => {
+    const input = inputRef.current;
+    try {
+      input.focus();
+      await navigator.clipboard.writeText(input.value);
+      alert("Copied!");
+    } catch (err) {
+      console.error("Failed to copy text", err);
+    }
+  };
   return (
     <>
       <ProfileLayout>
@@ -14,12 +26,15 @@ export default function ReferralEnroll() {
             <div className="bg-card flex flex-col gap-2 rounded-md p-4">
               <div className="flex gap-2">
                 <Input
+                  ref={inputRef}
                   type="text"
                   value="https://course.itwindow.dev/login?ref=45sd5sd4g5da45"
+                  readOnly
                 />
                 <Button
                   size="sm"
                   className="bg-gradient text-white flex gap-2 items-center flex-shrink-0"
+                  onClick={handleCopy}
                 >
                   <Copy size={16} /> কপি করুন
                 </Button>

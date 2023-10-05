@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function FeedbackItem({ feedback }) {
   return (
-    <div className="dark:text-slate-400 border p-5 rounded-md space-y-3">
+    <div className="dark:text-slate-400 border p-5 rounded-md space-y-4">
       <div className="flex gap-1 text-yellow-600">
         <Star size={14} />
         <Star size={14} />
@@ -26,7 +26,7 @@ export default function FeedbackItem({ feedback }) {
           />
         </div>
         <div>
-          <strong className="dark:text-white">হযরত আলী</strong>
+          <h4 className="dark:text-white">হযরত আলী</h4>
           <p className="text-sm">কম্পিউটার সাইন্স, নর্থ আইটি</p>
         </div>
       </div>

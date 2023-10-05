@@ -1,14 +1,19 @@
+import Head from "next/head";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSideNav from "./DashboardSideNav";
-import styles from "@/src/styles/DashboardLayout.module.css";
 
 export default function DashboardLayout({ children }) {
   return (
     <>
-      <main className={styles.font}>
+      <Head>
+        <title>Dashboard | ITWINDOW - Enhance Yourself</title>
+      </Head>
+      <main style={{ fontSize: "15px" }}>
         <DashboardHeader />
-        <DashboardSideNav />
-        {children}
+        <div className="flex">
+          <DashboardSideNav />
+          {children}
+        </div>
       </main>
     </>
   );

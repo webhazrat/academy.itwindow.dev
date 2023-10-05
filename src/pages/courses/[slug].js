@@ -189,7 +189,7 @@ export default function SingleCourse() {
 
               <div className="space-y-3">
                 <h3 className="text-xl font-semibold">শিক্ষার্থীরা যা বলেছে</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid lg:grid-cols-2 gap-4">
                   <FeedbackItem />
                   <FeedbackItem />
                 </div>
