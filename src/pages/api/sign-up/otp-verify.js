@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       }
       return res.status(200).json({
         status: 200,
-        data: { phone },
+        data: { phone: userExist.phone, otp: userExist.otp },
       });
     } catch (error) {
       if (error instanceof z.ZodError) {

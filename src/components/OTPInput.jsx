@@ -1,49 +1,36 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import Label from "./Label";
 import { Input } from "./ui/input";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
-export default function OTPInput({ phone, setStep, length }) {
+export default function OTPInput({ phone, onNext, onBack }) {
   const inputRefs = useRef([]);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    setError,
+    clearErrors,
   } = useForm();
 
-  const handleOtpSubmit = async (data) => {
+  const handleNext = async (data) => {
     const otp = `${data.otp1}${data.otp2}${data.otp3}${data.otp4}`;
-    try {
-      const response = await fetch("/api/sign-up/otp-verify", {
-        method: "POST",
-        body: JSON.stringify({ phone, otp }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const responseData = await response.json();
-      if (!response.ok) {
-        responseData.errors.forEach((error) => {
-          setError(error.field, {
-            type: "server",
-            message: error.message,
-          });
+    const response = await onNext({ otp });
+    if (response?.errors.length > 0) {
+      response.errors.forEach((error) => {
+        setError(error.field, {
+          type: "server",
+          message: error.message,
         });
-        return;
-      }
-      setStep(3);
-      setPhone(responseData.phone);
-      console.log({ responseData });
-    } catch (error) {
-      console.log(error);
+      });
     }
   };
 
   const handleChange = (e, index) => {
+    clearErrors();
     const value = e.target.value;
     if (isNaN(value)) return false;
     setValue(`otp${index}`, value);
@@ -53,6 +40,7 @@ export default function OTPInput({ phone, setStep, length }) {
   };
 
   const handleBackspace = (e, index) => {
+    clearErrors();
     if (e.key === "Backspace" && !e.target.value) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -60,11 +48,11 @@ export default function OTPInput({ phone, setStep, length }) {
 
   return (
     <div>
-      <Button variant="outline" className="mb-8" onClick={setStep(1)}>
+      <Button variant="outline" className="mb-8" onClick={onBack}>
         <ChevronLeft />
       </Button>
 
-      <form className="space-y-3" onSubmit={handleSubmit(handleOtpSubmit)}>
+      <form className="space-y-3" onSubmit={handleSubmit(handleNext)}>
         <Label className="font-medium">মোবাইল নাম্বার ভেরিফাই করুন</Label>
         <p className="text-sm dark:text-slate-400">
           {phone} নাম্বারে 4 সংখ্যার কোড পাঠানো হয়েছে। কোডটি এখানে ইনপুট করুন।
@@ -88,18 +76,25 @@ export default function OTPInput({ phone, setStep, length }) {
         </div>
 
         {(errors.otp1 || errors.otp2 || errors.otp3 || errors.otp4) && (
-          <p className="text-sm text-red-400">4 ডিজিট OTP টি ইনপুট করুন।</p>
+          <p className="text-sm text-red-400">4 সংখ্যার OTP টি ইনপুট করুন।</p>
         )}
 
         {errors.otp && (
           <p className="text-sm text-red-400">{errors.otp.message}</p>
         )}
 
-        <p className="text-right">
+        <div className="text-right">
           <button className="text-gradient">আবার কোড পাঠান</button>
-        </p>
+        </div>
 
-        <Button className="bg-gradient text-white">সাবমিট করুন</Button>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-gradient text-white"
+        >
+          {isSubmitting && <Loader2 size={16} className="mr-2 animate-spin" />}
+          সাবমিট করুন
+        </Button>
       </form>
     </div>
   );

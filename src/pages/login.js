@@ -12,7 +12,7 @@ export default function Login() {
         <div className="container my-20">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="space-y-12">
+              <div className="space-y-10">
                 <div>
                   <h1 className="font-semibold text-2xl mb-2">লগইন</h1>
                   <p className="dark:text-slate-400">

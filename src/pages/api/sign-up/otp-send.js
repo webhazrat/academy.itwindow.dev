@@ -7,8 +7,8 @@ import { z } from "zod";
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const { phone } = OtpSendSchema.parse(req.body);
-
+      OtpSendSchema.parse(req.body);
+      const { phone } = req.body;
       await connectDB();
       const userExist = await userModel.findOne({ phone, status: "verified" });
       if (userExist) {
@@ -31,11 +31,11 @@ export default async function handler(req, res) {
         );
 
         // send to phone also
-        await sendOtpToPhone(phone, otp);
+        //await sendOtpToPhone(phone, otp);
 
         return res.status(200).json({
           status: 200,
-          data: { phone, otp },
+          data: { phone },
         });
       }
     } catch (error) {

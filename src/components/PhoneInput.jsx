@@ -6,45 +6,33 @@ import Label from "../components/Label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 
-export default function PhoneInput({ setStep, setPhone }) {
+export default function PhoneInput({ onNext }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
+    clearErrors,
   } = useForm({
     resolver: zodResolver(OtpSendSchema),
   });
 
-  const onPhoneSubmit = async (data) => {
-    try {
-      const response = await fetch("/api/sign-up/otp-send", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const responseData = await response.json();
-      if (!response.ok) {
-        responseData.errors.forEach((error) => {
-          setError(error.field, {
-            type: "server",
-            message: error.message,
-          });
+  const handleNext = async (data) => {
+    const response = await onNext(data);
+    if (response?.errors.length > 0) {
+      response.errors.forEach((error) => {
+        setError(error.field, {
+          type: "server",
+          message: error.message,
         });
-        return;
-      }
-      setStep(2);
-      setPhone(responseData.phone);
-      console.log({ responseData });
-    } catch (error) {
-      console.log(error);
+      });
+    } else {
+      clearErrors();
     }
   };
+
   return (
-    <form onSubmit={handleSubmit(onPhoneSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(handleNext)} className="space-y-4">
       <div className="space-y-3">
         <Label className="font-medium" htmlFor="phone">
           মোবাইল নাম্বার

@@ -1,14 +1,97 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Carousel from "../components/Carousel";
 import { loginSlider } from "../constants";
 import Layout from "../components/Layout";
 import PhoneInput from "../components/PhoneInput";
 import OTPInput from "../components/OTPInput";
 import UserDataInput from "../components/UserDataInput";
+import Link from "next/link";
+import { LogIn } from "lucide-react";
 
 export default function Join() {
-  const [step, setStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+
+  // send otp
+  const handleNextPhone = async (data) => {
+    try {
+      const response = await fetch("/api/sign-up/otp-send", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const otpSendResponse = await response.json();
+      if (!response.ok) {
+        return otpSendResponse;
+      } else {
+        setPhone(otpSendResponse.data.phone);
+        setCurrentStep(1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // otp verify
+  const handleNextOtp = async (data) => {
+    try {
+      const response = await fetch("/api/sign-up/otp-verify", {
+        method: "POST",
+        body: JSON.stringify({ phone, otp: data.otp }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const otpVerifyResponse = await response.json();
+      if (!response.ok) {
+        return otpVerifyResponse;
+      } else {
+        setPhone(otpVerifyResponse.data.phone);
+        setOtp(otpVerifyResponse.data.otp);
+        setCurrentStep(2);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // final submit
+  const handleSubmitUserData = async (data) => {
+    try {
+      const response = await fetch("/api/sign-up/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const registerResponse = await response.json();
+      if (!response.ok) {
+        return registerResponse;
+      } else {
+        setCurrentStep(3);
+        setPhone("");
+        setOtp("");
+      }
+      console.log({ registerResponse });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBackOtp = () => {
+    setCurrentStep(0);
+  };
+
+  const handleBackSubmit = () => {
+    setCurrentStep(1);
+  };
 
   return (
     <>
@@ -16,7 +99,7 @@ export default function Join() {
         <div className="container my-20">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="space-y-12">
+              <div className="space-y-10">
                 <div>
                   <h1 className="font-semibold text-2xl mb-2">
                     অ্যাকাউন্ট তৈরি করুন
@@ -29,17 +112,36 @@ export default function Join() {
                   </p>
                 </div>
 
-                {step === 1 && (
-                  <PhoneInput setPhone={setPhone} setStep={setStep} />
-                )}
-                {step === 2 && (
-                  <OTPInput
+                {currentStep === 0 && (
+                  <PhoneInput
+                    onNext={handleNextPhone}
                     phone={phone}
-                    setStep={setStep}
-                    length={[1, 2, 3, 4]}
+                    setPhone={setPhone}
                   />
                 )}
-                {step === 3 && <UserDataInput phone={phone} />}
+                {currentStep === 1 && (
+                  <OTPInput
+                    phone={phone}
+                    onNext={handleNextOtp}
+                    onBack={handleBackOtp}
+                  />
+                )}
+                {currentStep === 2 && (
+                  <UserDataInput
+                    onSubmit={handleSubmitUserData}
+                    onBack={handleBackSubmit}
+                    phone={phone}
+                    otp={otp}
+                  />
+                )}
+                {currentStep === 3 && (
+                  <p className="text-green-300 border py-3 px-4 rounded-md flex items-center gap-1">
+                    অভিনন্দন! অ্যাকাউন্ট সঠিকভাবে তৈরি হয়েছে। {""}
+                    <span className="flex items-center gap-1">
+                      <LogIn size={14} /> <Link href={"/login"}>লগইন করুন</Link>
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
             <div className="text-center">
