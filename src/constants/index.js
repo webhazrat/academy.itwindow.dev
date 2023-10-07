@@ -49,12 +49,6 @@ export const mainNavs = [
     ],
   },
   {
-    id: "resources",
-    title: "রিসোর্সেস",
-    href: "/resources",
-    sub: [],
-  },
-  {
     id: "why-our-course",
     title: "কেন আমাদের কোর্স",
     href: "/#why-our-course",

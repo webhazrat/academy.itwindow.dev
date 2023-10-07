@@ -1,4 +1,10 @@
-export default function RegisterForm() {
+import { ChevronLeft } from "lucide-react";
+import Label from "./Label";
+import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
+
+export default function UserDataInput() {
   return (
     <div>
       <Button variant="outline" className="mb-8">

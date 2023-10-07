@@ -92,13 +92,14 @@ export default function HeaderNavigation() {
               <Search size={16} />
             </a>
           </Link>
-          {/* <Link href={"/login"}>
+          <Link href={"/login"}>লগইন</Link>
+          <Link href={"/join"}>
             <Button className="bg-gradient text-white text-[14px]" size="sm">
-              লগইন / সাইন আপ
+              সাইন আপ করুন
             </Button>
-          </Link> */}
+          </Link>
         </div>
-        <LoggedDropdown />
+        {/* <LoggedDropdown /> */}
       </div>
     </div>
   );

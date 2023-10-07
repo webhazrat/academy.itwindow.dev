@@ -29,7 +29,11 @@ export default function Carousel({ items }) {
         >
           {items?.length && (
             <>
-              <motion.img src={items[currentIndex]?.image} className="m-auto" />
+              <motion.img
+                src={items[currentIndex]?.image}
+                className="m-auto"
+                alt="carousel"
+              />
               <motion.p className="font-semibold dark:text-slate-400 mt-5">
                 {items[currentIndex]?.title}
               </motion.p>

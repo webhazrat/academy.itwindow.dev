@@ -1,6 +1,6 @@
 export default function Label({ children, className, ...props }) {
   return (
-    <label {...props} className={`mb-2 block ${className}`}>
+    <label {...props} className={`mb-2 block ${className} text-[15px]`}>
       {children}
     </label>
   );
