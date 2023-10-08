@@ -1,8 +1,9 @@
 import connectDB from "@/src/lib/connect";
-import { generateOTP, sendOtpToPhone, storeOtp } from "@/src/lib/helpers";
+import { generateOTP } from "@/src/lib/helpers";
 import { OtpSendSchema } from "@/src/lib/validation";
 import userModel from "@/src/models/userModel";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
           ],
         });
       } else {
-        const otp = generateOTP();
+        const otp = bcrypt.hashSync(generateOTP(), 10);
 
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         await userModel.updateOne(

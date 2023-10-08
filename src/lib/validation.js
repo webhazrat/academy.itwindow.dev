@@ -4,7 +4,7 @@ export const OtpSendSchema = z.object({
   phone: z
     .string()
     .min(1, "মোবাইল নাম্বার ইনপুট করুন।")
-    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
 });
 
 export const UserRegisterSchema = z
@@ -23,3 +23,11 @@ export const UserRegisterSchema = z
     message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে।",
     path: ["confirmPassword"],
   });
+
+export const LoginSchema = z.object({
+  phone: z
+    .string()
+    .min(1, "মোবাইল নাম্বার ইনপুট করুন।")
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
+  password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন।"),
+});

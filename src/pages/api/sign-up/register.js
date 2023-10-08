@@ -26,7 +26,7 @@ export default async function handler(req, res) {
           ],
         });
       } else {
-        const user = await userModel.updateOne(
+        await userModel.updateOne(
           { phone, otp },
           {
             $set: { name, password: hashPassword, status: "verified" },

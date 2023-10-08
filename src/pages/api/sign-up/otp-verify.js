@@ -6,7 +6,6 @@ export default async function handler(req, res) {
     const { phone, otp } = req.body;
     try {
       await connectDB();
-
       const userExist = await userModel.findOne({ phone });
       if (!userExist) {
         return res.status(400).json({
@@ -18,8 +17,24 @@ export default async function handler(req, res) {
           ],
         });
       }
+      if (userExist.otpExpires < new Date()) {
+        return res.status(400).json({
+          errors: [
+            {
+              field: "otp",
+              message: "OTP টির মেয়াদ শেষ হয়ে গেছে।",
+            },
+          ],
+        });
+      }
 
-      if (userExist.otp !== otp || userExist.otpExpires < new Date()) {
+      const isValid = bcrypt.compareSync(otp, userExist.otp);
+      if (isValid) {
+        return res.status(200).json({
+          status: 200,
+          data: { phone: userExist.phone, otp: userExist.otp },
+        });
+      } else {
         return res.status(400).json({
           errors: [
             {
@@ -29,10 +44,6 @@ export default async function handler(req, res) {
           ],
         });
       }
-      return res.status(200).json({
-        status: 200,
-        data: { phone: userExist.phone, otp: userExist.otp },
-      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({

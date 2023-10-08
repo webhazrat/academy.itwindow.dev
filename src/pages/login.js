@@ -4,15 +4,39 @@ import Layout from "../components/Layout";
 import Label from "../components/Label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "../lib/validation";
+import { signIn } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    setError,
+  } = useForm({
+    resolver: zodResolver(LoginSchema),
+  });
+
+  const handleLogin = async (data) => {
+    const status = await signIn("credentials", {
+      redirect: false,
+      ...data,
+    });
+
+    console.log({ status });
+  };
+
   return (
     <>
       <Layout border>
         <div className="container my-20">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="space-y-10">
+              <div className="space-y-8">
                 <div>
                   <h1 className="font-semibold text-2xl mb-2">লগইন</h1>
                   <p className="dark:text-slate-400">
@@ -22,33 +46,68 @@ export default function Login() {
                     নিজের মত করে।
                   </p>
                 </div>
-                <form action="" className="space-y-4">
+                <form
+                  onSubmit={handleSubmit(handleLogin)}
+                  className="space-y-5"
+                >
                   <div className="space-y-3">
-                    <Label className="font-medium">মোবাইল নাম্বার</Label>
-                    <Input type="text" placeholder="01712 122501" />
-                    <p className="text-sm dark:text-slate-400">
-                      মোবাইল নাম্বার ভেরিফাই করার জন্য সঠিক মোবাইল নাম্বার ইনপুট
-                      করুন।
-                    </p>
+                    <div>
+                      <Label htmlFor="phone" className="font-medium">
+                        মোবাইল নাম্বার
+                      </Label>
+                      <p className="text-sm dark:text-slate-400">
+                        যে মোবাইল নাম্বার ব্যবহার করে অ্যাকাউন্ট করেছিলেন।
+                      </p>
+                    </div>
+                    <Input
+                      type="text"
+                      id="phone"
+                      {...register("phone")}
+                      placeholder="01XXXXXXXXX"
+                    />
+                    {errors.phone && (
+                      <p className="text-sm text-red-400">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="font-medium">পাসওয়ার্ড</Label>
-                    <Input type="password" />
-                    <p className="text-sm dark:text-slate-400">
-                      পাসওয়ার্ড কমপক্ষে 6 অক্ষরসহ 1টি লেটার এবং 1টি নাম্বার হতে
-                      হবে।
-                    </p>
-                    <p className="text-right">
-                      <button className="text-gradient">
-                        পাসওয়ার্ড ভুলে গেছেন?
-                      </button>
-                    </p>
+                    <div>
+                      <Label htmlFor="password" className="font-medium">
+                        পাসওয়ার্ড
+                      </Label>
+                      <p className="text-sm dark:text-slate-400">
+                        পাসওয়ার্ড কমপক্ষে আট(8) অক্ষরের হতে হবে।
+                      </p>
+                    </div>
+                    <Input
+                      type="password"
+                      id="password"
+                      {...register("password")}
+                    />
+                    {errors.password && (
+                      <p className="text-sm text-red-400">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
 
-                  <Button type="button" className="bg-gradient text-white">
-                    লগইন করুন
-                  </Button>
+                  <div className="flex gap-2 items-center justify-between">
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-gradient text-white"
+                    >
+                      {isSubmitting && (
+                        <Loader2 size={16} className="mr-2 animate-spin" />
+                      )}
+                      লগইন করুন
+                    </Button>
+                    <button className="text-gradient">
+                      পাসওয়ার্ড ভুলে গেছেন?
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>

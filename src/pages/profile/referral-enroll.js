@@ -28,7 +28,7 @@ export default function ReferralEnroll() {
                 <Input
                   ref={inputRef}
                   type="text"
-                  value="https://course.itwindow.dev/login?ref=45sd5sd4g5da45"
+                  value="http://localhost:3000/join?ref=45sd5sd4g5da45"
                   readOnly
                 />
                 <Button
