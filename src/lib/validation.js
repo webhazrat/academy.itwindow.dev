@@ -31,3 +31,16 @@ export const LoginSchema = z.object({
     .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
   password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন।"),
 });
+
+export const UserSchema = z.object({
+  name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
+  email: z.string().email("সঠিক ইমেল অ্যাড্রেস ইনপুট করুন।"),
+  address: z.string().min(1, "বর্তমান ঠিকানা ইনপুট করুন।"),
+  guardian: z.string().min(1, "অভিভাবকের ইনপুট করুন।"),
+  guardianPhone: z
+    .string()
+    .min(1, "অভিভাবকের মোবাইল নাম্বার ইনপুট করুন।")
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
+  education: z.string().min(1, "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন।"),
+  institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন।"),
+});

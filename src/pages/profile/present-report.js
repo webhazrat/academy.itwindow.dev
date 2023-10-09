@@ -1,5 +1,6 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Calendar } from "@/src/components/ui/calendar";
+import { getSession } from "next-auth/react";
 import React from "react";
 
 export default function PresentReport() {
@@ -25,4 +26,19 @@ export default function PresentReport() {
       </ProfileLayout>
     </>
   );
+}
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

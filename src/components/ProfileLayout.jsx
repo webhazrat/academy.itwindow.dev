@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import Layout from "./Layout";
 import ProfileSideNav from "./ProfileSideNav";
 

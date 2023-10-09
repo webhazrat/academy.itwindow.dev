@@ -7,6 +7,7 @@ import OTPInput from "../components/OTPInput";
 import UserDataInput from "../components/UserDataInput";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
+import { getSession } from "next-auth/react";
 
 export default function Join() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -152,4 +153,23 @@ export default function Join() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+
+  console.log({ session });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: `/profile`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

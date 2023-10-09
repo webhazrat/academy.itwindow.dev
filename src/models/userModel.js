@@ -13,6 +13,11 @@ const userSchema = new Schema(
     email: String,
     image: String,
     password: String,
+    address: String,
+    guardian: String,
+    guardianPhone: String,
+    education: String,
+    institute: String,
     status: { type: String, required: true },
   },
   {

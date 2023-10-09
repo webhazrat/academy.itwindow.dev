@@ -16,9 +16,12 @@ import { useTheme } from "next-themes";
 import MobileMenu from "./MobileMenu";
 import LoggedDropdown from "./LoggedDropdown";
 import { Button } from "./ui/button";
+import { useSession } from "next-auth/react";
+import { UserProfileProvider } from "../context/UserProfileContext";
 
 export default function HeaderNavigation() {
   const { theme, setTheme } = useTheme();
+  const { data: session } = useSession();
   return (
     <div className="py-4 flex justify-between items-center dark:text-white text-[15px]">
       <Link href={"/"}>
@@ -92,14 +95,21 @@ export default function HeaderNavigation() {
               <Search size={16} />
             </a>
           </Link>
-          <Link href={"/login"}>লগইন</Link>
-          <Link href={"/join"}>
-            <Button className="bg-gradient text-white text-[14px]" size="sm">
-              সাইন আপ করুন
-            </Button>
-          </Link>
+          {!session && (
+            <>
+              <Link href={"/login"}>লগইন</Link>
+              <Link href={"/join"}>
+                <Button
+                  className="bg-gradient text-white text-[14px]"
+                  size="sm"
+                >
+                  সাইন আপ করুন
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
-        {/* <LoggedDropdown /> */}
+        {session && <LoggedDropdown />}
       </div>
     </div>
   );

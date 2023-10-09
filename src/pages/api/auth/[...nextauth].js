@@ -1,5 +1,8 @@
+import userModel from "@/src/models/userModel";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import connectDB from "@/src/lib/connect";
 
 export const authOptions = {
   providers: [
@@ -7,29 +10,20 @@ export const authOptions = {
       name: "Credentials",
       async authorize(credentials) {
         const { phone, password } = credentials;
-        try {
-          const response = await fetch(
-            `${process.env.NEXTAUTH_URL}/api/auth/login`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                phone,
-                password,
-              }),
-            }
-          );
-          const user = await response.json();
-
-          if (response.ok) {
+        await connectDB();
+        const user = await userModel.findOne({ phone });
+        if (!user) {
+          return Promise.reject({
+            message: "এই নাম্বার ব্যবহার করে কোন অ্যাকাউন্ট নাই।",
+          });
+        } else {
+          if (user && bcrypt.compareSync(password, user.password)) {
             return Promise.resolve(user);
           } else {
-            return Promise.reject(user);
+            return Promise.reject({
+              message: "মোবাইল ও পাসওয়ার্ড মিল হচ্ছে না।",
+            });
           }
-        } catch (error) {
-          return Promise.reject(error);
         }
       },
     }),
@@ -39,20 +33,14 @@ export const authOptions = {
     error: "/login",
   },
   callbacks: {
-    async signIn({ user, account }) {
-      console.log({ user });
-      return user;
-    },
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id;
-        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       session.user._id = token._id;
-      session.user.role = token.role;
       return session;
     },
   },

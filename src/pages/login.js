@@ -7,15 +7,16 @@ import { Button } from "../components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../lib/validation";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
     setError,
   } = useForm({
     resolver: zodResolver(LoginSchema),
@@ -26,8 +27,14 @@ export default function Login() {
       redirect: false,
       ...data,
     });
-
-    console.log({ status });
+    if (status.ok) {
+      router.push(status.url);
+    } else {
+      setError("common", {
+        type: "server",
+        message: status.error,
+      });
+    }
   };
 
   return (
@@ -93,6 +100,12 @@ export default function Login() {
                     )}
                   </div>
 
+                  {errors.common && (
+                    <p className="text-sm text-red-400">
+                      {errors.common.message}
+                    </p>
+                  )}
+
                   <div className="flex gap-2 items-center justify-between">
                     <Button
                       type="submit"
@@ -119,4 +132,20 @@ export default function Login() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session) {
+    return {
+      redirect: {
+        destination: `/profile`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }
