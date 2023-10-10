@@ -1,6 +1,7 @@
 import Label from "@/src/components/Label";
 import ProfileEdit from "@/src/components/ProfileEdit";
 import ProfileLayout from "@/src/components/ProfileLayout";
+import ProfilePhoto from "@/src/components/ProfilePhoto";
 import { useUserProfile } from "@/src/hook/useUserProfile";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
@@ -25,7 +26,7 @@ export default function Profile() {
       }
       return updateResponse;
     } catch (error) {
-      console.log(error);
+      console.log({ profilePage: error });
     }
   };
 
@@ -42,12 +43,20 @@ export default function Profile() {
             </div>
             <div>
               <div className="flex gap-5 items-center">
-                <Image
-                  src={"/hazrat.jpg"}
-                  width={100}
-                  height={100}
-                  className="rounded-md"
-                />
+                <div className="relative">
+                  <div className="w-[100px] h-[100px] border rounded-full">
+                    <Image
+                      src={`${
+                        user?.image ? `/uploads/${user.image}` : "/no-photo.png"
+                      }`}
+                      width={150}
+                      height={150}
+                      className="rounded-full"
+                    />
+                  </div>
+
+                  <ProfilePhoto mutate={mutate} />
+                </div>
                 <div>
                   <h2 className="text-lg font-medium">{user?.name}</h2>
                   <p className="dark:text-slate-400 text-[15px]">

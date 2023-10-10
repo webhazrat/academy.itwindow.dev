@@ -25,7 +25,7 @@ export default function Banner() {
           </a>
         </Link>
         <div>
-          <Link href={"/login"}>
+          <Link href={"/join"}>
             <Button className="bg-gradient text-white">সাইন আপ করুন</Button>
           </Link>
         </div>

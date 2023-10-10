@@ -65,7 +65,7 @@ export default function DashboardSideNav() {
             <div className="px-3 py-2">
               <h2 className="mb-2 px-4 text-base font-semibold">Academy</h2>
               <div className="space-y-1">
-                <Link href={"/"}>
+                <Link href={"/dashboard/courses"}>
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-slate-600 dark:text-slate-400"

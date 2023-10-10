@@ -1,6 +1,6 @@
-import { AlignLeft, Bell } from "lucide-react";
+import { AlignLeft, Bell, Home } from "lucide-react";
 import { Button } from "./ui/button";
-import LoggedDropdown from "./LoggedDropdown";
+import Link from "next/link";
 
 export default function DashboardHeader() {
   return (
@@ -15,7 +15,11 @@ export default function DashboardHeader() {
             <Button variant="ghost" size="sm">
               <Bell size={18} />
             </Button>
-            <LoggedDropdown />
+            <Link href={"/"}>
+              <Button variant="ghost" size="sm">
+                <Home size={18} />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

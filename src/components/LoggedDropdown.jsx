@@ -19,17 +19,20 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useUserProfile } from "../hook/useUserProfile";
 
 export default function LoggedDropdown() {
+  const { data: session } = useSession();
   const { user } = useUserProfile();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <User2 size={14} />{" "}
-          <span className="hidden sm:block">{user?.name}</span>{" "}
+          <span className="hidden sm:block">
+            {user?.name || session.user.name}
+          </span>{" "}
           <ChevronDown size={14} />
         </Button>
       </DropdownMenuTrigger>
