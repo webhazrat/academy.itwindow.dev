@@ -4,17 +4,20 @@ import { Schema } from "mongoose";
 const courseSchema = new Schema(
   {
     title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
     description: String,
-    topics: [{ type: String }],
-    features: [
+    topics: [{ _id: false, value: String }],
+    details: [
       {
+        _id: false,
         question: String,
         answer: String,
       },
     ],
-    requirements: [{ type: String }],
-    knows: [{ type: String }],
-    how: [{ type: String }],
+    requirements: [{ _id: false, value: String }],
+    knows: [{ _id: false, value: String }],
+    hows: [{ _id: false, value: String }],
+    fee: Number,
   },
   {
     timestamps: true,
@@ -22,6 +25,6 @@ const courseSchema = new Schema(
 );
 
 const courseModel =
-  mongoose.model.Course || mongoose.model("Course", courseSchema);
+  mongoose.models.Course || mongoose.model("Course", courseSchema);
 
 export default courseModel;

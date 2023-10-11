@@ -9,12 +9,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { useSession } from "next-auth/react";
 
 export default function MobileMenu({ navLinks }) {
+  const { data: session } = useSession();
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="ghost" size="sm">
           <Menu size={18} />
         </Button>
       </SheetTrigger>
@@ -43,7 +45,7 @@ export default function MobileMenu({ navLinks }) {
                       {link.title}
                     </AccordionTrigger>
                     <AccordionContent className="border-t pt-3 mt-3">
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-4 dark:text-slate-400">
                         {link.sub.map((subLink) => (
                           <Link key={subLink.id} href={subLink.href}>
                             <a>{subLink.title}</a>
@@ -55,15 +57,24 @@ export default function MobileMenu({ navLinks }) {
                 )}
               </AccordionItem>
             ))}
+            {!session && (
+              <AccordionItem className="border-0">
+                <Link href={"/login"}>
+                  <a>লগইন</a>
+                </Link>
+              </AccordionItem>
+            )}
           </Accordion>
-          <Link href={"/login"}>
-            <Button
-              className="bg-gradient text-white text-[14px] mt-4 w-full"
-              size="sm"
-            >
-              লগইন / সাইন আপ
-            </Button>
-          </Link>
+          {!session && (
+            <Link href={"/join"}>
+              <Button
+                className="bg-gradient text-white text-[14px] mt-4 w-full"
+                size="sm"
+              >
+                সাইন আপ
+              </Button>
+            </Link>
+          )}
         </ScrollArea>
       </SheetContent>
     </Sheet>

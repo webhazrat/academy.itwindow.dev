@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { ChevronsUpDown, MoreHorizontal, Plus } from "lucide-react";
 import Link from "next/link";
 
 export const columns = [
@@ -195,16 +195,18 @@ const data = [
 export default function Courses() {
   return (
     <DashboardLayout>
-      <div className="">
-        <div className="flex justify-between items-center">
-          <h1>Courses</h1>
-          <Link href={"/dashboard/add-course"}>
+      <div>
+        <div className="py-3 px-7 flex items-center justify-between bg-slate-50 dark:bg-slate-800 dark:bg-opacity-30">
+          <h1 className="text-lg font-semibold">কোর্সসমূহ</h1>
+          <Link href={"/dashboard/courses/add-course"}>
             <Button size="sm" variant="outline">
-              Add Course
+              <Plus size={14} className="mr-2" /> কোর্স সংযুক্ত করুন
             </Button>
           </Link>
         </div>
-        <DataTable columns={columns} data={data} />
+        <div className="p-7">
+          <DataTable columns={columns} data={data} />
+        </div>
       </div>
     </DashboardLayout>
   );

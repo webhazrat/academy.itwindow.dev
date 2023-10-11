@@ -7,10 +7,10 @@ import {
 
 export default function Accordions({ faqs }) {
   return (
-    <Accordion collapsible defaultValue={`item1`}>
-      {faqs.map((faq) => (
-        <AccordionItem key={faq.id} value={`item${faq.id}`}>
-          <AccordionTrigger className="font-normal">
+    <Accordion collapsible defaultValue={`item0`}>
+      {faqs.map((faq, index) => (
+        <AccordionItem key={index} value={`item${index}`}>
+          <AccordionTrigger className="text-left">
             {faq.question}
           </AccordionTrigger>
           <AccordionContent className="text-base dark:text-slate-400">

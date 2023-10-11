@@ -1,6 +1,7 @@
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -21,6 +22,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { ChevronsUpDown } from "lucide-react";
+import DataTablePagination from "./DataTablePagination";
 
 export function DataTable({ data, columns }) {
   const [sorting, setSorting] = useState([]);
@@ -30,6 +32,7 @@ export function DataTable({ data, columns }) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -118,6 +121,27 @@ export function DataTable({ data, columns }) {
           </TableBody>
         </Table>
       </div>
+
+      <DataTablePagination table={table} />
+
+      {/* <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div> */}
     </>
   );
 }

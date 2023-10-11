@@ -1,20 +1,24 @@
 import Head from "next/head";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSideNav from "./DashboardSideNav";
-import styles from "@/src/styles/DashboardLayout.module.css";
+import { useTheme } from "next-themes";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function DashboardLayout({ children }) {
+  const { theme, setTheme } = useTheme();
   return (
     <>
       <Head>
         <title>Dashboard | ITWINDOW - Enhance Yourself</title>
       </Head>
-      <main className={styles.font}>
+      <main>
         <div className="flex">
-          <DashboardSideNav />
+          <DashboardSideNav theme={theme} />
           <div className="flex-1">
-            <DashboardHeader />
-            <div className="border-t p-4">{children}</div>
+            <DashboardHeader theme={theme} setTheme={setTheme} />
+            <ScrollArea className="h-[calc(100vh_-_56px)] border-t">
+              <div>{children}</div>
+            </ScrollArea>
           </div>
         </div>
       </main>

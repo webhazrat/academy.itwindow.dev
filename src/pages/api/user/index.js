@@ -6,20 +6,15 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const session = await loginAuthMiddleware(req, res);
-      if (session) {
-        await connectDB();
-        const user = await userModel.findOne(
-          { _id: session.user._id },
-          { password: 0 }
-        );
-
-        if (user) {
-          res.status(200).json({ status: 200, data: user });
-        } else {
-          res.status(404).json({ status: 404, message: `User not found` });
-        }
+      await connectDB();
+      const user = await userModel.findOne(
+        { _id: session.user._id },
+        { password: 0 }
+      );
+      if (user) {
+        res.status(200).json({ status: 200, data: user });
       } else {
-        res.status(401).json({ status: 401, message: "Unauthorized" });
+        res.status(404).json({ status: 404, message: `User not found` });
       }
     } catch (error) {
       console.log({ userCatch: error });

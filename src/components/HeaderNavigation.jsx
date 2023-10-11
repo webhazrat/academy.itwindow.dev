@@ -17,7 +17,6 @@ import MobileMenu from "./MobileMenu";
 import LoggedDropdown from "./LoggedDropdown";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
-import { UserProfileProvider } from "../context/UserProfileContext";
 
 export default function HeaderNavigation() {
   const { theme, setTheme } = useTheme();
@@ -40,16 +39,18 @@ export default function HeaderNavigation() {
       </Link>
 
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-4 lg:hidden">
+        <div className="flex items-center lg:hidden">
           <ThemeChanger theme={theme} setTheme={setTheme} />
-          <Link href={"/"}>
-            <a>
-              <Search size={16} />
-            </a>
-          </Link>
+          <Button size="sm" variant="ghost">
+            <Link href={"/"}>
+              <a>
+                <Search size={16} />
+              </a>
+            </Link>
+          </Button>
           <MobileMenu navLinks={mainNavs} />
         </div>
-        <div className="hidden lg:flex items-center gap-5">
+        <div className="hidden lg:flex items-center gap-1">
           <NavigationMenu>
             <NavigationMenuList className="flex">
               {mainNavs.map((link) => {
@@ -90,19 +91,18 @@ export default function HeaderNavigation() {
           </NavigationMenu>
 
           <ThemeChanger theme={theme} setTheme={setTheme} />
-          <Link href={"/"}>
-            <a>
-              <Search size={16} />
-            </a>
-          </Link>
+          <Button size="sm" variant="ghost">
+            <Link href={"/"}>
+              <a>
+                <Search size={16} />
+              </a>
+            </Link>
+          </Button>
           {!session && (
             <>
               <Link href={"/login"}>লগইন</Link>
               <Link href={"/join"}>
-                <Button
-                  className="bg-gradient text-white text-[14px]"
-                  size="sm"
-                >
+                <Button className="bg-gradient ml-3 text-white" size="sm">
                   সাইন আপ করুন
                 </Button>
               </Link>

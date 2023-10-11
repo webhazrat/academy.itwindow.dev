@@ -80,7 +80,8 @@
   .banner-bg:after {
     content: "";
     z-index: -1;
-    width: 450px;
+    max-width: 450px;
+    width: 100%;
     height: 450px;
     position: absolute;
     left: 50%;
@@ -112,13 +113,11 @@
     @apply scroll-smooth;
   }
   * {
-    @apply border-border;
+    @apply border-border box-border;
   }
   body {
-    @apply dark:bg-background text-foreground;
+    @apply dark:bg-background text-foreground overflow-x-hidden font-normal;
     font-family: "Hind Siliguri", sans-serif;
-    font-weight: 400;
     font-size: 16px;
-    overflow-x: hidden;
   }
 }

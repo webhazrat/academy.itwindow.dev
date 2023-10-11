@@ -1,8 +1,9 @@
 import { AlignLeft, Bell, Home } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import ThemeChanger from "./ThemeChanger";
 
-export default function DashboardHeader() {
+export default function DashboardHeader({ theme, setTheme }) {
   return (
     <>
       <div className="h-14 px-4 flex items-center">
@@ -11,7 +12,8 @@ export default function DashboardHeader() {
             <AlignLeft size={18} />
           </Button>
 
-          <div className="flex gap-2">
+          <div className="flex items-center">
+            <ThemeChanger theme={theme} setTheme={setTheme} />
             <Button variant="ghost" size="sm">
               <Bell size={18} />
             </Button>

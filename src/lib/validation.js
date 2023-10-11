@@ -44,3 +44,41 @@ export const UserSchema = z.object({
   education: z.string().min(1, "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন।"),
   institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন।"),
 });
+
+export const CourseSchema = z.object({
+  title: z.string().min(1, "কোর্স টাইটেল ইনপুট করুন।"),
+  slug: z.string().regex(/^[a-z0-9-]+$/, "সঠিক স্লাগ ইনপুট করুন।"),
+  description: z.string().min(1, "ডেসক্রিপশন ইনপুট করুন।"),
+  topics: z.array(
+    z.object({
+      value: z.string().min(1, "কোর্সে শিক্ষানীয় বিষয় ইনপুট করুন।"),
+    })
+  ),
+  details: z.array(
+    z.object({
+      question: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন।"),
+      answer: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন।"),
+    })
+  ),
+  requirements: z.array(
+    z.object({
+      value: z.string().min(1, "কোর্স করতে প্রয়োজনীয় বিষয় ইনপুট করুন।"),
+    })
+  ),
+  knows: z.array(
+    z.object({
+      value: z.string().min(1, "কোর্স করতে জ্ঞাত বিষয় ইনপুট করুন।"),
+    })
+  ),
+  hows: z.array(
+    z.object({
+      value: z.string().min(1, "কোর্সটি কিভাবে করবে তা ইনপুট করুন।"),
+    })
+  ),
+  fee: z
+    .string()
+    .min(1, "কোর্স ফি ইনপুট করুন।")
+    .refine((value) => !isNaN(value), {
+      message: "কোর্স ফি নাম্বারে ইনপুট করুন।",
+    }),
+});

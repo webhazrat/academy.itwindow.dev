@@ -256,3 +256,111 @@ export const profileSideNav = [
     href: "/profile/change-password",
   },
 ];
+
+export const dashboardSideNav = [
+  {
+    id: 1,
+    titleE: "Discover",
+    title: "ডিসকভার",
+    navs: [
+      {
+        id: 1,
+        icon: "LayoutDashboard",
+        href: "/dashboard",
+        titleE: "Dashboard",
+        title: "ড্যাশবোর্ড",
+      },
+      {
+        id: 2,
+        icon: "Grid2X2",
+        href: "/dashboard/browse",
+        titleE: "Browse",
+        title: "ব্রাউজ",
+      },
+    ],
+  },
+  {
+    id: 2,
+    titleE: "Academy",
+    title: "একাডেমী",
+    navs: [
+      {
+        id: 1,
+        icon: "GanttChartSquare",
+        href: "/dashboard/courses",
+        titleE: "Courses",
+        title: "কোর্সেস",
+      },
+      {
+        id: 2,
+        icon: "Shapes",
+        href: "/dashboard/quizzes",
+        titleE: "Quizzes",
+        title: "কুইজ",
+      },
+      {
+        id: 3,
+        icon: "ClipboardEdit",
+        href: "/dashboard/assignments",
+        titleE: "Assignments",
+        title: "এ্যাসাইনমেন্টস",
+      },
+      {
+        id: 4,
+        icon: "Tv",
+        href: "/dashboard/announcement",
+        titleE: "Announcement",
+        title: "এ্যানাউন্স",
+      },
+      {
+        id: 5,
+        icon: "GraduationCap",
+        href: "/dashboard/students",
+        titleE: "Students",
+        title: "স্টুডেন্টস",
+      },
+    ],
+  },
+  {
+    id: 3,
+    titleE: "Finance",
+    title: "ফাইন্যান্স",
+    navs: [
+      {
+        id: 1,
+        icon: "BadgeDollarSign",
+        href: "/dashboard/earnings",
+        titleE: "Earnings",
+        title: "আর্নিং",
+      },
+      {
+        id: 2,
+        icon: "FolderOpen",
+        href: "/dashboard/reports",
+        titleE: "Reports",
+        title: "রিপোর্টস",
+      },
+    ],
+  },
+  {
+    id: 4,
+    titleE: "Human Resources",
+    title: "হিউম্যান রিসোর্সেস",
+    navs: [
+      {
+        id: 1,
+        icon: "Users2",
+        href: "/dashboard/users",
+        titleE: "Users",
+        title: "ইউজারস",
+      },
+      {
+        id: 2,
+        icon: "UserPlus2",
+        href: "/dashboard/members",
+        titleE: "Members",
+        title: "মেম্বারস",
+      },
+    ],
+  },
+];

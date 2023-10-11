@@ -1,7 +1,6 @@
 import Head from "next/head";
 import HeaderNavigation from "./HeaderNavigation";
 import Footer from "./Footer";
-import styles from "@/src/styles/Layout.module.css";
 
 export default function Layout({ children, border }) {
   return (
@@ -13,7 +12,7 @@ export default function Layout({ children, border }) {
           content="You are providing our popular IT courses via this website"
         />
       </Head>
-      <main className={styles.font}>
+      <main>
         <div className={`${border && "border-b"}`}>
           <div className="container">
             <HeaderNavigation />
