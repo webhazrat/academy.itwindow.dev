@@ -11,9 +11,10 @@ export const config = {
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
+    const destination = "public/uploads";
     try {
       const session = await loginAuthMiddleware(req, res);
-      const upload = multerStorage(uId());
+      const upload = await multerStorage(uId(), destination);
       upload.single("file")(req, {}, async (error) => {
         if (error) {
           return res.status(500).json({ error: error.message });
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
         await connectDB();
         const user = await userModel.findById(session.user._id);
         if (user.image) {
-          unlinkPhoto(user.image);
+          unlinkPhoto(user.image, destination);
         }
         await userModel.updateOne(
           { _id: session.user._id },

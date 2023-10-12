@@ -48,7 +48,8 @@ export const UserSchema = z.object({
 export const CourseSchema = z.object({
   title: z.string().min(1, "কোর্স টাইটেল ইনপুট করুন।"),
   slug: z.string().regex(/^[a-z0-9-]+$/, "সঠিক স্লাগ ইনপুট করুন।"),
-  description: z.string().min(1, "ডেসক্রিপশন ইনপুট করুন।"),
+  excerpt: z.string().min(1, "ছোট বিবরণ ইনপুট করুন।"),
+  description: z.string().min(1, "বিবরণ ইনপুট করুন।"),
   topics: z.array(
     z.object({
       value: z.string().min(1, "কোর্সে শিক্ষানীয় বিষয় ইনপুট করুন।"),
@@ -81,4 +82,25 @@ export const CourseSchema = z.object({
     .refine((value) => !isNaN(value), {
       message: "কোর্স ফি নাম্বারে ইনপুট করুন।",
     }),
+});
+
+export const CoursePhotoSchema = z.object({
+  file: z.any().refine(
+    (data) => {
+      if (!data || !data[0]) {
+        return false;
+      }
+      const accectTypes = ["image/jpeg", "image/png", "image/svg+xml"];
+      const fileType = data[0].type;
+      const fileSize = data[0].size;
+      const maxSize = 1 * 1024 * 1024;
+      if (!accectTypes.includes(fileType) || fileSize > maxSize) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "ইমেজ টাইপ (jpg, jpeg, png or svg) এবং সাইজ 1MB এর কম হতে হবে।",
+    }
+  ),
 });

@@ -3,13 +3,16 @@ import Label from "@/src/components/Label";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Textarea } from "@/src/components/ui/textarea";
-import { CourseSchema } from "@/src/lib/validation";
+import { CoursePhotoSchema, CourseSchema } from "@/src/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Minus, Plus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 
 export default function Dashboard() {
+  const [selectedImage, setSelectedImage] = useState(null);
   const {
     control,
     register,
@@ -19,6 +22,8 @@ export default function Dashboard() {
     setError,
     reset,
     clearErrors,
+    getValues,
+    setValue,
   } = useForm({
     resolver: zodResolver(CourseSchema),
     defaultValues: {
@@ -56,6 +61,7 @@ export default function Dashboard() {
   });
 
   const handleCourse = async (data) => {
+    console.log({ data });
     try {
       const response = await fetch("/api/course/create", {
         method: "POST",
@@ -66,7 +72,7 @@ export default function Dashboard() {
       });
 
       const crouseCreateResponse = await response.json();
-      if (response?.errors.length > 0) {
+      if (response?.errors?.length > 0) {
         response.errors.forEach((error) => {
           setError(error.field, {
             type: "server",
@@ -74,12 +80,34 @@ export default function Dashboard() {
           });
         });
       } else {
+        setSelectedImage(null);
         reset();
         clearErrors();
       }
       console.log({ crouseCreateResponse });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch("/api/course/coursePhoto", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        const { data: image } = data;
+        setSelectedImage(image);
+        setValue("image", image);
+      }
+      console.log({ coursePhoto: data });
+    } catch (error) {
+      console.log({ coursePhotoCatch: error });
     }
   };
 
@@ -131,7 +159,16 @@ export default function Dashboard() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">ডেসক্রিপশন</Label>
+                  <Label htmlFor="excerpt">ছোট বিবরণ</Label>
+                  <Textarea rows="2" id="excerpt" {...register("excerpt")} />
+                  {errors.excerpt && (
+                    <p className="text-sm text-red-400">
+                      {errors.excerpt.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">বিবরণ</Label>
                   <Textarea
                     rows="4"
                     id="description"
@@ -232,6 +269,24 @@ export default function Dashboard() {
             </div>
             <div>
               <div className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="file">ইমেজ</Label>
+                  {selectedImage && (
+                    <Image
+                      src={`/courses/${selectedImage}`}
+                      height={80}
+                      width={80}
+                      className="rounded-md"
+                    />
+                  )}
+                  <Input type="file" id="file" onChange={handleImageChange} />
+                  {errors.file && (
+                    <p className="text-sm text-red-400">
+                      {errors.file.message}
+                    </p>
+                  )}
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="requirements">
                     কোর্সটির জন্য যা যা প্রয়োজন

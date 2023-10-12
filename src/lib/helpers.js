@@ -16,10 +16,10 @@ export async function sendOtpToPhone(phone, otp) {
   await new Promise((resolve) => setTimeout(resolve, 5000));
 }
 
-export function multerStorage(name) {
+export function multerStorage(name, dest) {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      const uploadsDir = path.join(process.cwd(), "public/uploads");
+      const uploadsDir = path.join(process.cwd(), dest);
       if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir);
       }
@@ -32,11 +32,11 @@ export function multerStorage(name) {
   });
 
   const upload = multer({ storage });
-  return upload;
+  return Promise.resolve(upload);
 }
 
-export const unlinkPhoto = (image) => {
-  const currentPhotoPath = path.join(process.cwd(), "public/uploads", image);
+export const unlinkPhoto = (image, dest) => {
+  const currentPhotoPath = path.join(process.cwd(), dest, image);
   fs.unlink(currentPhotoPath, (error) => {
     if (error) {
       return;

@@ -5,6 +5,7 @@ const courseSchema = new Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
+    excerpt: String,
     description: String,
     topics: [{ _id: false, value: String }],
     details: [
@@ -14,6 +15,7 @@ const courseSchema = new Schema(
         answer: String,
       },
     ],
+    image: String,
     requirements: [{ _id: false, value: String }],
     knows: [{ _id: false, value: String }],
     hows: [{ _id: false, value: String }],

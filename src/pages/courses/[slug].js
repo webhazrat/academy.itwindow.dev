@@ -3,13 +3,13 @@ import FeedbackItem from "@/src/components/FeebackItem";
 import Layout from "@/src/components/Layout";
 import ListItem from "@/src/components/ListItem";
 import { Button } from "@/src/components/ui/button";
-import { APP_URL, fetcher } from "@/src/lib/utils";
+import { APP_URL } from "@/src/lib/utils";
 import {
   CheckCheck,
-  FileText,
-  FileVideo2,
-  ScrollText,
+  Presentation,
+  StickyNote,
   Users2,
+  Video,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,20 +32,20 @@ export default function SingleCourse({ course }) {
                   <div className="border rounded-md py-4 px-6">
                     <div className="dark:text-slate-400 flex flex-wrap gap-5">
                       <p className="flex items-center gap-2">
-                        <Users2 size={20} className="text-[#43AF7B]" /> কোর্সটি
+                        <Users2 size={18} className="text-[#43AF7B]" /> কোর্সটি
                         করেছেন 10 জন
                       </p>
                       <p className="flex items-center gap-2">
-                        <ScrollText size={20} className="text-[#43AF7B]" />{" "}
+                        <Presentation size={18} className="text-[#43AF7B]" />
                         প্রতি সপ্তাহে 4 টি করে মোট 48 টি ক্লাস
                       </p>
                       <p className="flex items-center gap-2">
-                        <FileText size={20} className="text-[#43AF7B]" /> 10 টি
-                        নোট
+                        <StickyNote size={18} className="text-[#43AF7B]" /> 10
+                        টি নোট
                       </p>
                       <p className="flex items-center gap-2">
-                        <FileVideo2 size={20} className="text-[#43AF7B]" /> 10
-                        টি ভিডিও
+                        <Video size={18} className="text-[#43AF7B]" /> 10 টি
+                        ভিডিও
                       </p>
                     </div>
                   </div>
