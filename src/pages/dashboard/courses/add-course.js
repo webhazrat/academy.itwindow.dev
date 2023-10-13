@@ -3,16 +3,20 @@ import Label from "@/src/components/Label";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Textarea } from "@/src/components/ui/textarea";
+import { useToast } from "@/src/components/ui/use-toast";
 import { CoursePhotoSchema, CourseSchema } from "@/src/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Minus, Plus } from "lucide-react";
+import { Loader2, Minus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { z } from "zod";
 
 export default function Dashboard() {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [showSelectedImage, setShowSelectedImage] = useState(null);
+  const { toast } = useToast();
   const {
     control,
     register,
@@ -22,8 +26,6 @@ export default function Dashboard() {
     setError,
     reset,
     clearErrors,
-    getValues,
-    setValue,
   } = useForm({
     resolver: zodResolver(CourseSchema),
     defaultValues: {
@@ -61,53 +63,82 @@ export default function Dashboard() {
   });
 
   const handleCourse = async (data) => {
-    console.log({ data });
     try {
-      const response = await fetch("/api/course/create", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const crouseCreateResponse = await response.json();
-      if (response?.errors?.length > 0) {
-        response.errors.forEach((error) => {
-          setError(error.field, {
-            type: "server",
-            message: error.message,
-          });
-        });
-      } else {
-        setSelectedImage(null);
-        reset();
-        clearErrors();
-      }
-      console.log({ crouseCreateResponse });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    try {
+      CoursePhotoSchema.parse({ file });
+      const formData = new FormData();
+      formData.append("file", file);
       const response = await fetch("/api/course/coursePhoto", {
         method: "POST",
         body: formData,
       });
-      const data = await response.json();
+      const photoResonse = await response.json();
+      const { data: image } = photoResonse;
       if (response.ok) {
-        const { data: image } = data;
-        setSelectedImage(image);
-        setValue("image", image);
+        // data set to data variable
+        const allData = {
+          ...data,
+          image,
+        };
+        // second request
+        const response2 = await fetch("/api/course/create", {
+          method: "POST",
+          body: JSON.stringify(allData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const createResponse = await response2.json();
+        if (!response2.ok) {
+          // server custom zod pattern error
+          if (createResponse?.errors?.length > 0) {
+            createResponse.errors.forEach((error) => {
+              setError(error.field, {
+                type: "server",
+                message: error.message,
+              });
+            });
+          }
+        } else {
+          toast({
+            variant: "sccess",
+            title: createResponse.title,
+            description: createResponse.message,
+          });
+          reset();
+          clearErrors();
+          setShowSelectedImage(null);
+          setFile(null);
+        }
       }
-      console.log({ coursePhoto: data });
     } catch (error) {
-      console.log({ coursePhotoCatch: error });
+      // for CoursePhotoSchema
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((error) => {
+          setError(error.path.join("."), {
+            type: "manual",
+            message: error.message,
+          });
+        });
+      }
+      console.log({ courseCreateCatch: error });
+    }
+  };
+
+  // onChange image with zod validation
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+    try {
+      CoursePhotoSchema.parse({ file });
+      const imageUrl = URL.createObjectURL(file);
+      setShowSelectedImage(imageUrl);
+      clearErrors("file");
+    } catch (error) {
+      setShowSelectedImage(null);
+      setError("file", {
+        type: "manual",
+        message: error.errors[0].message,
+      });
     }
   };
 
@@ -271,15 +302,20 @@ export default function Dashboard() {
               <div className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="file">ইমেজ</Label>
-                  {selectedImage && (
+                  {showSelectedImage && (
                     <Image
-                      src={`/courses/${selectedImage}`}
+                      src={`${showSelectedImage}`}
                       height={80}
                       width={80}
                       className="rounded-md"
                     />
                   )}
-                  <Input type="file" id="file" onChange={handleImageChange} />
+                  <Input
+                    type="file"
+                    id="file"
+                    {...register("file")}
+                    onChange={handleImageChange}
+                  />
                   {errors.file && (
                     <p className="text-sm text-red-400">
                       {errors.file.message}

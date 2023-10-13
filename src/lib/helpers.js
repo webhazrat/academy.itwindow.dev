@@ -37,10 +37,11 @@ export function multerStorage(name, dest) {
 
 export const unlinkPhoto = (image, dest) => {
   const currentPhotoPath = path.join(process.cwd(), dest, image);
-  fs.unlink(currentPhotoPath, (error) => {
-    if (error) {
-      return;
-    }
+  if (fs.existsSync(currentPhotoPath)) {
+    fs.unlink(currentPhotoPath, (error) => {
+      return true;
+    });
+  } else {
     return true;
-  });
+  }
 };

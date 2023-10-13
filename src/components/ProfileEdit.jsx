@@ -37,13 +37,15 @@ export default function ProfileEdit({ user, onSubmit }) {
 
   const handleEditSubmit = async (data) => {
     const response = await onSubmit(data);
-    if (response?.errors?.length > 0) {
-      response.errors.forEach((error) => {
-        setError(error.field, {
-          type: "server",
-          message: error.message,
+    if (!response.ok) {
+      if (response?.errors?.length > 0) {
+        response.errors.forEach((error) => {
+          setError(error.field, {
+            type: "server",
+            message: error.message,
+          });
         });
-      });
+      }
     } else {
       setIsOpen(false);
       clearErrors();
@@ -65,36 +67,28 @@ export default function ProfileEdit({ user, onSubmit }) {
         <div>
           <form onSubmit={handleSubmit(handleEditSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="font-medium">
-                নাম
-              </Label>
+              <Label htmlFor="name">নাম</Label>
               <Input id="name" type="text" {...register("name")} />
               {errors.name && (
                 <p className="text-sm text-red-400">{errors.name.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-medium">
-                ইমেইল
-              </Label>
+              <Label htmlFor="email">ইমেইল</Label>
               <Input id="email" type="email" {...register("email")} />
               {errors.email && (
                 <p className="text-sm text-red-400">{errors.email.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="address" className="font-medium">
-                বর্তমান ঠিকানা
-              </Label>
+              <Label htmlFor="address">বর্তমান ঠিকানা</Label>
               <Input id="address" type="text" {...register("address")} />
               {errors.address && (
                 <p className="text-sm text-red-400">{errors.address.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="guardian" className="font-medium">
-                অভিভাবকের নাম
-              </Label>
+              <Label htmlFor="guardian">অভিভাবকের নাম</Label>
               <Input id="guardian" type="text" {...register("guardian")} />
               {errors.guardian && (
                 <p className="text-sm text-red-400">
@@ -103,11 +97,7 @@ export default function ProfileEdit({ user, onSubmit }) {
               )}
             </div>
             <div className="space-y-2">
-              <Label
-                htmlFor="guardianPhone"
-                placeholder="01XXXXXXXXXXX"
-                className="font-medium"
-              >
+              <Label htmlFor="guardianPhone" placeholder="01XXXXXXXXXXX">
                 অভিভাবকের মোবাইল নাম্বার
               </Label>
               <Input
@@ -122,9 +112,7 @@ export default function ProfileEdit({ user, onSubmit }) {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="education" className="font-medium">
-                সর্বশেষ শিক্ষাগত যোগ্যতা
-              </Label>
+              <Label htmlFor="education">সর্বশেষ শিক্ষাগত যোগ্যতা</Label>
               <Input id="education" type="text" {...register("education")} />
               {errors.education && (
                 <p className="text-sm text-red-400">
@@ -133,9 +121,7 @@ export default function ProfileEdit({ user, onSubmit }) {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="institute" className="font-medium">
-                প্রতিষ্ঠানের নাম
-              </Label>
+              <Label htmlFor="institute">প্রতিষ্ঠানের নাম</Label>
               <Input id="institute" type="text" {...register("institute")} />
               {errors.institute && (
                 <p className="text-sm text-red-400">

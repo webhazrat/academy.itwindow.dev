@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       const upload = await multerStorage(uId(), destination);
       upload.single("file")(req, {}, async (error) => {
         if (error) {
-          return res.status(500).json({ error: error.message });
+          throw new Error(error);
         }
         await connectDB();
         const user = await userModel.findById(session.user._id);

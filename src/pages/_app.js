@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
 import { UserProfileProvider } from "../context/UserProfileContext";
+import { Toaster } from "../components/ui/toaster";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -9,6 +10,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <UserProfileProvider>
           <Component {...pageProps} />
+          <Toaster />
         </UserProfileProvider>
       </SessionProvider>
     </ThemeProvider>

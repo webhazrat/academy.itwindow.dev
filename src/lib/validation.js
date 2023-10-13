@@ -86,13 +86,13 @@ export const CourseSchema = z.object({
 
 export const CoursePhotoSchema = z.object({
   file: z.any().refine(
-    (data) => {
-      if (!data || !data[0]) {
+    (file) => {
+      if (!file) {
         return false;
       }
       const accectTypes = ["image/jpeg", "image/png", "image/svg+xml"];
-      const fileType = data[0].type;
-      const fileSize = data[0].size;
+      const fileType = file.type;
+      const fileSize = file.size;
       const maxSize = 1 * 1024 * 1024;
       if (!accectTypes.includes(fileType) || fileSize > maxSize) {
         return false;
