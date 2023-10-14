@@ -20,6 +20,7 @@ export default async function handler(req, res) {
         message: "তথ্য সফলভাবে আপডেট হয়েছে।",
       });
     } catch (error) {
+      console.log({ userUpdateCatch: error });
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({
@@ -28,7 +29,6 @@ export default async function handler(req, res) {
           })),
         });
       } else {
-        console.log({ userUpdateCatch: error });
         return res.status(500).json({ error: "Internal Server Error" });
       }
     }

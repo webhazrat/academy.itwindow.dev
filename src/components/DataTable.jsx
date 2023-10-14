@@ -102,7 +102,10 @@ export function DataTable({ data, columns }) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-3">
+                    <TableCell
+                      key={cell.id}
+                      className="py-3 dark:text-slate-300"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -113,7 +116,10 @@ export function DataTable({ data, columns }) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center dark:text-slate-300"
+                >
                   No results
                 </TableCell>
               </TableRow>

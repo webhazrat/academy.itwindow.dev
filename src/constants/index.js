@@ -26,13 +26,13 @@ export const mainNavs = [
         id: "wordpress-theme-development",
         title: "ওয়ার্ডপ্রেস থিম ডেভেলপমেন্ট",
         href: "/courses/wordpress-theme-development",
-        icon: "/courses/wtheme.svg",
+        icon: "/courses/wptheme.svg",
       },
       {
         id: "wordpress-plugin-development",
         title: "ওয়ার্ডপ্রেস প্লাগিন ডেভেলপমেন্ট",
         href: "/courses/wordpress-plugin-development",
-        icon: "/courses/wplugin.svg",
+        icon: "/courses/wpplugin.svg",
       },
       {
         id: "thinking-in-react",
@@ -59,57 +59,6 @@ export const mainNavs = [
     title: "স্টুডেন্ট ফিডব্যাক",
     href: "/#student-feedback",
     sub: [],
-  },
-];
-
-export const courses = [
-  {
-    id: "hsc-ict-crush-course",
-    title: "এইচএসসি আইসিটি ক্র্যাশ কোর্স",
-    description:
-      "আমাদের এই আইসিটি ক্র্যাশ কোর্সটি তোমার ক্যারিয়ার তৈরি করতে সাহায্য করবে এবং উচ্চ শিক্ষা গ্রহণের সময় তথ্য ও প্রযুক্তি সেক্টরে দক্ষতা সম্পন্ন একটি ধাপ আগিয়ে থাকতে সাহায্য করবে",
-    icon: "/courses/ict.svg",
-    href: "/courses/hsc-ict-crush-course",
-  },
-  {
-    id: "web-design",
-    title: "ওয়েব ডিজাইন",
-    description:
-      "ওয়েব ডিজাইন কোর্সটি আপনার ক্যারিয়ারের জন্য একটি আদর্শ পথ প্রদান করবে, যেখানে আপনি সুন্দর, আকর্ষণীয়, এবং ক্রিয়েটিভ ওয়েব ডিজাইন প্রকল্প তৈরি করতে পারবেন",
-    icon: "/courses/web-design.svg",
-    href: "/courses/web-design",
-  },
-  {
-    id: "wordpress-theme-development",
-    title: "ওয়ার্ডপ্রেস থিম ডেভেলপমেন্ট",
-    description:
-      "এই কোর্সটি ওয়ার্ডপ্রেস কাস্টম থিম তৈরি এবং ওয়ার্ডপ্রেস ডেভেলপমেন্ট প্রকল্পে কাজ করতে সাহায্য করবে, যা ওয়ার্ডপ্রেস থিম ডেভেলপার হিসেবে আপনাকে উন্নত ক্যারিয়ার পথে প্রবর্দ্ধন করতে সাহায্য করবে",
-    icon: "/courses/wtheme.svg",
-    href: "/courses/wordpress-theme-development",
-  },
-  {
-    id: "wordpress-plugin-development",
-    title: "ওয়ার্ডপ্রেস প্লাগিন ডেভেলপমেন্ট",
-    description:
-      "কোর্সটি আপনার ক্যারিয়ারের প্রাগণ্য দিকে পৌঁছানোর একটি সশস্ত্র মাধ্যম, যা আপনাকে ওয়ার্ডপ্রেসে প্লাগইন তৈরি করতে শিখাবে এবং ওয়ার্ডপ্রেস একটি উন্নত ডেভেলপার হিসেবে গড়ে তোলার সুযোগ দেবে",
-    icon: "/courses/wplugin.svg",
-    href: "/courses/wordpress-plugin-development",
-  },
-  {
-    id: "thinking-in-react",
-    title: "থিংকিং ইন রিয়াক্ট",
-    description:
-      "কোর্সটি আপনাকে রিয়াক্ট সম্পর্কে স্পষ্ট ও মজাদার ভাবে বোঝাতে সাহায্য করবে, এটি আপনার রিয়াক্ট ডেভেলপমেন্ট ক্যারিয়ার শুরু করার পথে একটি শ্রেষ্ঠ উপায়",
-    icon: "/courses/react.svg",
-    href: "/courses/thinking-in-react",
-  },
-  {
-    id: "fullstack-with-nextjs",
-    title: "ফুলস্ট্যাক উইথ নেক্সট জেএস",
-    description:
-      "নেক্সট জেএস সম্পর্কে স্পষ্ট বোঝানোর জন্য সাহায্য করবে, এটি আপনার নেক্সট জেএস ডেভেলপমেন্ট ক্যারিয়ারে অগ্রগতি করতে একটি অদ্ভুত সুযোগ প্রদান করবে",
-    icon: "/courses/nextjs.svg",
-    href: "/courses/fullstack-with-nextjs",
   },
 ];
 

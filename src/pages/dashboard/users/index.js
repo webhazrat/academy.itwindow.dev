@@ -18,7 +18,7 @@ import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
 
-export default function Courses() {
+export default function Users() {
   const [course, setCourse] = useState(null);
   const [photo, setPhoto] = useState(null);
   const { data, isLoading, mutate } = useSWR(
@@ -143,8 +143,7 @@ export default function Courses() {
     <DashboardLayout>
       <div>
         <div className="py-3 px-7 flex items-center justify-between bg-slate-50 dark:bg-slate-800 dark:bg-opacity-30">
-          <h1 className="text-lg font-semibold">কোর্সসমূহ</h1>
-          <CourseCreate mutate={mutate} />
+          <h1 className="text-lg font-semibold">ইউজারস</h1>
         </div>
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
@@ -164,7 +163,6 @@ export default function Courses() {
     </DashboardLayout>
   );
 }
-
 export async function getServerSideProps(context) {
   return checkAdmin(context);
 }

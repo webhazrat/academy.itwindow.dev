@@ -1,22 +1,22 @@
 import connectDB from "@/src/lib/connect";
-import { unlinkPhoto } from "@/src/lib/helpers";
 import { CourseSchema } from "@/src/lib/validation";
 import adminAuthMiddleware from "@/src/middleware/adminAuthMiddleware";
 import courseModel from "@/src/models/courseModel";
 import { z } from "zod";
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method === "PUT") {
+    const { id } = req.query;
     const data = req.body;
-    const destination = "public/courses";
     try {
       const session = await adminAuthMiddleware(req, res);
       CourseSchema.parse(req.body);
       await connectDB();
-      const slug = await courseModel.countDocuments({ slug: data.slug });
-      //const slug = await courseModel.findOne({ slug: data.slug });
+      const slug = await courseModel.countDocuments({
+        slug: data.slug,
+        _id: { $ne: id },
+      });
       if (slug) {
-        unlinkPhoto(data.image, destination);
         return res.status(400).json({
           errors: [
             {
@@ -26,15 +26,15 @@ export default async function handler(req, res) {
           ],
         });
       } else {
-        await courseModel.create({ ...data });
-        return res.status(200).json({
+        await courseModel.findByIdAndUpdate(id, data, { new: true });
+        res.status(200).json({
           status: 200,
           title: "সফল!",
-          message: "কোর্সটি সফলভাবে সংযুক্ত হয়েছে।",
+          message: "কোর্স সফলভাবে আপডেট হয়েছে",
         });
       }
     } catch (error) {
-      unlinkPhoto(data.image, destination);
+      console.log({ courseUpdateCatch: error });
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

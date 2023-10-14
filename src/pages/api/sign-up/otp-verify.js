@@ -45,6 +45,7 @@ export default async function handler(req, res) {
         });
       }
     } catch (error) {
+      console.log({ otpVerifyCatch: error });
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({
@@ -53,7 +54,6 @@ export default async function handler(req, res) {
           })),
         });
       } else {
-        console.log({ otpVerifyCatch: error });
         res.status(500).json({ status: 500, message: "Internal server error" });
       }
     }

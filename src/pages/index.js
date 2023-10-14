@@ -1,6 +1,6 @@
 import Banner from "../components/Banner";
 import CourseItem from "../components/CourseItem";
-import { courses, faqs, features, whyUs } from "../constants";
+import { faqs, features, whyUs } from "../constants";
 import Link from "next/link";
 import ListItem from "../components/ListItem";
 import FeatureItem from "../components/FeatureItem";
@@ -10,8 +10,9 @@ import { Phone } from "lucide-react";
 import Accordions from "../components/Accordion";
 import Layout from "../components/Layout";
 import FeedbackItem from "../components/FeebackItem";
+import { getCourses } from "../lib/getData";
 
-export default function Home() {
+export default function Home({ courses }) {
   return (
     <>
       <Layout>
@@ -22,7 +23,7 @@ export default function Home() {
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {courses.map((course) => (
-              <Link href={course.href} key={course.id}>
+              <Link href={`/courses/${course.slug}`} key={course._id}>
                 <a>
                   <CourseItem course={course} />
                 </a>
@@ -68,21 +69,23 @@ export default function Home() {
                 সকাল 10টা থেকে রাত 11টা পর্যন্ত
               </p>
             </div>
-            <Button className="bg-gradient text-white flex-shrink-0">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={"/whatsapp.svg"}
-                    height={16}
-                    width={16}
-                    alt="whatsapp"
-                  />
-                  <div className="h-3 w-[2px] bg-white/[0.5]"></div>
-                  <Phone size={16} />
+            <a href="tel:+8801712122501">
+              <Button className="bg-gradient text-white flex-shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={"/whatsapp.svg"}
+                      height={16}
+                      width={16}
+                      alt="whatsapp"
+                    />
+                    <div className="h-3 w-[2px] bg-white/[0.5]"></div>
+                    <Phone size={16} />
+                  </div>
+                  01712 122501
                 </div>
-                01712 122501
-              </div>
-            </Button>
+              </Button>
+            </a>
           </div>
         </div>
 
@@ -108,9 +111,11 @@ export default function Home() {
                 আপনিও অংশগ্রহন করতে পারেন।
               </p>
             </div>
-            <Button className="bg-gradient text-white flex-shrink-0">
-              ফ্রি সেমিনার
-            </Button>
+            <Link href={"/seminar"}>
+              <Button className="bg-gradient text-white flex-shrink-0">
+                ফ্রি সেমিনার
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -129,4 +134,11 @@ export default function Home() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const courses = await getCourses();
+  return {
+    props: { courses },
+  };
 }

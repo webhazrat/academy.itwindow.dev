@@ -1,6 +1,7 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import { checkLogin } from "@/src/lib/auth";
 import { Copy } from "lucide-react";
 import { getSession } from "next-auth/react";
 import React from "react";
@@ -82,18 +83,6 @@ export default function ReferralEnroll() {
     </>
   );
 }
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: `/login`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+export async function getServerSideProps(context) {
+  return checkLogin(context);
 }

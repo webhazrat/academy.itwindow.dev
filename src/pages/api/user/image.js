@@ -20,7 +20,7 @@ export default async function handler(req, res) {
           throw new Error(error);
         }
         await connectDB();
-        const user = await userModel.findById(session.user._id);
+        const user = await userModel.findById(session.user._id).select("image");
         if (user.image) {
           unlinkPhoto(user.image, destination);
         }

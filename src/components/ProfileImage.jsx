@@ -5,7 +5,7 @@ import { getCroppedImg, readFile } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Pencil } from "lucide-react";
 
-export default function ProfilePhoto({ mutate }) {
+export default function ProfileImage({ mutate }) {
   const [image, setImage] = useState({
     src: "",
     originalname: "",
@@ -19,11 +19,11 @@ export default function ProfilePhoto({ mutate }) {
     setCroppedImage(cropped);
   };
 
-  const handleProfilePhoto = async () => {
+  const handleProfileImage = async () => {
     const formData = new FormData();
     formData.append("file", croppedImage, image.originalname);
     try {
-      const response = await fetch("/api/user/profilePhoto", {
+      const response = await fetch("/api/user/image", {
         method: "POST",
         body: formData,
       });
@@ -32,9 +32,9 @@ export default function ProfilePhoto({ mutate }) {
       if (response.ok) {
         mutate();
       }
-      console.log({ profilePhoto: data });
+      console.log({ ProfileImage: data });
     } catch (error) {
-      console.log({ profilePhoto: error });
+      console.log({ ProfileImage: error });
     }
   };
 
@@ -86,7 +86,7 @@ export default function ProfilePhoto({ mutate }) {
             </div>
             {croppedImage && (
               <Button
-                onClick={handleProfilePhoto}
+                onClick={handleProfileImage}
                 className="bg-gradient text-white"
               >
                 আপলোড

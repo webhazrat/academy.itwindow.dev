@@ -1,4 +1,5 @@
 import DashboardLayout from "@/src/components/DashboardLayout";
+import { checkAdmin } from "@/src/lib/auth";
 
 export default function Dashboard() {
   return (
@@ -8,4 +9,8 @@ export default function Dashboard() {
       </div>
     </DashboardLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  return checkAdmin(context);
 }

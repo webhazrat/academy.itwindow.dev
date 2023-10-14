@@ -84,17 +84,13 @@ export const CourseSchema = z.object({
     }),
 });
 
-export const CoursePhotoSchema = z.object({
+export const CourseImageSchema = z.object({
   file: z.any().refine(
     (file) => {
       if (!file) {
         return false;
       }
-      const accectTypes = ["image/jpeg", "image/png", "image/svg+xml"];
-      const fileType = file.type;
-      const fileSize = file.size;
-      const maxSize = 1 * 1024 * 1024;
-      if (!accectTypes.includes(fileType) || fileSize > maxSize) {
+      if (!file.type.startsWith("image/") || file.size > 1 * 1024 * 1024) {
         return false;
       }
       return true;

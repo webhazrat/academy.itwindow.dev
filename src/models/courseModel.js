@@ -20,6 +20,8 @@ const courseSchema = new Schema(
     knows: [{ _id: false, value: String }],
     hows: [{ _id: false, value: String }],
     fee: Number,
+    status: String,
+    order: Number,
   },
   {
     timestamps: true,

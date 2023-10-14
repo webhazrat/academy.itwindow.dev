@@ -1,8 +1,9 @@
 import Label from "@/src/components/Label";
 import ProfileEdit from "@/src/components/ProfileEdit";
+import ProfileImage from "@/src/components/ProfileImage";
 import ProfileLayout from "@/src/components/ProfileLayout";
-import ProfilePhoto from "@/src/components/ProfilePhoto";
 import { useUserProfile } from "@/src/hook/useUserProfile";
+import { checkLogin } from "@/src/lib/auth";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 
@@ -14,17 +15,12 @@ export default function Profile() {
     try {
       const response = await fetch("api/user/update", {
         method: "PUT",
-        credentials: "include",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const updateResponse = await response.json();
-      if (response.ok) {
-        mutate();
-      }
-      return updateResponse;
+      return response;
     } catch (error) {
       console.log({ profilePage: error });
     }
@@ -39,7 +35,13 @@ export default function Profile() {
           <div>
             <div className="flex justify-between items-center">
               <h1 className="text-xl font-medium mb-3">প্রোফাইল</h1>
-              <ProfileEdit user={user} onSubmit={handleProfileUpdate} />
+              {user && (
+                <ProfileEdit
+                  user={user}
+                  mutate={mutate}
+                  onSubmit={handleProfileUpdate}
+                />
+              )}
             </div>
             <div>
               <div className="flex gap-5 items-center">
@@ -55,7 +57,7 @@ export default function Profile() {
                     />
                   </div>
 
-                  <ProfilePhoto mutate={mutate} />
+                  <ProfileImage mutate={mutate} />
                 </div>
                 <div>
                   <h2 className="text-lg font-medium">{user?.name}</h2>
@@ -114,18 +116,6 @@ export default function Profile() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: `/login`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+export async function getServerSideProps(context) {
+  return checkLogin(context);
 }

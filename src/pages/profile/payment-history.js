@@ -1,5 +1,6 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
+import { checkLogin } from "@/src/lib/auth";
 import { getSession } from "next-auth/react";
 
 export default function PaymentHistory() {
@@ -54,18 +55,6 @@ export default function PaymentHistory() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: `/login`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+export async function getServerSideProps(context) {
+  return checkLogin(context);
 }

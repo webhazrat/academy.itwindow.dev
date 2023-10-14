@@ -1,5 +1,6 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
+import { checkLogin } from "@/src/lib/auth";
 import { BookOpen, Calendar, Paperclip, Video } from "lucide-react";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
@@ -53,18 +54,6 @@ export default function MyCourses() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: `/login`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+export async function getServerSideProps(context) {
+  return checkLogin(context);
 }

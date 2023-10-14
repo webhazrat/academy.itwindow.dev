@@ -6,6 +6,7 @@ import { ScrollArea } from "./ui/scroll-area";
 
 export default function DashboardLayout({ children }) {
   const { theme, setTheme } = useTheme();
+
   return (
     <>
       <Head>

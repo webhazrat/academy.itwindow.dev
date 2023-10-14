@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "../lib/validation";
 import { useState } from "react";
 
-export default function ProfileEdit({ user, onSubmit }) {
+export default function ProfileEdit({ user, mutate, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
   const {
     register,
@@ -24,15 +24,7 @@ export default function ProfileEdit({ user, onSubmit }) {
     clearErrors,
   } = useForm({
     resolver: zodResolver(UserSchema),
-    defaultValues: {
-      name: user?.name,
-      email: user?.email,
-      address: user?.address,
-      guardian: user?.guardian,
-      guardianPhone: user?.guardianPhone,
-      education: user?.education,
-      institute: user?.institute,
-    },
+    defaultValues: user,
   });
 
   const handleEditSubmit = async (data) => {
@@ -47,6 +39,7 @@ export default function ProfileEdit({ user, onSubmit }) {
         });
       }
     } else {
+      mutate();
       setIsOpen(false);
       clearErrors();
     }

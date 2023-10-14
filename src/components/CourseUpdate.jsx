@@ -1,24 +1,16 @@
-import Label from "@/src/components/Label";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { Textarea } from "@/src/components/ui/textarea";
-import { useToast } from "@/src/components/ui/use-toast";
-import { CourseSchema } from "@/src/lib/validation";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { useToast } from "./ui/use-toast";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Minus, Plus } from "lucide-react";
-import { useForm, useFieldArray } from "react-hook-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+import { CourseSchema } from "../lib/validation";
+import Label from "./Label";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
+import { Loader2, Minus } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
-import { useState } from "react";
 
-export default function CourseCreate({ mutate }) {
-  const [isOpen, setIsOpen] = useState(null);
+export default function CourseUpdate({ course, setCourse, mutate }) {
   const { toast } = useToast();
   const {
     control,
@@ -31,13 +23,7 @@ export default function CourseCreate({ mutate }) {
     clearErrors,
   } = useForm({
     resolver: zodResolver(CourseSchema),
-    defaultValues: {
-      topics: [{ value: "" }],
-      details: [{ question: "", answer: "" }],
-      requirements: [{ value: "" }],
-      knows: [{ value: "" }],
-      hows: [{ value: "" }],
-    },
+    defaultValues: course,
   });
 
   const topics = useFieldArray({
@@ -65,20 +51,20 @@ export default function CourseCreate({ mutate }) {
     control,
   });
 
-  const handleCourse = async (data) => {
+  const handleCourseUpdate = async (data) => {
     try {
-      const response = await fetch("/api/course/create", {
-        method: "POST",
+      const response = await fetch(`/api/course/update?id=${course._id}`, {
+        method: "PUT",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const createResponse = await response.json();
+      const updateResponse = await response.json();
       if (!response.ok) {
         // server custom zod pattern error
-        if (createResponse?.errors?.length > 0) {
-          createResponse.errors.forEach((error) => {
+        if (updateResponse?.errors?.length > 0) {
+          updateResponse.errors.forEach((error) => {
             setError(error.field, {
               type: "server",
               message: error.message,
@@ -88,31 +74,26 @@ export default function CourseCreate({ mutate }) {
       } else {
         toast({
           variant: "success",
-          title: createResponse.title,
-          description: createResponse.message,
+          title: updateResponse.title,
+          description: updateResponse.message,
         });
         mutate();
         reset();
         clearErrors();
-        setIsOpen(null);
       }
     } catch (error) {
-      console.log({ courseCreateCatch: error });
+      console.log({ courseUpdateCatch: error });
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <Plus size={14} className="mr-2" /> কোর্স সংযুক্ত করুন
-        </Button>
-      </DialogTrigger>
+    <Dialog open={course} onOpenChange={setCourse}>
       <DialogContent className="max-w-5xl p-0">
-        <DialogHeader className="p-7">
-          <DialogTitle>নতুন কোর্স সংযুক্ত</DialogTitle>
+        <DialogHeader className="p-5">
+          <DialogTitle>কোর্স আপডেট</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(handleCourse)}>
+
+        <form onSubmit={handleSubmit(handleCourseUpdate)}>
           <div className="fixed w-full bottom-0 px-7 left-0 dark:bg-background rounded-b-md z-40 border-t h-16 flex justify-end items-center">
             <Button
               type="submit"
@@ -122,7 +103,7 @@ export default function CourseCreate({ mutate }) {
               {isSubmitting && (
                 <Loader2 size={16} className="mr-2 animate-spin" />
               )}
-              সংযুক্ত করুন
+              আপডেট করুন
             </Button>
           </div>
           <ScrollArea className="h-[calc(100vh_-_200px)] overflow-y-auto  mb-16">
