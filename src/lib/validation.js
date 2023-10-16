@@ -12,6 +12,18 @@ export const UserRegisterSchema = z
     name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
     password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে।"),
     confirmPassword: z.string(),
+    refer: z
+      .string()
+      .optional()
+      .refine(
+        (phone) =>
+          phone === "" ||
+          phone === undefined ||
+          /^(01[3456789]\d{8})$/.test(phone),
+        {
+          message: "সঠিক মোবাইল নাম্বার ইনপুট করুন।",
+        }
+      ),
     terms: z
       .boolean()
       .default(false)

@@ -1,6 +1,6 @@
 import connectDB from "@/src/lib/connect";
 import { multerStorage, uId, unlinkPhoto } from "@/src/lib/helpers";
-import adminAuthMiddleware from "@/src/middleware/adminAuthMiddleware";
+import { checkAdmin } from "@/src/middleware/serverAuth";
 import courseModel from "@/src/models/courseModel";
 
 export const config = {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const destination = "public/courses";
     try {
-      const session = await adminAuthMiddleware(req, res);
+      const session = await checkAdmin(req, res);
       const upload = await multerStorage(uId(), destination);
       upload.single("file")(req, {}, async (error) => {
         if (error) {

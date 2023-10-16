@@ -1,6 +1,3 @@
-import CourseCreate from "@/src/components/CourseCreate";
-import CourseImage from "@/src/components/CourseImage";
-import CourseUpdate from "@/src/components/CourseUpdate";
 import DashboardLayout from "@/src/components/DashboardLayout";
 import { DataTable } from "@/src/components/DataTable";
 import { Button } from "@/src/components/ui/button";
@@ -12,17 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { checkAdmin } from "@/src/lib/auth";
+import { checkAdmin } from "@/src/middleware/clientAuth";
 import { fetcher } from "@/src/lib/utils";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
+import UserUpdate from "@/src/components/UserUpdate";
 
 export default function Users() {
-  const [course, setCourse] = useState(null);
-  const [photo, setPhoto] = useState(null);
+  const [user, setUser] = useState(null);
   const { data, isLoading, mutate } = useSWR(
-    "/api/course?sortBy=createdAt&sortOrder=desc",
+    "/api/users?sortBy=createdAt&sortOrder=desc",
     fetcher
   );
 
@@ -46,40 +43,66 @@ export default function Users() {
       enableHiding: false,
     },
     {
-      accessorKey: "title",
+      accessorKey: "name",
       header: ({ column }) => {
         return (
           <button
             className="flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Title <ChevronsUpDown className="w-3 h-3 ml-2" />
+            Name <ChevronsUpDown className="w-3 h-3 ml-2" />
           </button>
         );
       },
     },
     {
-      accessorKey: "excerpt",
+      accessorKey: "phone",
       header: ({ column }) => {
         return (
           <button
             className="flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Short Description <ChevronsUpDown className="w-3 h-3 ml-2" />
+            Phone <ChevronsUpDown className="w-3 h-3 ml-2" />
           </button>
         );
       },
     },
     {
-      accessorKey: "fee",
+      accessorKey: "address",
       header: ({ column }) => {
         return (
           <button
             className="flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fee <ChevronsUpDown className="w-3 h-3 ml-2" />
+            Address <ChevronsUpDown className="w-3 h-3 ml-2" />
+          </button>
+        );
+      },
+    },
+    {
+      accessorKey: "role",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex items-center"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Role <ChevronsUpDown className="w-3 h-3 ml-2" />
+          </button>
+        );
+      },
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex items-center"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status <ChevronsUpDown className="w-3 h-3 ml-2" />
           </button>
         );
       },
@@ -101,7 +124,7 @@ export default function Users() {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const course = row.original;
+        const user = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -116,14 +139,7 @@ export default function Users() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() => {
-                  setPhoto(course);
-                }}
-              >
-                ফটো
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setCourse(course);
+                  setUser(user);
                 }}
               >
                 ইডিট
@@ -148,16 +164,8 @@ export default function Users() {
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
           {!isLoading && <DataTable columns={columns} data={data.data} />}
-          {photo && (
-            <CourseImage course={photo} setCourse={setPhoto} mutate={mutate} />
-          )}
-          {course && (
-            <CourseUpdate
-              course={course}
-              setCourse={setCourse}
-              mutate={mutate}
-            />
-          )}
+
+          {user && <UserUpdate user={user} setUser={setUser} mutate={mutate} />}
         </div>
       </div>
     </DashboardLayout>

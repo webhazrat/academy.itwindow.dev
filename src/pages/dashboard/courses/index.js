@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { checkAdmin } from "@/src/lib/auth";
+import { checkAdmin } from "@/src/middleware/clientAuth";
 import { fetcher } from "@/src/lib/utils";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
@@ -22,7 +22,7 @@ export default function Courses() {
   const [course, setCourse] = useState(null);
   const [photo, setPhoto] = useState(null);
   const { data, isLoading, mutate } = useSWR(
-    "/api/course?sortBy=createdAt&sortOrder=desc",
+    "/api/courses?sortBy=createdAt&sortOrder=desc",
     fetcher
   );
 

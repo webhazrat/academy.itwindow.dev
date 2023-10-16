@@ -2,8 +2,7 @@ import Label from "@/src/components/Label";
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { checkLogin } from "@/src/lib/auth";
-import { getSession } from "next-auth/react";
+import { checkLogin } from "@/src/middleware/clientAuth";
 
 export default function PresentReport() {
   return (

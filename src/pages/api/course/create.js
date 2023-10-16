@@ -1,7 +1,6 @@
 import connectDB from "@/src/lib/connect";
-import { unlinkPhoto } from "@/src/lib/helpers";
 import { CourseSchema } from "@/src/lib/validation";
-import adminAuthMiddleware from "@/src/middleware/adminAuthMiddleware";
+import { checkAdmin } from "@/src/middleware/serverAuth";
 import courseModel from "@/src/models/courseModel";
 import { z } from "zod";
 
@@ -10,13 +9,11 @@ export default async function handler(req, res) {
     const data = req.body;
     const destination = "public/courses";
     try {
-      const session = await adminAuthMiddleware(req, res);
+      const session = await checkAdmin(req, res);
       CourseSchema.parse(req.body);
       await connectDB();
       const slug = await courseModel.countDocuments({ slug: data.slug });
-      //const slug = await courseModel.findOne({ slug: data.slug });
       if (slug) {
-        unlinkPhoto(data.image, destination);
         return res.status(400).json({
           errors: [
             {
@@ -34,7 +31,7 @@ export default async function handler(req, res) {
         });
       }
     } catch (error) {
-      unlinkPhoto(data.image, destination);
+      // CourseSchema zodError
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

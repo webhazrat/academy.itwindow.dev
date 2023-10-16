@@ -1,5 +1,5 @@
 import DashboardLayout from "@/src/components/DashboardLayout";
-import { checkAdmin } from "@/src/lib/auth";
+import { checkAdmin } from "@/src/middleware/clientAuth";
 
 export default function Dashboard() {
   return (

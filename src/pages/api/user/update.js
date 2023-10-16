@@ -1,13 +1,13 @@
 import connectDB from "@/src/lib/connect";
 import { UserSchema } from "@/src/lib/validation";
-import loginAuthMiddleware from "@/src/middleware/loginAuthMiddleware";
+import { checkLogin } from "@/src/middleware/serverAuth";
 import userModel from "@/src/models/userModel";
 import { z } from "zod";
 
 export default async function handler(req, res) {
   if (req.method === "PUT") {
     try {
-      const session = await loginAuthMiddleware(req, res);
+      const session = await checkLogin(req, res);
       UserSchema.parse(req.body);
       const data = req.body;
       await connectDB();
@@ -21,6 +21,7 @@ export default async function handler(req, res) {
       });
     } catch (error) {
       console.log({ userUpdateCatch: error });
+      // UserSchema zodError
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

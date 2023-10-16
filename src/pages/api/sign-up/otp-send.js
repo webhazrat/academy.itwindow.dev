@@ -1,5 +1,5 @@
 import connectDB from "@/src/lib/connect";
-import { generateOTP } from "@/src/lib/helpers";
+import { generateOTP, sendSMS } from "@/src/lib/helpers";
 import { OtpSendSchema } from "@/src/lib/validation";
 import userModel from "@/src/models/userModel";
 import { z } from "zod";
@@ -11,7 +11,10 @@ export default async function handler(req, res) {
       OtpSendSchema.parse(req.body);
       const { phone } = req.body;
       await connectDB();
-      const userExist = await userModel.findOne({ phone, status: "verified" });
+      const userExist = await userModel.countDocuments({
+        phone,
+        status: "verified",
+      });
       if (userExist) {
         return res.status(400).json({
           errors: [
@@ -22,7 +25,8 @@ export default async function handler(req, res) {
           ],
         });
       } else {
-        const otp = bcrypt.hashSync(generateOTP(), 10);
+        const genOTP = generateOTP();
+        const otp = bcrypt.hashSync(genOTP, 8);
 
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         await userModel.updateOne(
@@ -32,7 +36,20 @@ export default async function handler(req, res) {
         );
 
         // send to phone also
-        //await sendOtpToPhone(phone, otp);
+        const send = await sendSMS(
+          `88${phone}`,
+          `Your phone verification OTP is ${genOTP}`
+        );
+        if (send.code !== "ok") {
+          return res.status(400).json({
+            errors: [
+              {
+                field: "phone",
+                message: "দুঃখিত! মোবাইল নাম্বারটি চেক করে আবার চেষ্টা করুন",
+              },
+            ],
+          });
+        }
 
         return res.status(200).json({
           status: 200,
@@ -40,6 +57,7 @@ export default async function handler(req, res) {
         });
       }
     } catch (error) {
+      console.log({ otpSendCatch: error });
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({
@@ -48,7 +66,6 @@ export default async function handler(req, res) {
           })),
         });
       } else {
-        console.log({ otpSendCatch: error });
         return res.status(500).json({ error: "Internal Server Error" });
       }
     }

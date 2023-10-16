@@ -1,6 +1,6 @@
 import connectDB from "@/src/lib/connect";
 import { CourseSchema } from "@/src/lib/validation";
-import adminAuthMiddleware from "@/src/middleware/adminAuthMiddleware";
+import { checkAdmin } from "@/src/middleware/serverAuth";
 import courseModel from "@/src/models/courseModel";
 import { z } from "zod";
 
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const { id } = req.query;
     const data = req.body;
     try {
-      const session = await adminAuthMiddleware(req, res);
+      const session = await checkAdmin(req, res);
       CourseSchema.parse(req.body);
       await connectDB();
       const slug = await courseModel.countDocuments({

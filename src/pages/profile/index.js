@@ -3,8 +3,7 @@ import ProfileEdit from "@/src/components/ProfileEdit";
 import ProfileImage from "@/src/components/ProfileImage";
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { useUserProfile } from "@/src/hook/useUserProfile";
-import { checkLogin } from "@/src/lib/auth";
-import { getSession } from "next-auth/react";
+import { checkLogin } from "@/src/middleware/clientAuth";
 import Image from "next/image";
 
 export default function Profile() {

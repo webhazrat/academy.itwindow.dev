@@ -1,6 +1,6 @@
 import connectDB from "@/src/lib/connect";
 import { multerStorage, uId, unlinkPhoto } from "@/src/lib/helpers";
-import loginAuthMiddleware from "@/src/middleware/loginAuthMiddleware";
+import { checkLogin } from "@/src/middleware/serverAuth";
 import userModel from "@/src/models/userModel";
 
 export const config = {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const destination = "public/uploads";
     try {
-      const session = await loginAuthMiddleware(req, res);
+      const session = await checkLogin(req, res);
       const upload = await multerStorage(uId(), destination);
       upload.single("file")(req, {}, async (error) => {
         if (error) {

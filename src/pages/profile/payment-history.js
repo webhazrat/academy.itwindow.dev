@@ -1,7 +1,6 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
-import { checkLogin } from "@/src/lib/auth";
-import { getSession } from "next-auth/react";
+import { checkLogin } from "@/src/middleware/clientAuth";
 
 export default function PaymentHistory() {
   return (

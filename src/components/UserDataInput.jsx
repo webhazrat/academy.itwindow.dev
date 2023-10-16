@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserRegisterSchema } from "../lib/validation";
 
-export default function UserDataInput({ onSubmit, onBack, phone, otp }) {
+export default function UserDataInput({ onSubmit, phone, otp }) {
   const {
     register,
     handleSubmit,
@@ -23,8 +23,7 @@ export default function UserDataInput({ onSubmit, onBack, phone, otp }) {
   const handleSubmitForm = async (data) => {
     (data.phone = phone), (data.otp = otp);
     const response = await onSubmit(data);
-    console.log({ data, response });
-    if (response?.errors.length > 0) {
+    if (response?.errors?.length > 0) {
       response.errors.forEach((error) => {
         setError(error.field, {
           type: "server",
@@ -46,18 +45,14 @@ export default function UserDataInput({ onSubmit, onBack, phone, otp }) {
 
   return (
     <div>
-      <Button variant="outline" className="mb-8" onClick={onBack}>
-        <ChevronLeft />
-      </Button>
-
-      <form className="space-y-3" onSubmit={handleSubmit(handleSubmitForm)}>
+      <form className="space-y-4" onSubmit={handleSubmit(handleSubmitForm)}>
         <div className="space-y-3">
-          <Label htmlFor="name" className="font-medium">
-            আপনার পুরো নাম
-          </Label>
-          <p className="text-sm dark:text-slate-400">
-            সকল কমিউনিকেশনে এই নামটি ব্যবহৃত হবে, তাই সঠিক নাম ব্যবহার করুন
-          </p>
+          <div>
+            <Label htmlFor="name">আপনার পুরো নাম</Label>
+            <p className="text-sm dark:text-slate-400">
+              সকল কমিউনিকেশনে এই নামটি ব্যবহৃত হবে, তাই সঠিক নাম ব্যবহার করুন
+            </p>
+          </div>
           <Input id="name" type="text" {...register("name")} />
           {errors.name && (
             <p className="text-sm dark:text-red-400">{errors.name.message}</p>
@@ -65,52 +60,67 @@ export default function UserDataInput({ onSubmit, onBack, phone, otp }) {
         </div>
 
         <div className="space-y-3">
-          <Label htmlFor="password" className="font-medium">
-            পাসওয়ার্ড
-          </Label>
-          <p className="text-sm dark:text-slate-400">
-            পাসওয়ার্ড কমপক্ষে আট(8) অক্ষরের হতে হবে
-          </p>
+          <div>
+            <Label htmlFor="password">পাসওয়ার্ড</Label>
+            <p className="text-sm dark:text-slate-400">
+              পাসওয়ার্ড কমপক্ষে আট(8) অক্ষরের হতে হবে
+            </p>
+          </div>
           <Input id="password" type="password" {...register("password")} />
           {errors.password && (
-            <p className="text-sm dark:text-red-400">
-              {errors.password.message}
-            </p>
+            <p className="text-sm text-red-400">{errors.password.message}</p>
           )}
         </div>
 
         <div className="space-y-3">
-          <Label htmlFor="confirmPassword" className="font-medium">
-            পুনরায় একই পাসওয়ার্ড দিন
-          </Label>
-          <p className="text-sm dark:text-slate-400">
-            উপরের পাসওয়ার্ড এর সাথে মিল রেখে ইনপুট করুন
-          </p>
+          <div>
+            <Label htmlFor="confirmPassword">পুনরায় একই পাসওয়ার্ড দিন</Label>
+            <p className="text-sm dark:text-slate-400">
+              উপরের পাসওয়ার্ড এর সাথে মিল রেখে ইনপুট করুন
+            </p>
+          </div>
           <Input
             id="confirmPassword"
             type="password"
             {...register("confirmPassword")}
           />
           {errors.confirmPassword && (
-            <p className="text-sm dark:text-red-400">
+            <p className="text-sm text-red-400">
               {errors.confirmPassword.message}
             </p>
+          )}
+        </div>
+
+        <div className="space-y-3 p-1">
+          <div>
+            <Label htmlFor="refer">
+              রেফারেল মোবাইল নাম্বার{" "}
+              <span className="text-gradient">(যদি থাকে)</span>
+            </Label>
+            <p className="text-sm dark:text-slate-400">
+              যে নাম্বার ব্যবহার করে রেফারেল অ্যাকাউন্ট করেছে
+            </p>
+          </div>
+          <Input id="refer" type="text" {...register("refer")} />
+          {errors.refer && (
+            <p className="text-sm text-red-400">{errors.refer.message}</p>
           )}
         </div>
 
         <div className="py-2">
           <label
             htmlFor="terms"
-            className={`flex items-center gap-3 text-[15px] ${
-              errors.terms ? "text-red-400" : "dark:text-slate-400"
-            } `}
+            className={`flex items-center gap-3 text-[15px]`}
           >
             <Checkbox
               id="terms"
               {...register("terms")}
               onCheckedChange={(e) => handleCheckChange(e)}
             />
-            আমি এই প্লাটফর্মের রিফান্ড পলিসি সহ সকল শর্ত মেনে নিচ্ছি
+            আমি এই প্লাটফর্মের রিফান্ড পলিসি সহ সকল শর্ত মেনে নিচ্ছি।
+            {errors.terms && (
+              <span className="text-sm text-red-400">আবশ্যক</span>
+            )}
           </label>
         </div>
         {errors.common && (

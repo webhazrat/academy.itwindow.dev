@@ -14,6 +14,7 @@ const userSchema = new Schema(
     email: String,
     image: String,
     password: String,
+    refer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     address: String,
     guardian: String,
     guardianPhone: String,

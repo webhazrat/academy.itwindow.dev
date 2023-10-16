@@ -1,5 +1,7 @@
 import connectDB from "@/src/lib/connect";
 import userModel from "@/src/models/userModel";
+import bcrypt from "bcryptjs";
+import { z } from "zod";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {

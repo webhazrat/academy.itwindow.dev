@@ -7,7 +7,7 @@ import OTPInput from "../components/OTPInput";
 import UserDataInput from "../components/UserDataInput";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
-import { getSession } from "next-auth/react";
+import { checkLoggedin } from "../middleware/clientAuth";
 
 export default function Join() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -15,7 +15,7 @@ export default function Join() {
   const [otp, setOtp] = useState("");
 
   // send otp
-  const handleNextPhone = async (data) => {
+  const handleOtpSend = async (data) => {
     try {
       const response = await fetch("/api/sign-up/otp-send", {
         method: "POST",
@@ -38,7 +38,7 @@ export default function Join() {
   };
 
   // otp verify
-  const handleNextOtp = async (data) => {
+  const handleOtpVerify = async (data) => {
     try {
       const response = await fetch("/api/sign-up/otp-verify", {
         method: "POST",
@@ -115,7 +115,7 @@ export default function Join() {
 
                 {currentStep === 0 && (
                   <PhoneInput
-                    onNext={handleNextPhone}
+                    handleOtpSend={handleOtpSend}
                     phone={phone}
                     setPhone={setPhone}
                   />
@@ -123,8 +123,9 @@ export default function Join() {
                 {currentStep === 1 && (
                   <OTPInput
                     phone={phone}
-                    onNext={handleNextOtp}
+                    handleOtpVerify={handleOtpVerify}
                     onBack={handleBackOtp}
+                    handleOtpSend={handleOtpSend}
                   />
                 )}
                 {currentStep === 2 && (
@@ -155,21 +156,6 @@ export default function Join() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-
-  console.log({ session });
-
-  if (session) {
-    return {
-      redirect: {
-        destination: `/profile`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+export async function getServerSideProps(context) {
+  return checkLoggedin(context);
 }

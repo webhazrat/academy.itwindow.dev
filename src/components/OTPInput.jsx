@@ -2,10 +2,18 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import Label from "./Label";
 import { Input } from "./ui/input";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useToast } from "./ui/use-toast";
 
-export default function OTPInput({ phone, onNext, onBack }) {
+export default function OTPInput({
+  phone,
+  handleOtpVerify,
+  onBack,
+  handleOtpSend,
+}) {
+  const [remainingTime, setRemainingTime] = useState(1 * 60);
+  const timerRef = useRef();
   const inputRefs = useRef([]);
   const {
     register,
@@ -15,11 +23,38 @@ export default function OTPInput({ phone, onNext, onBack }) {
     setError,
     clearErrors,
   } = useForm();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setRemainingTime((time) => time - 1);
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (remainingTime === 0) clearInterval(timerRef.current);
+  }, [remainingTime]);
+
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+
+  // otp send again
+  const otpSendAgain = async () => {
+    const response = await handleOtpSend({ phone });
+    if (!response?.errors?.length > 0) {
+      toast({
+        variant: "success",
+        title: "সফল!",
+        description: `${phone} নাম্বারে OTP পাঠানো হয়েছে।`,
+      });
+    }
+  };
 
   const handleNext = async (data) => {
     const otp = `${data.otp1}${data.otp2}${data.otp3}${data.otp4}`;
-    const response = await onNext({ otp });
-    if (response?.errors.length > 0) {
+    const response = await handleOtpVerify({ otp });
+    if (response?.errors?.length > 0) {
       response.errors.forEach((error) => {
         setError(error.field, {
           type: "server",
@@ -83,8 +118,24 @@ export default function OTPInput({ phone, onNext, onBack }) {
           <p className="text-sm text-red-400">{errors.otp.message}</p>
         )}
 
-        <div className="text-right">
-          <button className="text-gradient">আবার কোড পাঠান</button>
+        <div className="flex justify-between items-center">
+          <p>
+            {remainingTime !== 0 && (
+              <span>
+                অবশিষ্ট সময় {minutes}:{seconds < 10 ? "0" : ""}
+                {seconds}
+              </span>
+            )}
+          </p>
+          <Button
+            type="button"
+            variant="link"
+            disabled={remainingTime !== 0}
+            className={`p-0`}
+            onClick={otpSendAgain}
+          >
+            আবার কোড পাঠান
+          </Button>
         </div>
 
         <Button
@@ -93,7 +144,7 @@ export default function OTPInput({ phone, onNext, onBack }) {
           className="bg-gradient text-white"
         >
           {isSubmitting && <Loader2 size={16} className="mr-2 animate-spin" />}
-          সাবমিট করুন
+          ভেরিফাই করুন
         </Button>
       </form>
     </div>

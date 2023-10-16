@@ -7,12 +7,11 @@ export default async function handler(req, res) {
     try {
       const session = await checkLogin(req, res);
       await connectDB();
-      const user = await userModel.findOne(
-        { _id: session.user._id },
-        { password: 0 }
-      );
-      if (user) {
-        res.status(200).json({ status: 200, data: user });
+      const users = await userModel
+        .find({ refer: session.user._id })
+        .select("name phone");
+      if (users) {
+        res.status(200).json({ status: 200, data: users });
       } else {
         res.status(404).json({ status: 404, message: `User not found` });
       }

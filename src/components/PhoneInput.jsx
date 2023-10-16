@@ -6,7 +6,7 @@ import Label from "../components/Label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 
-export default function PhoneInput({ onNext }) {
+export default function PhoneInput({ handleOtpSend }) {
   const {
     register,
     handleSubmit,
@@ -18,8 +18,8 @@ export default function PhoneInput({ onNext }) {
   });
 
   const handleNext = async (data) => {
-    const response = await onNext(data);
-    if (response?.errors.length > 0) {
+    const response = await handleOtpSend(data);
+    if (response?.errors?.length > 0) {
       response.errors.forEach((error) => {
         setError(error.field, {
           type: "server",

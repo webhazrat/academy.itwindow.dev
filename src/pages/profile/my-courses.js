@@ -1,8 +1,7 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
-import { checkLogin } from "@/src/lib/auth";
+import { checkLogin } from "@/src/middleware/clientAuth";
 import { BookOpen, Calendar, Paperclip, Video } from "lucide-react";
-import { getSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function MyCourses() {
@@ -41,9 +40,14 @@ export default function MyCourses() {
                     মোট কোর্স ফি ৳3000। এর 50% পে করার মাধ্যমে কোর্সটিতে
                     ইনরোলমেন্ট সম্পন্ন হবে।
                   </p>
-                  <Button className="bg-gradient text-white" size="sm">
-                    পে করুন
-                  </Button>
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-gradient">
+                      <Link href={"/"}>ফিডব্যাক দিন</Link>
+                    </span>
+                    <Button className="bg-gradient text-white" size="sm">
+                      পে করুন
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

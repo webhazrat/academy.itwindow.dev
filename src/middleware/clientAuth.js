@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import connectDB from "./connect";
+import connectDB from "../lib/connect";
 import userModel from "../models/userModel";
 
 export async function checkAdmin(context) {
@@ -34,6 +34,22 @@ export async function checkLogin(context) {
     return {
       redirect: {
         destination: `/login`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
+
+export async function checkLoggedin(context) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: `/profile`,
         permanent: false,
       },
     };

@@ -7,16 +7,15 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       UserRegisterSchema.parse(req.body);
-      const { phone, otp, name, password } = req.body;
+      const { phone, otp, name, password, refer } = req.body;
       await connectDB();
       const hashPassword = bcrypt.hashSync(password, 8);
-
-      const userExist = await userModel.findOne({
+      const userExist = await userModel.countDocuments({
         phone,
         status: "verified",
       });
       if (userExist) {
-        res.status(400).json({
+        return res.status(400).json({
           errors: [
             {
               field: "common",
@@ -26,10 +25,33 @@ export default async function handler(req, res) {
           ],
         });
       } else {
+        let userId = "";
+        if (refer) {
+          const user = await userModel.findOne({ phone: refer }).select("_id");
+          if (!user) {
+            return res.status(400).json({
+              errors: [
+                {
+                  field: "refer",
+                  message:
+                    "এই মোবাইল নাম্বার ব্যবহার করে কোন অ্যাকাউন্ট না থাকায় রেফারেল হিসেবে ব্যবহার করা যাবে না।",
+                },
+              ],
+            });
+          }
+          userId = user._id;
+        }
+
         await userModel.updateOne(
           { phone, otp },
           {
-            $set: { name, password: hashPassword, status: "verified" },
+            $set: {
+              name,
+              password: hashPassword,
+              refer: userId,
+              role: "general",
+              status: "verified",
+            },
             $unset: {
               otp: 1,
               otpExpires: 1,
@@ -42,6 +64,8 @@ export default async function handler(req, res) {
         });
       }
     } catch (error) {
+      console.log({ otpVerifyCatch: error });
+      // UserRegisterSchema for zodError
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({
@@ -50,7 +74,6 @@ export default async function handler(req, res) {
           })),
         });
       } else {
-        console.log({ otpVerifyCatch: error });
         return res.status(500).json({ error: "Internal Server Error" });
       }
     }

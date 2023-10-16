@@ -1,7 +1,6 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Calendar } from "@/src/components/ui/calendar";
-import { checkLogin } from "@/src/lib/auth";
-import { getSession } from "next-auth/react";
+import { checkLogin } from "@/src/middleware/clientAuth";
 import React from "react";
 
 export default function PresentReport() {

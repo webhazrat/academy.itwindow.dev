@@ -1,23 +1,15 @@
+import ListItem from "@/src/components/ListItem";
 import ProfileLayout from "@/src/components/ProfileLayout";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { checkLogin } from "@/src/lib/auth";
-import { Copy } from "lucide-react";
-import { getSession } from "next-auth/react";
+import { useUserProfile } from "@/src/hook/useUserProfile";
+import { fetcher } from "@/src/lib/utils";
+import { checkLogin } from "@/src/middleware/clientAuth";
 import React from "react";
+import useSWR from "swr";
 
 export default function ReferralEnroll() {
-  const inputRef = React.useRef();
-  const handleCopy = async () => {
-    const input = inputRef.current;
-    try {
-      input.focus();
-      await navigator.clipboard.writeText(input.value);
-      alert("Copied!");
-    } catch (err) {
-      console.error("Failed to copy text", err);
-    }
-  };
+  const { user } = useUserProfile();
+  const { data, isLoading } = useSWR("/api/user/refer", fetcher);
+  const users = data?.data;
   return (
     <>
       <ProfileLayout>
@@ -25,58 +17,53 @@ export default function ReferralEnroll() {
           <h1 className="text-xl font-medium mb-3">রেফারেল ইনরোল</h1>
 
           <div className="space-y-5">
-            <div className="bg-card flex flex-col gap-2 rounded-md p-4">
-              <div className="flex gap-2">
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  value="http://localhost:3000/join?ref=45sd5sd4g5da45"
-                  readOnly
-                />
-                <Button
-                  size="sm"
-                  className="bg-gradient text-white flex gap-2 items-center flex-shrink-0"
-                  onClick={handleCopy}
-                >
-                  <Copy size={16} /> কপি করুন
-                </Button>
-              </div>
-              <p className="dark:text-slate-400 text-sm">
-                এখান থেকে রেফারেল লিংক কপি করে যেকোন শিক্ষার্থীকে এই রেফারেল
-                লিংকের মাধ্যমে ইনরোল করালে 10% কমিশন।
-              </p>
+            <div className="bg-slate-100 dark:bg-card rounded-md p-4 space-y-5">
+              <ListItem>
+                আপনি যদি কোন শিক্ষর্থীকে আপনার অ্যাকাউন্ট রেফারেল মোবাইল নাম্বার
+                ({user?.phone}) ব্যবহার করে সাইন আপ করান এবং পরবর্তীতে সেই
+                শিক্ষার্থী এই প্লাটফর্ম থেকে কোন কোর্স নেন, তাহলে তার কোর্স ফি
+                এর 10% কমিশন অ্যাড হবে আপনার প্রোফাইলে। এবং সর্বনিম্ন 100 টাকা
+                হলে আপনি যেকোন মোবাইল ব্যাংকিং ব্যবহার করে পে আউট করতে পারবেন।
+              </ListItem>
+              <ListItem>
+                রেফারেলে কোন শিক্ষর্থীকে সাইন আপ করতে সাইন আপ অপশনে গিয়ে{" "}
+                <strong>[যদি কোন রেফারেল থাকে]</strong> অপশনে এই মোবাইল নাম্বার
+                ({user?.phone}) ব্যবহার করতে হবে।
+              </ListItem>
             </div>
-
-            <table className="table-auto border-t border-collapse w-full rounded-md">
-              <thead>
-                <tr>
-                  <td className="border-b py-2">শিক্ষার্থীর নাম</td>
-                  <td className="border-b py-2">কোর্সের নাম</td>
-                  <td className="border-b py-2">স্ট্যাটাস</td>
-                  <td className="border-b py-2 text-right">পেইড অ্যামাউন্ট</td>
-                </tr>
-                <tr className="dark:text-slate-400">
-                  <td className="border-b py-2">সাহাদাত হোসেন</td>
-                  <td className="border-b py-2">
-                    এইচএসসি আইসিটি ক্র্যাশ কোর্স
-                  </td>
-                  <td className="border-b py-2 text-green-400">Admitted</td>
-                  <td className="border-b py-2 text-right text-green-400">
-                    ৳1500
-                  </td>
-                </tr>
-                <tr className="dark:text-slate-400">
-                  <td className="border-b py-2">সাবিদ হোসেন</td>
-                  <td className="border-b py-2">
-                    এইচএসসি আইসিটি ক্র্যাশ কোর্স
-                  </td>
-                  <td className="border-b py-2 text-green-400">Admitted</td>
-                  <td className="border-b py-2 text-right text-green-400">
-                    ৳1500
-                  </td>
-                </tr>
-              </thead>
-            </table>
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <table className="table-auto border-t border-collapse w-full rounded-md">
+                <thead>
+                  <tr>
+                    <td className="border-b py-2">শিক্ষার্থীর নাম</td>
+                    <td className="border-b py-2">মোবাইল নাম্বার</td>
+                    <td className="border-b py-2">কোর্সের নাম</td>
+                    <td className="border-b py-2">স্ট্যাটাস</td>
+                    <td className="border-b py-2 text-right">
+                      পেইড অ্যামাউন্ট
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length > 0 &&
+                    users.map((user) => (
+                      <tr key={user._id} className="dark:text-slate-400">
+                        <td className="border-b py-2">{user.name}</td>
+                        <td className="border-b py-2">
+                          <a href={`tel:+88${user.phone}`}>{user.phone}</a>
+                        </td>
+                        <td className="border-b py-2">-</td>
+                        <td className="border-b py-2 text-green-400">-</td>
+                        <td className="border-b py-2 text-right text-green-400">
+                          -
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </ProfileLayout>
