@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "../lib/validation";
 import { useState } from "react";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function ProfileEdit({ user, mutate, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,87 +54,94 @@ export default function ProfileEdit({ user, mutate, onSubmit }) {
           আপডেট
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="p-0">
+        <DialogHeader className="p-7">
           <DialogTitle>প্রোফাইল আপডেট</DialogTitle>
         </DialogHeader>
-        <div>
-          <form onSubmit={handleSubmit(handleEditSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">নাম</Label>
-              <Input id="name" type="text" {...register("name")} />
-              {errors.name && (
-                <p className="text-sm text-red-400">{errors.name.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">ইমেইল</Label>
-              <Input id="email" type="email" {...register("email")} />
-              {errors.email && (
-                <p className="text-sm text-red-400">{errors.email.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="address">বর্তমান ঠিকানা</Label>
-              <Input id="address" type="text" {...register("address")} />
-              {errors.address && (
-                <p className="text-sm text-red-400">{errors.address.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="guardian">অভিভাবকের নাম</Label>
-              <Input id="guardian" type="text" {...register("guardian")} />
-              {errors.guardian && (
-                <p className="text-sm text-red-400">
-                  {errors.guardian.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="guardianPhone" placeholder="01XXXXXXXXXXX">
-                অভিভাবকের মোবাইল নাম্বার
-              </Label>
-              <Input
-                id="guardianPhone"
-                type="text"
-                {...register("guardianPhone")}
-              />
-              {errors.guardianPhone && (
-                <p className="text-sm text-red-400">
-                  {errors.guardianPhone.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="education">সর্বশেষ শিক্ষাগত যোগ্যতা</Label>
-              <Input id="education" type="text" {...register("education")} />
-              {errors.education && (
-                <p className="text-sm text-red-400">
-                  {errors.education.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="institute">প্রতিষ্ঠানের নাম</Label>
-              <Input id="institute" type="text" {...register("institute")} />
-              {errors.institute && (
-                <p className="text-sm text-red-400">
-                  {errors.institute.message}
-                </p>
-              )}
-            </div>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-gradient text-white"
+        <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto">
+          <div className="p-7 pt-0">
+            <form
+              onSubmit={handleSubmit(handleEditSubmit)}
+              className="space-y-4"
             >
-              {isSubmitting && (
-                <Loader2 size={16} className="mr-2 animate-spin" />
-              )}
-              সংরক্ষণ
-            </Button>
-          </form>
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">নাম</Label>
+                <Input id="name" type="text" {...register("name")} />
+                {errors.name && (
+                  <p className="text-sm text-red-400">{errors.name.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">ইমেইল</Label>
+                <Input id="email" type="email" {...register("email")} />
+                {errors.email && (
+                  <p className="text-sm text-red-400">{errors.email.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address">বর্তমান ঠিকানা</Label>
+                <Input id="address" type="text" {...register("address")} />
+                {errors.address && (
+                  <p className="text-sm text-red-400">
+                    {errors.address.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="guardian">অভিভাবকের নাম</Label>
+                <Input id="guardian" type="text" {...register("guardian")} />
+                {errors.guardian && (
+                  <p className="text-sm text-red-400">
+                    {errors.guardian.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="guardianPhone" placeholder="01XXXXXXXXXXX">
+                  অভিভাবকের মোবাইল নাম্বার
+                </Label>
+                <Input
+                  id="guardianPhone"
+                  type="text"
+                  {...register("guardianPhone")}
+                />
+                {errors.guardianPhone && (
+                  <p className="text-sm text-red-400">
+                    {errors.guardianPhone.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="education">সর্বশেষ শিক্ষাগত যোগ্যতা</Label>
+                <Input id="education" type="text" {...register("education")} />
+                {errors.education && (
+                  <p className="text-sm text-red-400">
+                    {errors.education.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="institute">প্রতিষ্ঠানের নাম</Label>
+                <Input id="institute" type="text" {...register("institute")} />
+                {errors.institute && (
+                  <p className="text-sm text-red-400">
+                    {errors.institute.message}
+                  </p>
+                )}
+              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-gradient text-white"
+              >
+                {isSubmitting && (
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                )}
+                সংরক্ষণ
+              </Button>
+            </form>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

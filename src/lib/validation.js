@@ -36,6 +36,18 @@ export const UserRegisterSchema = z
     path: ["confirmPassword"],
   });
 
+// forgot password form validation
+export const ChangePasswordSchema = z
+  .object({
+    password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে।"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে।",
+    path: ["confirmPassword"],
+  });
+
+// login form validation
 export const LoginSchema = z.object({
   phone: z
     .string()

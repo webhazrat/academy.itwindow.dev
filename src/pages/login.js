@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { checkLoggedin } from "../middleware/clientAuth";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -29,7 +30,10 @@ export default function Login() {
       ...data,
     });
     if (status.ok) {
-      router.push(status.url);
+      const redirectUrl = router.query.redirect
+        ? decodeURIComponent(router.query.redirect)
+        : "/profile";
+      router.push(redirectUrl);
     } else {
       setError("common", {
         type: "server",
@@ -118,9 +122,9 @@ export default function Login() {
                       )}
                       লগইন করুন
                     </Button>
-                    <button className="text-gradient">
-                      পাসওয়ার্ড ভুলে গেছেন?
-                    </button>
+                    <Link href="/forgot">
+                      <a className="text-gradient">পাসওয়ার্ড ভুলে গেছেন?</a>
+                    </Link>
                   </div>
                 </form>
               </div>

@@ -11,6 +11,8 @@ export const isActive = (path, href) => {
 
 export const APP_URL = "http://localhost:3000";
 
+export const OTP_EXPIRE_TIME = 5 * 60;
+
 export const fetcher = async (...args) => {
   return fetch(...args).then((res) => res.json());
 };

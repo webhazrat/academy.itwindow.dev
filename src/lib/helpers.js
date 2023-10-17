@@ -7,6 +7,10 @@ export const generateOTP = () => {
   return crypto.randomInt(1000, 10000).toString();
 };
 
+export const generateToken = () => {
+  return crypto.randomBytes(16).toString("hex");
+};
+
 export const uId = () => {
   const randdomString = crypto.randomBytes(6).toString("hex");
   return `${Date.now()}-${randdomString}`;

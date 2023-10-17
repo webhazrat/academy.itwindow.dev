@@ -1,18 +1,14 @@
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import Label from "./Label";
 import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "./ui/use-toast";
+import { OTP_EXPIRE_TIME } from "../lib/utils";
 
-export default function OTPInput({
-  phone,
-  handleOtpVerify,
-  onBack,
-  handleOtpSend,
-}) {
-  const [remainingTime, setRemainingTime] = useState(1 * 60);
+export default function OtpVerify({ phone, handleOtpVerify, handleOtpSend }) {
+  const [remainingTime, setRemainingTime] = useState(OTP_EXPIRE_TIME);
   const timerRef = useRef();
   const inputRefs = useRef([]);
   const {
@@ -26,14 +22,13 @@ export default function OTPInput({
   const { toast } = useToast();
 
   useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setRemainingTime((time) => time - 1);
-    }, 1000);
+    clearInterval(timerRef.current);
+    if (remainingTime > 0) {
+      timerRef.current = setInterval(() => {
+        setRemainingTime((time) => time - 1);
+      }, 1000);
+    }
     return () => clearInterval(timerRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (remainingTime === 0) clearInterval(timerRef.current);
   }, [remainingTime]);
 
   const minutes = Math.floor(remainingTime / 60);
@@ -41,8 +36,10 @@ export default function OTPInput({
 
   // otp send again
   const otpSendAgain = async () => {
+    clearErrors();
     const response = await handleOtpSend({ phone });
     if (!response?.errors?.length > 0) {
+      setRemainingTime(OTP_EXPIRE_TIME);
       toast({
         variant: "success",
         title: "সফল!",
@@ -51,9 +48,9 @@ export default function OTPInput({
     }
   };
 
-  const handleNext = async (data) => {
+  const handleOtpSubmit = async (data) => {
     const otp = `${data.otp1}${data.otp2}${data.otp3}${data.otp4}`;
-    const response = await handleOtpVerify({ otp });
+    const response = await handleOtpVerify({ phone, otp });
     if (response?.errors?.length > 0) {
       response.errors.forEach((error) => {
         setError(error.field, {
@@ -83,11 +80,7 @@ export default function OTPInput({
 
   return (
     <div>
-      <Button variant="outline" className="mb-8" onClick={onBack}>
-        <ChevronLeft />
-      </Button>
-
-      <form className="space-y-3" onSubmit={handleSubmit(handleNext)}>
+      <form className="space-y-3" onSubmit={handleSubmit(handleOtpSubmit)}>
         <Label className="font-medium">মোবাইল নাম্বার ভেরিফাই করুন</Label>
         <p className="text-sm dark:text-slate-400">
           {phone} নাম্বারে 4 সংখ্যার কোড পাঠানো হয়েছে। কোডটি এখানে ইনপুট করুন।
@@ -131,7 +124,7 @@ export default function OTPInput({
             type="button"
             variant="link"
             disabled={remainingTime !== 0}
-            className={`p-0`}
+            className={`p-0 h-auto`}
             onClick={otpSendAgain}
           >
             আবার কোড পাঠান

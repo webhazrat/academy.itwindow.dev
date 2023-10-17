@@ -2,11 +2,11 @@ import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OtpSendSchema } from "../lib/validation";
-import Label from "../components/Label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import Label from "./Label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
-export default function PhoneInput({ handleOtpSend }) {
+export default function OtpSend({ handleOtpSend, comment }) {
   const {
     register,
     handleSubmit,
@@ -34,12 +34,12 @@ export default function PhoneInput({ handleOtpSend }) {
   return (
     <form onSubmit={handleSubmit(handleNext)} className="space-y-4">
       <div className="space-y-3">
-        <Label className="font-medium" htmlFor="phone">
-          মোবাইল নাম্বার
-        </Label>
-        <p className="text-sm dark:text-slate-400">
-          মোবাইল নাম্বার ভেরিফাই করার জন্য সঠিক মোবাইল নাম্বার ইনপুট করুন।
-        </p>
+        <div>
+          <Label className="font-medium" htmlFor="phone">
+            মোবাইল নাম্বার
+          </Label>
+          <p className="text-sm dark:text-slate-400">{comment}</p>
+        </div>
         <Input
           id="phone"
           type="text"
