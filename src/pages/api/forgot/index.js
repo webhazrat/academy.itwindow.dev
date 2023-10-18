@@ -1,12 +1,12 @@
 import connectDB from "@/src/lib/connect";
-import { ChangePasswordSchema } from "@/src/lib/validation";
+import { ForgotPasswordSchema } from "@/src/lib/validation";
 import userModel from "@/src/models/userModel";
 import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      ChangePasswordSchema.parse(req.body);
+      ForgotPasswordSchema.parse(req.body);
       const { phone, token, password } = req.body;
       await connectDB();
       const hashPassword = bcrypt.hashSync(password, 8);
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       });
     } catch (error) {
       console.log({ forgotCatch: error });
-      // ChangePasswordSchema zod validation error
+      // ForgotPasswordSchema zod validation error
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

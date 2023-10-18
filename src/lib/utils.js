@@ -32,8 +32,8 @@ export function getCroppedImg(imageSrc, pixelCrop) {
   const canvas = document.createElement("canvas");
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
+  canvas.width = 300;
+  canvas.height = 300;
   const ctx = canvas.getContext("2d");
 
   ctx.drawImage(
@@ -44,11 +44,10 @@ export function getCroppedImg(imageSrc, pixelCrop) {
     pixelCrop.height * scaleY,
     0,
     0,
-    pixelCrop.width,
-    pixelCrop.height
+    300,
+    300
   );
 
-  // return canvas.toDataURL("image/jpeg");
   return new Promise((resolve, reject) => {
     canvas.toBlob((file) => {
       resolve(file);

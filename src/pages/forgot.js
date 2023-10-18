@@ -3,11 +3,11 @@ import { loginSlider } from "../constants";
 import Layout from "../components/Layout";
 import { checkLoggedin } from "../middleware/clientAuth";
 import { useState } from "react";
-import ChangePassword from "../components/ChangePassword";
 import OtpSend from "../components/OtpSend";
 import OtpVerify from "../components/OtpVerify";
 import { useToast } from "../components/ui/use-toast";
 import { useRouter } from "next/router";
+import ForgotPassword from "../components/ForgotPassword";
 
 export default function Forgot() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -124,7 +124,7 @@ export default function Forgot() {
                   />
                 )}
                 {currentStep === 2 && (
-                  <ChangePassword
+                  <ForgotPassword
                     handleSubmitUserData={handleSubmitUserData}
                     phone={phone}
                     token={token}

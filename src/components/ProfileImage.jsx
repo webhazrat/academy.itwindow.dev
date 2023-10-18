@@ -4,8 +4,10 @@ import { useState } from "react";
 import { getCroppedImg, readFile } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Pencil } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 export default function ProfileImage({ mutate }) {
+  const { toast } = useToast();
   const [image, setImage] = useState({
     src: "",
     originalname: "",
@@ -27,12 +29,16 @@ export default function ProfileImage({ mutate }) {
         method: "POST",
         body: formData,
       });
-      const data = await response.json();
+      const imageResponse = await response.json();
       setImage({ src: "", originalname: "" });
       if (response.ok) {
         mutate();
+        toast({
+          variant: "success",
+          title: imageResponse.title,
+          description: imageResponse.message,
+        });
       }
-      console.log({ ProfileImage: data });
     } catch (error) {
       console.log({ ProfileImage: error });
     }
@@ -45,7 +51,11 @@ export default function ProfileImage({ mutate }) {
         const imageDataUrl = await readFile(file);
         setImage({ src: imageDataUrl, originalname: file.name });
       } else {
-        console.log({ profilePage: "Please select an image file" });
+        toast({
+          variant: "destructive",
+          title: "দুঃখিত!",
+          description: "ইমেজ টাইপ ফাইল সিলেক্ট করুন।",
+        });
       }
     }
   };

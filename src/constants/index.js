@@ -241,6 +241,13 @@ export const dashboardSideNav = [
         title: "কোর্সসমূহ",
       },
       {
+        id: 6,
+        icon: "ClipboardPaste",
+        href: "/dashboard/enroll-requests",
+        titleE: "Enroll Requests",
+        title: "ইনরোল রিকুয়েস্টস",
+      },
+      {
         id: 5,
         icon: "GraduationCap",
         href: "/dashboard/students",

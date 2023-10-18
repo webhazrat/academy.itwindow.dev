@@ -28,7 +28,10 @@ export default async function handler(req, res) {
           { _id: session.user._id },
           { $set: { image: req.file.filename } }
         );
-        res.status(200).json({ message: "প্রোফাইল ফটো সফলভাবে আপলোড হয়েছে।" });
+        res.status(200).json({
+          title: "সফল!",
+          message: "প্রোফাইল ফটো সফলভাবে আপলোড হয়েছে।",
+        });
       });
     } catch (error) {
       console.log({ profilePhotoCatch: error });

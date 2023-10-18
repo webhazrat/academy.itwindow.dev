@@ -8,6 +8,9 @@ import Image from "next/image";
 
 export default function Profile() {
   const { user, isLoading, mutate } = useUserProfile();
+  const imageUrl = user?.image
+    ? `/uploads/${user.image}?v=${Date.now()}`
+    : "/no-photo.png";
 
   // profile update logic
   const handleProfileUpdate = async (data) => {
@@ -47,9 +50,7 @@ export default function Profile() {
                 <div className="relative">
                   <div className="w-[100px] h-[100px] border rounded-full">
                     <Image
-                      src={`${
-                        user?.image ? `/uploads/${user.image}` : "/no-photo.png"
-                      }`}
+                      src={imageUrl}
                       width={150}
                       height={150}
                       className="rounded-full"

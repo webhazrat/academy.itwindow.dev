@@ -8,33 +8,73 @@ import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 import Label from "@/src/components/Label";
 import { Input } from "@/src/components/ui/input";
 import { APP_URL } from "@/src/lib/utils";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EnrollSchema } from "@/src/lib/validation";
+import { useToast } from "@/src/components/ui/use-toast";
 
 export default function Cart({ course }) {
-  const [mobileBank, setMobileBank] = useState("bkash");
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm();
-
   const { data: session } = useSession();
+  const router = useRouter();
+  const { toast } = useToast();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+    reset,
+    setError,
+    clearErrors,
+  } = useForm({
+    resolver: zodResolver(EnrollSchema),
+    defaultValues: {
+      paymentMethod: "bkash",
+      transactionId: "",
+      amount: "",
+    },
+  });
 
   const handleEnrollConfirm = async (data) => {
     if (!session) {
       router.push(`/login?redirect=${encodeURIComponent(router.asPath)}`);
     } else {
-      data._id = course.data._id;
-      console.log({ data });
+      data.courseId = course.data._id;
+      try {
+        const response = await fetch("/api/enroll/create", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const enrollResponse = await response.json();
+        if (response.ok) {
+          reset();
+          toast({
+            variant: "success",
+            title: enrollResponse.title,
+            description: enrollResponse.message,
+          });
+        } else {
+          if (enrollResponse?.errors?.length > 0) {
+            enrollResponse.errors.forEach((error) => {
+              setError(error.field, {
+                type: "server",
+                message: error.message,
+              });
+            });
+          } else {
+            clearErrors();
+          }
+        }
+      } catch (error) {
+        console.log({ enrollResponse: error });
+      }
     }
   };
 
-  const handleChangePayment = (value) => {
-    setMobileBank(value);
-  };
+  const paymentMethod = watch("paymentMethod");
 
   return (
     <Layout border>
@@ -44,8 +84,9 @@ export default function Cart({ course }) {
             <div className="mb-4 space-y-2">
               <h1 className="text-xl font-medium mb-5">কোর্সে ইনরোল প্রোসেস</h1>
               <ListItem>
-                কোর্সগুলোর প্রতিটি সেশন সরাসরি আমারে ল্যাবে নেওয়া হবে, তাই কোর্স
-                ফি এর 50% দিয়ে কোর্সে ইনরোল কনফার্ম করা যাবে।
+                কোর্সটির প্রতিটি সেশন সরাসরি আমারে ল্যাবে নেওয়া হবে, তাই কোর্স
+                ফি এর কমপক্ষে 50% ({Number(course.data.fee) / 2} টাকা) দিয়ে
+                কোর্সে ইনরোল কনফার্ম করা যাবে। তাছাড়া ইনরোল কনফার্ম হবে না।
               </ListItem>
               <ListItem>
                 পেমেন্ট মেথড থেকে একটি মেথড সিলেক্ট করুন। পেমেন্ট মেথড বিকাশ,
@@ -54,15 +95,15 @@ export default function Cart({ course }) {
                 ট্রানজেকশন আইডি ইনপুট বক্সে ইনপুট করুন।
               </ListItem>
               <ListItem>
-                এরপর যে অ্যামাউন্ট টি সেন্ড করা হয়েছে সেই পরিমাণ অ্যামাউন্ট
-                ইনপুট বক্সে ইনপুট করুন।
+                এরপর যে অ্যামাউন্ট টি সেন্ড করা হয়েছে সেই পরিমাণ অ্যামাউন্ট,
+                অ্যামাউন্ট ইনপুট বক্সে ইনপুট করুন।
               </ListItem>
               <ListItem>
-                অথবা হ্যান্ড ক্যাস সিলেক্ট করে কনফার্ম করার মাধ্যমে কোর্সে ইনরোল
-                করা যাবে। এবং সরাসরি পেমেন্ট দিয়ে ইনরোল সম্পন্ন করা যাবে।
+                অথবা সরাসরি অফিসে ক্যাশ দিতে চাইলে হ্যান্ড ক্যাশ সিলেক্ট করে
+                কনফার্ম করুন। পরে অফিসে ক্যাশ জমা দিলে ইনরোল সম্পন্ন করা হবে।
               </ListItem>
               <p className="text-gradient">
-                [খুব শিঘ্রই মোবাইল ব্যাংকিং এর মাধ্যমে পেমেন্ট অটোমেশন সিস্টেম
+                [খুব শীঘ্রই মোবাইল ব্যাংকিং এর মাধ্যমে পেমেন্ট অটোমেশন সিস্টেম
                 চালু করা হবে।]
               </p>
             </div>
@@ -99,90 +140,103 @@ export default function Cart({ course }) {
               onSubmit={handleSubmit(handleEnrollConfirm)}
             >
               <div className="flex items-start justify-between">
-                <RadioGroup
-                  className="space-y-3"
-                  {...register("method")}
-                  defaultValue={mobileBank}
-                  onValueChange={handleChangePayment}
-                >
-                  <Label
-                    htmlFor="bkash"
-                    className="!mb-0 flex gap-2 items-center leading-none cursor-pointer"
-                  >
-                    <RadioGroupItem value="bkash" id="bkash" />
-                    বিকাশ
-                  </Label>
+                <Controller
+                  name="paymentMethod"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      className="space-y-3"
+                    >
+                      <Label
+                        htmlFor="bkash"
+                        className="!mb-0 flex gap-2 items-center leading-none cursor-pointer"
+                      >
+                        <RadioGroupItem value="bkash" id="bkash" />
+                        বিকাশ
+                      </Label>
+                      <Label
+                        htmlFor="nagad"
+                        className="flex gap-2 items-center leading-none cursor-pointer"
+                      >
+                        <RadioGroupItem value="nagad" id="nagad" />
+                        নগদ
+                      </Label>
 
-                  <Label
-                    htmlFor="nagad"
-                    className="flex gap-2 items-center leading-none cursor-pointer"
-                  >
-                    <RadioGroupItem value="nagad" id="nagad" />
-                    নগদ
-                  </Label>
+                      <Label
+                        htmlFor="rocket"
+                        className="flex gap-2 items-center leading-none cursor-pointer"
+                      >
+                        <RadioGroupItem value="rocket" id="rocket" />
+                        রকেট
+                      </Label>
 
-                  <Label
-                    htmlFor="rocket"
-                    className="flex gap-2 items-center leading-none cursor-pointer"
-                  >
-                    <RadioGroupItem value="rocket" id="rocket" />
-                    রকেট
-                  </Label>
-
-                  <Label
-                    htmlFor="cash"
-                    className="flex gap-2 items-center leading-none cursor-pointer"
-                  >
-                    <RadioGroupItem value="cash" id="cash" />
-                    হ্যান্ড ক্যাস
-                  </Label>
-                </RadioGroup>
-                {(mobileBank === "bkash" ||
-                  mobileBank === "nagad" ||
-                  mobileBank === "rocket") && (
-                  <div className="p-2 bg-white rounded-md h-30 flex">
-                    <Image
-                      src={"/qr.png"}
-                      width={110}
-                      height={110}
-                      className="rounded-md"
-                    />
-                  </div>
-                )}
+                      <Label
+                        htmlFor="cash"
+                        className="flex gap-2 items-center leading-none cursor-pointer"
+                      >
+                        <RadioGroupItem value="cash" id="cash" />
+                        হ্যান্ড ক্যাশ
+                      </Label>
+                    </RadioGroup>
+                  )}
+                />
               </div>
-              {(mobileBank === "bkash" ||
-                mobileBank === "nagad" ||
-                mobileBank === "rocket") && (
-                <div>
-                  <Label htmlFor="transactionId">
-                    {mobileBank.toUpperCase()} ট্রানজেকশন আইডি
-                  </Label>
-                  <Input
-                    type="text"
-                    id="transactionId"
-                    {...register("transactionId")}
-                  />
-                </div>
+              {(paymentMethod === "bkash" ||
+                paymentMethod === "nagad" ||
+                paymentMethod === "rocket") && (
+                <Controller
+                  name="transactionId"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label>
+                        {paymentMethod.toUpperCase()} ট্রানজেকশন আইডি
+                      </Label>
+                      <Input type="text" {...field} />
+                      {errors.transactionId && (
+                        <p className="text-sm text-red-400">
+                          {errors.transactionId.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                />
               )}
               <div className="flex items-center justify-between gap-2 font-medium">
                 সর্বমোট
                 <span>৳{course.data.fee}</span>
               </div>
 
-              {(mobileBank === "bkash" ||
-                mobileBank === "nagad" ||
-                mobileBank === "rocket") && (
-                <div className="flex justify-between gap-4 items-center">
-                  <Label htmlFor="ammount">অ্যামাউন্ট</Label>
-                  <Input
-                    type="text"
-                    id="ammount"
-                    {...register("ammount")}
-                    className="max-w-[100px] text-right"
-                  />
-                </div>
+              {(paymentMethod === "bkash" ||
+                paymentMethod === "nagad" ||
+                paymentMethod === "rocket") && (
+                <Controller
+                  name="amount"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <div className="flex justify-between gap-4 items-center">
+                        <Label>অ্যামাউন্ট</Label>
+                        <Input
+                          type="text"
+                          {...field}
+                          className="max-w-[100px] text-right"
+                        />
+                      </div>
+                      {errors.amount && (
+                        <p className="text-sm text-red-400">
+                          {errors.amount.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                />
               )}
-
+              {errors.common && (
+                <p className="text-sm text-red-400">{errors.common.message}</p>
+              )}
               <div className="flex justify-end">
                 <Button
                   disabled={isSubmitting}

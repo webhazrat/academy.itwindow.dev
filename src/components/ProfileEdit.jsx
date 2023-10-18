@@ -62,7 +62,7 @@ export default function ProfileEdit({ user, mutate, onSubmit }) {
           <div className="p-7 pt-0">
             <form
               onSubmit={handleSubmit(handleEditSubmit)}
-              className="space-y-4"
+              className="space-y-5"
             >
               <div className="space-y-2">
                 <Label htmlFor="name">নাম</Label>

@@ -4,9 +4,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangePasswordSchema } from "../lib/validation";
+import { ForgotPasswordSchema } from "../lib/validation";
 
-export default function ChangePassword({ handleSubmitUserData, phone, token }) {
+export default function ForgotPassword({ handleSubmitUserData, phone, token }) {
   const {
     register,
     handleSubmit,
@@ -15,7 +15,7 @@ export default function ChangePassword({ handleSubmitUserData, phone, token }) {
     setError,
     clearErrors,
   } = useForm({
-    resolver: zodResolver(ChangePasswordSchema),
+    resolver: zodResolver(ForgotPasswordSchema),
   });
 
   const handleSubmitForm = async (data) => {

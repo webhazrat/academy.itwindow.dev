@@ -19,7 +19,7 @@ const courseSchema = new Schema(
     requirements: [{ _id: false, value: String }],
     knows: [{ _id: false, value: String }],
     hows: [{ _id: false, value: String }],
-    fee: Number,
+    fee: String,
     status: String,
     order: Number,
   },

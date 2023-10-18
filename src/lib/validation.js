@@ -37,7 +37,7 @@ export const UserRegisterSchema = z
   });
 
 // forgot password form validation
-export const ChangePasswordSchema = z
+export const ForgotPasswordSchema = z
   .object({
     password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে।"),
     confirmPassword: z.string(),
@@ -56,6 +56,7 @@ export const LoginSchema = z.object({
   password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন।"),
 });
 
+// final user sign up data submit form validation
 export const UserSchema = z.object({
   name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
   email: z.string().email("সঠিক ইমেল অ্যাড্রেস ইনপুট করুন।"),
@@ -69,6 +70,7 @@ export const UserSchema = z.object({
   institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন।"),
 });
 
+// course submit form validation
 export const CourseSchema = z.object({
   title: z.string().min(1, "কোর্স টাইটেল ইনপুট করুন।"),
   slug: z.string().regex(/^[a-z0-9-]+$/, "সঠিক স্লাগ ইনপুট করুন।"),
@@ -108,6 +110,7 @@ export const CourseSchema = z.object({
     }),
 });
 
+// course image form validation
 export const CourseImageSchema = z.object({
   file: z.any().refine(
     (file) => {
@@ -124,3 +127,45 @@ export const CourseImageSchema = z.object({
     }
   ),
 });
+
+// password change form validation
+export const ChangePasswordSchema = z
+  .object({
+    prevPassword: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে"),
+    newPassword: z.string().min(8, "নতুন পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে",
+    path: ["confirmPassword"],
+  });
+
+export const EnrollSchema = z
+  .object({
+    paymentMethod: z.enum(["bkash", "nagad", "rocket", "cash"]),
+    transactionId: z.string().optional(),
+    amount: z
+      .string()
+      .optional()
+      .refine((value) => !isNaN(value), {
+        message: "পেমেন্ট অ্যামাউন্ট সংখ্যা হতে হবে",
+      }),
+  })
+  .refine(
+    (data) => {
+      return data.paymentMethod === "cash" || !!data.transactionId;
+    },
+    {
+      path: ["transactionId"],
+      message: "ট্রানজেকশন আইডি ইনপুট করুন",
+    }
+  )
+  .refine(
+    (data) => {
+      return data.paymentMethod === "cash" || !!data.amount;
+    },
+    {
+      path: ["amount"],
+      message: "পেমেন্ট অ্যামাউন্ট ইনপুট করুন",
+    }
+  );
