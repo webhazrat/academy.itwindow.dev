@@ -1,7 +1,9 @@
 import connectDB from "@/src/lib/connect";
 import { checkAdmin } from "@/src/middleware/serverAuth";
 import enrollModel from "@/src/models/enrollModel";
+import courseModel from "@/src/models/courseModel";
 
+// all enrollment requests to get a course [path:dashboard/enroll/requests]
 export default async function handler(req, res) {
   if (req.method === "GET") {
     const { sortBy, sortOrder, page, pageSize } = req.query;
@@ -14,7 +16,7 @@ export default async function handler(req, res) {
       await connectDB();
       const enrolls = await enrollModel
         .find()
-        .populate(["user", "course"])
+        .populate(["userId", "courseId"])
         .sort(sort)
         .skip((pageNum - 1) * size)
         .limit(size);

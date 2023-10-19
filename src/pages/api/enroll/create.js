@@ -1,9 +1,11 @@
 import connectDB from "@/src/lib/connect";
 import { EnrollSchema } from "@/src/lib/validation";
 import { checkLogin } from "@/src/middleware/serverAuth";
+import accountModel from "@/src/models/accountModel";
 import enrollModel from "@/src/models/enrollModel";
 import { z } from "zod";
 
+// create a request for enrollment a course path: courses/[slug]
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
@@ -15,23 +17,30 @@ export default async function handler(req, res) {
         amount = "";
       }
       await connectDB();
-      const enroll = await enrollModel.countDocuments({
-        user: session.user._id,
-        course: courseId,
+      const enrollExist = await enrollModel.countDocuments({
+        userId: session.user._id,
+        courseId,
+        status: { $ne: "completed" },
       });
-      if (enroll) {
+      if (enrollExist) {
         return res.status(400).json({
           title: "দুঃখিত!",
           message: "এই কোর্সে পূর্বেই ইনরোল হয়েছেন",
         });
       }
-      await enrollModel.create({
-        user: session.user._id,
-        course: courseId,
-        paymentMethod,
-        transactionId,
-        amount,
+      const enroll = await enrollModel.create({
+        userId: session.user._id,
+        courseId,
       });
+      if (enroll) {
+        await accountModel.create({
+          enrollId: enroll._id,
+          userId: session.user._id,
+          paymentMethod,
+          transactionId,
+          amount,
+        });
+      }
       res.status(200).json({
         title: "সফল!",
         message:

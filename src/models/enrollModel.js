@@ -3,11 +3,8 @@ const { Schema } = mongoose;
 
 const enrollSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-    course: { type: Schema.Types.ObjectId, ref: "Course" },
-    paymentMethod: String,
-    transactionId: String,
-    amount: String,
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    courseId: { type: Schema.Types.ObjectId, ref: "Course" },
     status: { type: String, required: true, default: "unverified" },
   },
   {

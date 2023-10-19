@@ -54,7 +54,7 @@ export default function Footer() {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#">
+            <a target="_blank" href="https://www.facebook.com/itwindow.dev">
               <Image
                 src={"/socials/facebook-f.svg"}
                 width={16}
@@ -62,7 +62,7 @@ export default function Footer() {
                 alt="facebook"
               />
             </a>
-            <a href="#">
+            <a target="_blank" href="https://twitter.com/webhazrat">
               <Image
                 src={"/socials/twitter.svg"}
                 width={16}
@@ -70,7 +70,7 @@ export default function Footer() {
                 alt="twitter"
               />
             </a>
-            <a href="#">
+            <a target="_blank" href="https://www.instagram.com/itwindow.dev/">
               <Image
                 src={"/socials/instagram.svg"}
                 width={16}
@@ -78,7 +78,7 @@ export default function Footer() {
                 alt="twitter"
               />
             </a>
-            <a href="#">
+            <a target="_blank" href="https://www.linkedin.com/company/itwindow">
               <Image
                 src={"/socials/linkedin-in.svg"}
                 width={16}
@@ -86,7 +86,7 @@ export default function Footer() {
                 alt="twitter"
               />
             </a>
-            <a href="#">
+            <a target="_blank" href="https://www.youtube.com/@y.itwindow">
               <Image
                 src={"/socials/youtube.svg"}
                 width={16}

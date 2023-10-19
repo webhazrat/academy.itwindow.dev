@@ -65,7 +65,7 @@ export default function LoggedDropdown() {
           </Link>
           <Link href={"/profile/referral-enroll"}>
             <DropdownMenuItem>
-              <Send size={16} className="mr-2" /> <span>রেফারেল লিংক</span>
+              <Send size={16} className="mr-2" /> <span>রেফারেল ইনরোল</span>
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />

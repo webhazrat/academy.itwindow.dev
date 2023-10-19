@@ -57,6 +57,11 @@ export default function Cart({ course }) {
             description: enrollResponse.message,
           });
         } else {
+          toast({
+            variant: "destructive",
+            title: enrollResponse.title,
+            description: enrollResponse.message,
+          });
           if (enrollResponse?.errors?.length > 0) {
             enrollResponse.errors.forEach((error) => {
               setError(error.field, {
@@ -191,10 +196,10 @@ export default function Cart({ course }) {
                   control={control}
                   render={({ field }) => (
                     <div className="space-y-2">
-                      <Label>
+                      <Label htmlFor="transactionId">
                         {paymentMethod.toUpperCase()} ট্রানজেকশন আইডি
                       </Label>
-                      <Input type="text" {...field} />
+                      <Input id="transactionId" type="text" {...field} />
                       {errors.transactionId && (
                         <p className="text-sm text-red-400">
                           {errors.transactionId.message}
@@ -218,8 +223,9 @@ export default function Cart({ course }) {
                   render={({ field }) => (
                     <div className="space-y-2">
                       <div className="flex justify-between gap-4 items-center">
-                        <Label>অ্যামাউন্ট</Label>
+                        <Label htmlFor="amount">অ্যামাউন্ট</Label>
                         <Input
+                          id="amount"
                           type="text"
                           {...field}
                           className="max-w-[100px] text-right"

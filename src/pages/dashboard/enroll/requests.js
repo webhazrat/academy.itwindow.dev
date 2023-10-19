@@ -1,3 +1,4 @@
+import AccountPayment from "@/src/components/AccountPayments";
 import DashboardLayout from "@/src/components/DashboardLayout";
 import { DataTable } from "@/src/components/DataTable";
 import { Button } from "@/src/components/ui/button";
@@ -12,9 +13,11 @@ import {
 import { fetcher } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
 import useSWR from "swr";
 
 export default function EnrollRequests() {
+  const [payment, setPayment] = useState(null);
   const { data, isLoading, mutate } = useSWR(
     "/api/enrolls?sortBy=createdAt&sortOrder=desc",
     fetcher
@@ -39,7 +42,7 @@ export default function EnrollRequests() {
       enableHiding: false,
     },
     {
-      accessorKey: "user.name",
+      accessorKey: "userId.name",
       header: ({ column }) => {
         return (
           <button
@@ -52,7 +55,7 @@ export default function EnrollRequests() {
       },
     },
     {
-      accessorKey: "user.phone",
+      accessorKey: "userId.phone",
       header: ({ column }) => {
         return (
           <button
@@ -65,7 +68,20 @@ export default function EnrollRequests() {
       },
     },
     {
-      accessorKey: "course.title",
+      accessorKey: "userId.address",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex items-center"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Address <ChevronsUpDown size={12} className="ml-2" />
+          </button>
+        );
+      },
+    },
+    {
+      accessorKey: "courseId.title",
       header: ({ column }) => {
         return (
           <button
@@ -78,7 +94,7 @@ export default function EnrollRequests() {
       },
     },
     {
-      accessorKey: "course.fee",
+      accessorKey: "courseId.fee",
       header: ({ column }) => {
         return (
           <button
@@ -86,45 +102,6 @@ export default function EnrollRequests() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Fee <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
-      accessorKey: "paymentMethod",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Method <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
-      accessorKey: "transactionId",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Trans. ID <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
-      accessorKey: "amount",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Paid <ChevronsUpDown size={12} className="ml-2" />
           </button>
         );
       },
@@ -159,7 +136,7 @@ export default function EnrollRequests() {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const course = row.original;
+        const enroll = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -177,7 +154,14 @@ export default function EnrollRequests() {
               //   setPhoto(course);
               // }}
               >
-                ফটো
+                রিভিউ
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setPayment(enroll);
+                }}
+              >
+                পেমেন্টস
               </DropdownMenuItem>
               <DropdownMenuItem
               // onClick={() => {
@@ -196,7 +180,6 @@ export default function EnrollRequests() {
       },
     },
   ];
-
   return (
     <DashboardLayout>
       <div>
@@ -206,6 +189,9 @@ export default function EnrollRequests() {
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
           {!isLoading && <DataTable columns={columns} data={data.data} />}
+          {payment && (
+            <AccountPayment enroll={payment} setEnroll={setPayment} />
+          )}
         </div>
       </div>
     </DashboardLayout>
