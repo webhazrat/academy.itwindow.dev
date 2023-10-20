@@ -1,8 +1,8 @@
 import {
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -23,32 +23,42 @@ import {
 import { Button } from "./ui/button";
 import { ChevronsUpDown } from "lucide-react";
 import DataTablePagination from "./DataTablePagination";
+import { Input } from "./ui/input";
 
-export function DataTable({ data, columns }) {
+export function DataTable({ data, columns, pagination, setPagination }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
+
   const table = useReactTable({
-    data,
+    data: data.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    manualPagination: true,
+    onPaginationChange: setPagination,
+    pageCount: data.page,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
+      pagination,
     },
   });
 
   return (
     <>
-      <div className="flex gap-3 items-center !mt-3">
+      <div className="flex gap-3 items-center justify-between">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline">
               <ChevronsUpDown className="w-3 h-3 mr-2" /> View
             </Button>
           </DropdownMenuTrigger>
@@ -72,6 +82,9 @@ export function DataTable({ data, columns }) {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <div>
+          <Input />
+        </div>
       </div>
 
       <div className="rounded-md border !mt-3">

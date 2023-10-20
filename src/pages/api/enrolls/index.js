@@ -6,8 +6,8 @@ import courseModel from "@/src/models/courseModel";
 // all enrollment requests to get a course [path:dashboard/enroll/requests]
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { sortBy, sortOrder, page, pageSize } = req.query;
-    const pageNum = parseInt(page) || 1;
+    const { sortBy, sortOrder, pageIndex, pageSize } = req.query;
+    const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
       const session = await checkAdmin(req, res);
@@ -18,14 +18,14 @@ export default async function handler(req, res) {
         .find()
         .populate(["userId", "courseId"])
         .sort(sort)
-        .skip((pageNum - 1) * size)
+        .skip(index * size)
         .limit(size);
 
       const total = await enrollModel.countDocuments();
       res.status(200).json({
         data: enrolls,
         total,
-        page: pageNum,
+        page: Math.ceil(total / size),
         pageSize: size,
       });
     } catch (error) {

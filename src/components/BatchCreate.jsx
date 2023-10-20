@@ -1,11 +1,7 @@
 import Label from "@/src/components/Label";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Textarea } from "@/src/components/ui/textarea";
-import { useToast } from "@/src/components/ui/use-toast";
-import { CourseSchema } from "@/src/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Minus, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Dialog,
@@ -16,19 +12,43 @@ import {
 } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "../lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BatchSchema } from "../lib/validation";
+import { useToast } from "./ui/use-toast";
 
 export default function BatchCreate({ mutate }) {
   const [isOpen, setIsOpen] = useState(null);
+  const { data, isLoading } = useSWR(
+    "/api/courses?sortBy=createdAt&sortOrder=desc",
+    fetcher
+  );
+  const courses = data?.data;
+  const { toast } = useToast();
+
   const {
     control,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors, isSubmitting },
+    reset,
+    clearErrors,
   } = useForm({
+    resolver: zodResolver(BatchSchema),
     defaultValues: {
+      courseId: "",
       classDays: [],
-      batchId: "",
+      batchCode: "",
       time: "",
     },
   });
@@ -43,6 +63,7 @@ export default function BatchCreate({ mutate }) {
     "শুক্রবার",
   ];
 
+  // class days value set to useForm
   const handleToggleChange = (day) => {
     const classDays = getValues("classDays");
     if (classDays.includes(day)) {
@@ -55,8 +76,41 @@ export default function BatchCreate({ mutate }) {
     }
   };
 
-  const handleBatch = (data) => {
-    console.log({ data });
+  // batch create data submit
+  const handleBatch = async (data) => {
+    try {
+      const response = await fetch("/api/batch/create", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const createResponse = await response.json();
+      if (!response.ok) {
+        // server custom zod pattern error
+        if (createResponse?.errors?.length > 0) {
+          createResponse.errors.forEach((error) => {
+            setError(error.field, {
+              type: "server",
+              message: error.message,
+            });
+          });
+        }
+      } else {
+        toast({
+          variant: "success",
+          title: createResponse.title,
+          description: createResponse.message,
+        });
+        mutate();
+        reset();
+        clearErrors();
+        setIsOpen(null);
+      }
+    } catch (error) {
+      console.log({ batchCreateCatch: error });
+    }
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -85,23 +139,54 @@ export default function BatchCreate({ mutate }) {
           <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto mb-16">
             <div className="space-y-5 p-7">
               <div className="space-y-2">
-                <Label htmlFor="batchId">ব্যাচ আইডি</Label>
+                <Label className="courseId">কোর্স</Label>
                 <Controller
-                  name="batchId"
+                  name="courseId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {courses.length > 0 &&
+                            courses.map((course) => (
+                              <SelectItem key={course._id} value={course._id}>
+                                {course.title}
+                              </SelectItem>
+                            ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.courseId && (
+                  <p className="text-sm text-red-400">
+                    {errors.courseId.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="batchCode">ব্যাচ আইডি</Label>
+                <Controller
+                  name="batchCode"
                   control={control}
                   render={({ field }) => (
                     <Input
                       type="text"
                       placeholder="BATCHXX"
-                      id="batchId"
+                      id="batchCode"
                       {...field}
                     />
                   )}
                 />
-
-                {errors.batchId && (
+                {errors.batchCode && (
                   <p className="text-sm text-red-400">
-                    {errors.batchId.message}
+                    {errors.batchCode.message}
                   </p>
                 )}
               </div>
@@ -116,7 +201,7 @@ export default function BatchCreate({ mutate }) {
                       render={({ field }) => {
                         return (
                           <label
-                            className={`h-10 px-4 py-2 rounded-md cursor-pointer border border-input hover:bg-accent hover:text-accent-foreground mb-0 transition-colors dark:text-slate-400 text-sm ${
+                            className={`h-10 px-4 flex items-center rounded-md cursor-pointer border border-input hover:bg-accent hover:text-accent-foreground mb-0 transition-colors dark:text-slate-400 text-sm ${
                               field.value.includes(day) &&
                               "bg-accent dark:!text-white"
                             }`}
@@ -135,6 +220,11 @@ export default function BatchCreate({ mutate }) {
                     />
                   ))}
                 </div>
+                {errors.classDays && (
+                  <p className="text-sm text-red-400">
+                    {errors.classDays.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="time">সময়</Label>
@@ -145,6 +235,9 @@ export default function BatchCreate({ mutate }) {
                     <Input type="time" id="time" {...field} />
                   )}
                 />
+                {errors.time && (
+                  <p className="text-sm text-red-400">{errors.time.message}</p>
+                )}
               </div>
             </div>
           </ScrollArea>

@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
+// [10, 20, 30, 40, 50]
 export default function DataTablePagination({ table }) {
   return (
     <div className="flex items-center justify-between p-2">
@@ -33,7 +33,7 @@ export default function DataTablePagination({ table }) {
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[2, 4, 6, 8, 10].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

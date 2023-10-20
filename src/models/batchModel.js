@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const batchSchema = new Schema(
   {
-    batchId: { type: String, required: true, unique: true },
+    courseId: { type: Schema.Types.ObjectId, ref: "Course" },
+    batchCode: { type: String, required: true, unique: true },
     classDays: [String],
     time: String,
     status: String,

@@ -13,16 +13,24 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { checkAdmin } from "@/src/middleware/clientAuth";
-import { fetcher } from "@/src/lib/utils";
+import { fetcher, formatDateTime } from "@/src/lib/utils";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
+import { useRouter } from "next/router";
 
 export default function Courses() {
+  const router = useRouter();
+  const { page, search } = router.query;
   const [course, setCourse] = useState(null);
   const [photo, setPhoto] = useState(null);
+  const [pagination, setPagination] = useState({
+    pageIndex: page ? page - 1 : 0,
+    pageSize: 2,
+  });
+
   const { data, isLoading, mutate } = useSWR(
-    "/api/courses?sortBy=createdAt&sortOrder=desc",
+    `/api/courses?pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${search}&sortBy=createdAt&sortOrder=asc`,
     fetcher
   );
 
@@ -96,6 +104,9 @@ export default function Courses() {
           </button>
         );
       },
+      cell: ({ row }) => {
+        return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      },
     },
     {
       id: "actions",
@@ -148,7 +159,14 @@ export default function Courses() {
         </div>
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
-          {!isLoading && <DataTable columns={columns} data={data.data} />}
+          {!isLoading && (
+            <DataTable
+              columns={columns}
+              data={data}
+              pagination={pagination}
+              setPagination={setPagination}
+            />
+          )}
           {photo && (
             <CourseImage course={photo} setCourse={setPhoto} mutate={mutate} />
           )}

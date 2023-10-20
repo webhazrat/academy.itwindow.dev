@@ -140,6 +140,7 @@ export const ChangePasswordSchema = z
     path: ["confirmPassword"],
   });
 
+// enroll request in a course
 export const EnrollSchema = z
   .object({
     paymentMethod: z.enum(["bkash", "nagad", "rocket", "cash"]),
@@ -169,3 +170,36 @@ export const EnrollSchema = z
       message: "পেমেন্ট অ্যামাউন্ট ইনপুট করুন",
     }
   );
+
+// batch create schema validation
+export const BatchSchema = z.object({
+  courseId: z.string().min(1, "কোর্স আইডি ইনপুট করুন"),
+  batchId: z.string().min(1, "ব্যাচ আইডি ইনপুট করুন"),
+  classDays: z
+    .array(
+      z.enum([
+        "শনিবার",
+        "রবিবার",
+        "সোমবার",
+        "মঙ্গলবার",
+        "বুধবার",
+        "বৃহস্পতিবার",
+        "শুক্রবার",
+      ])
+    )
+    .refine(
+      (data) => {
+        return data.length > 0;
+      },
+      {
+        message: "কমপক্ষে একটি দিন সিলেক্ট করুন",
+      }
+    ),
+  time: z.string().refine(
+    (data) => {
+      const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+      return timeRegex.test(data);
+    },
+    { message: "সঠিক টাইম ফরমেট (HH:mm) ইনপুট করুন" }
+  ),
+});

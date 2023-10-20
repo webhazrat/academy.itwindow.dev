@@ -10,16 +10,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { fetcher } from "@/src/lib/utils";
+import { fetcher, formatDateTime } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
 export default function EnrollCompleted() {
+  const router = useRouter();
+  const { page } = router.query;
   const [payment, setPayment] = useState(null);
+  const [pagination, setPagination] = useState({
+    pageIndex: page ? page - 1 : 0,
+    pageSize: 2,
+  });
   const { data, isLoading, mutate } = useSWR(
-    "/api/enrolls?sortBy=createdAt&sortOrder=desc",
+    `/api/enrolls?pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&sortBy=createdAt&sortOrder=desc`,
     fetcher
   );
   const columns = [
@@ -131,6 +138,9 @@ export default function EnrollCompleted() {
           </button>
         );
       },
+      cell: ({ row }) => {
+        return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      },
     },
     {
       id: "actions",
@@ -188,7 +198,14 @@ export default function EnrollCompleted() {
         </div>
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
-          {!isLoading && <DataTable columns={columns} data={data.data} />}
+          {!isLoading && (
+            <DataTable
+              columns={columns}
+              data={data}
+              pagination={pagination}
+              setPagination={setPagination}
+            />
+          )}
           {payment && (
             <AccountPayment enroll={payment} setEnroll={setPayment} />
           )}

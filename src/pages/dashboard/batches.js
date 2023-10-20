@@ -10,14 +10,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { fetcher } from "@/src/lib/utils";
+import { fetcher, formatDateTime } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import useSWR from "swr";
 
 export default function Batches() {
+  const router = useRouter();
+  const { page } = router.query;
+  const [pagination, setPagination] = useState({
+    pageIndex: page ? page - 1 : 0,
+    pageSize: 2,
+  });
   const { data, isLoading, mutate } = useSWR(
-    "/api/enrolls?sortBy=createdAt&sortOrder=desc",
+    `/api/batches??pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&sortBy=createdAt&sortOrder=desc`,
     fetcher
   );
   const columns = [
@@ -40,45 +48,6 @@ export default function Batches() {
       enableHiding: false,
     },
     {
-      accessorKey: "userId.name",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
-      accessorKey: "userId.phone",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Phone <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
-      accessorKey: "userId.address",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Address <ChevronsUpDown size={12} className="ml-2" />
-          </button>
-        );
-      },
-    },
-    {
       accessorKey: "courseId.title",
       header: ({ column }) => {
         return (
@@ -86,22 +55,51 @@ export default function Batches() {
             className="flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Title <ChevronsUpDown size={12} className="ml-2" />
+            Course <ChevronsUpDown size={12} className="ml-2" />
           </button>
         );
       },
     },
     {
-      accessorKey: "courseId.fee",
+      accessorKey: "batchCode",
       header: ({ column }) => {
         return (
           <button
             className="flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fee <ChevronsUpDown size={12} className="ml-2" />
+            Batch Code <ChevronsUpDown size={12} className="ml-2" />
           </button>
         );
+      },
+    },
+    {
+      accessorKey: "classDays",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex items-center"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Class Days <ChevronsUpDown size={12} className="ml-2" />
+          </button>
+        );
+      },
+    },
+    {
+      accessorKey: "time",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex items-center"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Time <ChevronsUpDown size={12} className="ml-2" />
+          </button>
+        );
+      },
+      cell: ({ row }) => {
+        return formatDateTime(row.getValue("time"), "hh:mm a");
       },
     },
     {
@@ -129,12 +127,15 @@ export default function Batches() {
           </button>
         );
       },
+      cell: ({ row }) => {
+        return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      },
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const enroll = row.original;
+        const batch = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -152,14 +153,7 @@ export default function Batches() {
               //   setPhoto(course);
               // }}
               >
-                রিভিউ
-              </DropdownMenuItem>
-              <DropdownMenuItem
-              // onClick={() => {
-              //   setPayment(enroll);
-              // }}
-              >
-                পেমেন্টস
+                স্টুডেন্টস
               </DropdownMenuItem>
               <DropdownMenuItem
               // onClick={() => {
@@ -188,7 +182,14 @@ export default function Batches() {
         </div>
         <div className="p-7">
           {isLoading && <p>Loading...</p>}
-          {!isLoading && <DataTable columns={columns} data={data.data} />}
+          {!isLoading && (
+            <DataTable
+              columns={columns}
+              data={data}
+              pagination={pagination}
+              setPagination={setPagination}
+            />
+          )}
         </div>
       </div>
     </DashboardLayout>

@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { format, parse, parseISO } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -13,10 +14,12 @@ export const APP_URL = "http://localhost:3000";
 
 export const OTP_EXPIRE_TIME = 5 * 60;
 
+// swr fetcher method
 export const fetcher = async (...args) => {
   return fetch(...args).then((res) => res.json());
 };
 
+// readfile method for crop image
 export function readFile(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -25,6 +28,7 @@ export function readFile(file) {
   });
 }
 
+// croping image method
 export function getCroppedImg(imageSrc, pixelCrop) {
   const image = new Image();
   image.src = imageSrc;
@@ -53,4 +57,13 @@ export function getCroppedImg(imageSrc, pixelCrop) {
       resolve(file);
     }, "image/jpeg");
   });
+}
+
+// date form
+export function formatDateTime(dateTimeString, formatString) {
+  const dateObject = dateTimeString.includes("T")
+    ? parseISO(dateTimeString)
+    : parse(dateTimeString, "HH:mm", new Date());
+
+  return format(dateObject, formatString);
 }

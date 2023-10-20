@@ -45,7 +45,7 @@ export default function MyCourses() {
                       </Link>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-red-300">
+                      <p className="text-red-400">
                         মোট কোর্স ফি ৳{enroll.courseId.fee}। এর 50% (
                         {enroll.courseId.fee / 2}) পে করার মাধ্যমে কোর্সটিতে
                         ইনরোলমেন্ট সম্পন্ন হবে।
