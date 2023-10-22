@@ -4,25 +4,35 @@ import userModel from "@/src/models/userModel";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { sortBy, sortOrder, page, pageSize } = req.query;
-    const pageNum = parseInt(page) || 1;
+    const { sortBy, sortOrder, pageIndex, pageSize, search } = req.query;
+    const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
       const session = await checkAdmin(req, res);
       const sort =
         sortBy && sortOrder ? { [sortBy]: sortOrder === "asc" ? 1 : -1 } : {};
+      const regex = new RegExp(search, "i");
+      const filter = {
+        $or: [
+          { name: { $regex: regex } },
+          { phone: { $regex: regex } },
+          { address: { $regex: regex } },
+          { role: { $regex: regex } },
+          { status: { $regex: regex } },
+        ],
+      };
       await connectDB();
       const users = await userModel
-        .find()
+        .find(filter)
         .sort(sort)
-        .skip((pageNum - 1) * size)
+        .skip(index * size)
         .limit(size);
 
-      const total = await userModel.countDocuments();
+      const total = await userModel.countDocuments(filter);
       res.status(200).json({
         data: users,
         total,
-        page: pageNum,
+        page: Math.ceil(total / size),
         pageSize: size,
       });
     } catch (error) {

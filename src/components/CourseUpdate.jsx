@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { useToast } from "./ui/use-toast";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CourseSchema } from "../lib/validation";
 import Label from "./Label";
@@ -9,6 +9,14 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Loader2, Minus } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function CourseUpdate({ course, setCourse, mutate }) {
   const { toast } = useToast();
@@ -19,7 +27,6 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    reset,
     clearErrors,
   } = useForm({
     resolver: zodResolver(CourseSchema),
@@ -77,8 +84,8 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
           title: updateResponse.title,
           description: updateResponse.message,
         });
+        setCourse(null);
         mutate();
-        reset();
         clearErrors();
       }
     } catch (error) {
@@ -89,7 +96,7 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
   return (
     <Dialog open={course} onOpenChange={setCourse}>
       <DialogContent className="max-w-5xl p-0">
-        <DialogHeader className="p-5">
+        <DialogHeader className="p-7">
           <DialogTitle>কোর্স আপডেট</DialogTitle>
         </DialogHeader>
 
@@ -106,7 +113,7 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
               আপডেট করুন
             </Button>
           </div>
-          <ScrollArea className="h-[calc(100vh_-_200px)] overflow-y-auto  mb-16">
+          <ScrollArea className="max-h-[calc(100vh_-_200px)] h-full mb-16">
             <div className="grid lg:grid-cols-2 gap-5 p-7 pt-0">
               <div className="flex-1">
                 <div className="space-y-5">
@@ -377,6 +384,37 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
                         {errors.fee.message}
                       </p>
                     )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="status">স্ট্যাটাস</Label>
+                    <Controller
+                      name="status"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="Published">
+                                Published
+                              </SelectItem>
+                              <SelectItem value="Unpublished">
+                                Unpublished
+                              </SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="order">অর্ডার</Label>
+                    <Input type="number" id="order" {...register("order")} />
                   </div>
                 </div>
               </div>

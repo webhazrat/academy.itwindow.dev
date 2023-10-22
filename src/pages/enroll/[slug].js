@@ -29,7 +29,7 @@ export default function Cart({ course }) {
   } = useForm({
     resolver: zodResolver(EnrollSchema),
     defaultValues: {
-      paymentMethod: "bkash",
+      paymentMethod: "Bkash",
       transactionId: "",
       amount: "",
     },
@@ -158,14 +158,14 @@ export default function Cart({ course }) {
                         htmlFor="bkash"
                         className="!mb-0 flex gap-2 items-center leading-none cursor-pointer"
                       >
-                        <RadioGroupItem value="bkash" id="bkash" />
+                        <RadioGroupItem value="Bkash" id="bkash" />
                         বিকাশ
                       </Label>
                       <Label
                         htmlFor="nagad"
                         className="flex gap-2 items-center leading-none cursor-pointer"
                       >
-                        <RadioGroupItem value="nagad" id="nagad" />
+                        <RadioGroupItem value="Nagad" id="nagad" />
                         নগদ
                       </Label>
 
@@ -173,7 +173,7 @@ export default function Cart({ course }) {
                         htmlFor="rocket"
                         className="flex gap-2 items-center leading-none cursor-pointer"
                       >
-                        <RadioGroupItem value="rocket" id="rocket" />
+                        <RadioGroupItem value="Rocket" id="rocket" />
                         রকেট
                       </Label>
 
@@ -181,16 +181,16 @@ export default function Cart({ course }) {
                         htmlFor="cash"
                         className="flex gap-2 items-center leading-none cursor-pointer"
                       >
-                        <RadioGroupItem value="cash" id="cash" />
+                        <RadioGroupItem value="Cash" id="cash" />
                         হ্যান্ড ক্যাশ
                       </Label>
                     </RadioGroup>
                   )}
                 />
               </div>
-              {(paymentMethod === "bkash" ||
-                paymentMethod === "nagad" ||
-                paymentMethod === "rocket") && (
+              {(paymentMethod === "Bkash" ||
+                paymentMethod === "Nagad" ||
+                paymentMethod === "Rocket") && (
                 <Controller
                   name="transactionId"
                   control={control}
@@ -214,9 +214,9 @@ export default function Cart({ course }) {
                 <span>৳{course.data.fee}</span>
               </div>
 
-              {(paymentMethod === "bkash" ||
-                paymentMethod === "nagad" ||
-                paymentMethod === "rocket") && (
+              {(paymentMethod === "Bkash" ||
+                paymentMethod === "Nagad" ||
+                paymentMethod === "Rocket") && (
                 <Controller
                   name="amount"
                   control={control}

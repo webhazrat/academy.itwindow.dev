@@ -8,7 +8,8 @@ const accountSchema = new Schema(
     paymentMethod: String,
     transactionId: String,
     amount: String,
-    status: { type: String, required: true, default: "unverified" },
+    comment: String,
+    status: { type: String, default: "Pending" },
   },
   {
     timestamps: true,

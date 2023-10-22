@@ -56,18 +56,26 @@ export const LoginSchema = z.object({
   password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন।"),
 });
 
-// final user sign up data submit form validation
+// user profile update
 export const UserSchema = z.object({
-  name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
-  email: z.string().email("সঠিক ইমেল অ্যাড্রেস ইনপুট করুন।"),
-  address: z.string().min(1, "বর্তমান ঠিকানা ইনপুট করুন।"),
-  guardian: z.string().min(1, "অভিভাবকের ইনপুট করুন।"),
+  name: z.string().min(1, "পুরো নাম ইনপুট করুন"),
+  email: z
+    .string()
+    .refine(
+      (data) => data === "" || z.string().email().safeParse(data).success,
+      {
+        message: "সঠিক ইমেল অ্যাড্রেস ইনপুট করুন।",
+      }
+    )
+    .optional(),
+  address: z.string().min(1, "বর্তমান ঠিকানা ইনপুট করুন"),
+  guardian: z.string().min(1, "অভিভাবকের ইনপুট করুন"),
   guardianPhone: z
     .string()
-    .min(1, "অভিভাবকের মোবাইল নাম্বার ইনপুট করুন।")
-    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
-  education: z.string().min(1, "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন।"),
-  institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন।"),
+    .min(1, "অভিভাবকের মোবাইল নাম্বার ইনপুট করুন")
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
+  education: z.string().min(1, "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন"),
+  institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন"),
 });
 
 // course submit form validation
@@ -108,6 +116,8 @@ export const CourseSchema = z.object({
     .refine((value) => !isNaN(value), {
       message: "কোর্স ফি নাম্বারে ইনপুট করুন।",
     }),
+  status: z.string().optional(),
+  order: z.string().optional(),
 });
 
 // course image form validation
@@ -143,7 +153,11 @@ export const ChangePasswordSchema = z
 // enroll request in a course
 export const EnrollSchema = z
   .object({
-    paymentMethod: z.enum(["bkash", "nagad", "rocket", "cash"]),
+    paymentMethod: z
+      .string()
+      .refine((value) => ["Bkash", "Nagad", "Rocket", "Cash"].includes(value), {
+        message: "সঠিক পেমেন্ট পদ্ধতি নির্বাচন করুন।", // Custom error message
+      }),
     transactionId: z.string().optional(),
     amount: z
       .string()
@@ -151,10 +165,12 @@ export const EnrollSchema = z
       .refine((value) => !isNaN(value), {
         message: "পেমেন্ট অ্যামাউন্ট সংখ্যা হতে হবে",
       }),
+    status: z.string().optional(),
+    comment: z.string().optional(),
   })
   .refine(
     (data) => {
-      return data.paymentMethod === "cash" || !!data.transactionId;
+      return data.paymentMethod === "Cash" || !!data.transactionId;
     },
     {
       path: ["transactionId"],
@@ -163,7 +179,7 @@ export const EnrollSchema = z
   )
   .refine(
     (data) => {
-      return data.paymentMethod === "cash" || !!data.amount;
+      return data.paymentMethod === "Cash" || !!data.amount;
     },
     {
       path: ["amount"],
@@ -174,7 +190,7 @@ export const EnrollSchema = z
 // batch create schema validation
 export const BatchSchema = z.object({
   courseId: z.string().min(1, "কোর্স আইডি ইনপুট করুন"),
-  batchId: z.string().min(1, "ব্যাচ আইডি ইনপুট করুন"),
+  batchCode: z.string().min(1, "ব্যাচ কোড ইনপুট করুন"),
   classDays: z
     .array(
       z.enum([

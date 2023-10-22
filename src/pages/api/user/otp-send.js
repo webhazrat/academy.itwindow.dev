@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       // user exist check
       const userExist = await userModel.countDocuments({
         phone,
-        status: "verified",
+        status: "Verified",
       });
       if (userExist) {
         return res.status(400).json({

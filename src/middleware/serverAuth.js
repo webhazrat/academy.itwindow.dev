@@ -8,7 +8,7 @@ export async function checkAdmin(req, res) {
   if (session) {
     await connectDB();
     const user = await userModel.findById(session.user._id).select("role");
-    if (user.role === "admin") {
+    if (user.role === "Admin") {
       return Promise.resolve(session);
     } else {
       return Promise.reject({ message: "Unauthorized route" });

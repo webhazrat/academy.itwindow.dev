@@ -3,21 +3,29 @@ import courseModel from "@/src/models/courseModel";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { sortBy, sortOrder, pageIndex, pageSize } = req.query;
+    const { sortBy, sortOrder, pageIndex, pageSize, search } = req.query;
     const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
       const sort =
         sortBy && sortOrder ? { [sortBy]: sortOrder === "asc" ? 1 : -1 } : {};
-
+      const regex = new RegExp(search, "i");
+      const filter = {
+        $or: [
+          { title: { $regex: regex } },
+          { excerpt: { $regex: regex } },
+          { fee: { $regex: regex } },
+          { status: { $regex: regex } },
+        ],
+      };
       await connectDB();
       const courses = await courseModel
-        .find()
+        .find(filter)
         .sort(sort)
         .skip(index * size)
         .limit(size);
 
-      const total = await courseModel.countDocuments();
+      const total = await courseModel.countDocuments(filter);
       res.status(200).json({
         data: courses,
         total,

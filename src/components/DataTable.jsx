@@ -2,7 +2,6 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -13,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -25,33 +24,49 @@ import { ChevronsUpDown } from "lucide-react";
 import DataTablePagination from "./DataTablePagination";
 import { Input } from "./ui/input";
 
-export function DataTable({ data, columns, pagination, setPagination }) {
+export function DataTable({
+  isLoading,
+  data,
+  columns,
+  pagination,
+  setPagination,
+  globalFilter,
+  setGlobalFilter,
+}) {
   const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+  const [inputValue, setInputValue] = useState("");
 
   const table = useReactTable({
-    data: data.data || [],
+    data: data?.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     manualPagination: true,
     onPaginationChange: setPagination,
-    pageCount: data.page,
+    pageCount: data?.page,
+    onGlobalFilterChange: setGlobalFilter,
+    manualFiltering: true,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
       pagination,
+      globalFilter,
     },
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setGlobalFilter(inputValue);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
 
   return (
     <>
@@ -82,8 +97,14 @@ export function DataTable({ data, columns, pagination, setPagination }) {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div>
-          <Input />
+        <div className="flex-shrink-0">
+          <Input
+            type="text"
+            placeholder="Search keywords..."
+            className="text-sm"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
         </div>
       </div>
 
@@ -108,7 +129,16 @@ export function DataTable({ data, columns, pagination, setPagination }) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center dark:text-slate-300"
+                >
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { CourseImageSchema } from "../lib/validation";
 import { z } from "zod";
 import { useToast } from "./ui/use-toast";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function CourseImage({ course, setCourse, mutate }) {
   const [showSelectedImage, setShowSelectedImage] = useState(null);
@@ -69,46 +70,50 @@ export default function CourseImage({ course, setCourse, mutate }) {
 
   return (
     <Dialog open={course} onOpenChange={setCourse}>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="p-0">
+        <DialogHeader className="p-7 pb-0">
           <DialogTitle> কোর্স ({course.title})</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(handleImageSubmit)} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="file">ইমেজ</Label>
-            {(course.image || showSelectedImage) && (
-              <Image
-                src={`${
-                  showSelectedImage
-                    ? showSelectedImage
-                    : `/courses/${course.image}`
-                }`}
-                height={80}
-                width={80}
-                className="rounded-md"
-              />
-            )}
-            <Input
-              type="file"
-              id="file"
-              {...register("file")}
-              onChange={handleImageChange}
-            />
-            {errors.file && (
-              <p className="text-sm text-red-400">{errors.file.message}</p>
-            )}
-          </div>
-          <Button
-            type="submit"
-            className="bg-gradient text-white"
-            disabled={isSubmitting || !showSelectedImage}
-          >
-            {isSubmitting && (
-              <Loader2 size={16} className="mr-2 animate-spin" />
-            )}
-            আপলোড করুন
-          </Button>
+        <form onSubmit={handleSubmit(handleImageSubmit)}>
+          <ScrollArea className="max-h-[calc(100vh_-_100px)] h-full">
+            <div className="space-y-4 p-7">
+              <div className="space-y-2">
+                <Label htmlFor="file">ইমেজ</Label>
+                {(course.image || showSelectedImage) && (
+                  <Image
+                    src={`${
+                      showSelectedImage
+                        ? showSelectedImage
+                        : `/courses/${course.image}`
+                    }`}
+                    height={80}
+                    width={80}
+                    className="rounded-md"
+                  />
+                )}
+                <Input
+                  type="file"
+                  id="file"
+                  {...register("file")}
+                  onChange={handleImageChange}
+                />
+                {errors.file && (
+                  <p className="text-sm text-red-400">{errors.file.message}</p>
+                )}
+              </div>
+              <Button
+                type="submit"
+                className="bg-gradient text-white"
+                disabled={isSubmitting || !showSelectedImage}
+              >
+                {isSubmitting && (
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                )}
+                আপলোড করুন
+              </Button>
+            </div>
+          </ScrollArea>
         </form>
       </DialogContent>
     </Dialog>

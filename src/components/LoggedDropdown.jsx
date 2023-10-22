@@ -40,7 +40,7 @@ export default function LoggedDropdown() {
         <DropdownMenuLabel>আমার অ্যাকাউন্ট</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="dark:text-slate-400">
-          {user?.role === "admin" && (
+          {user?.role === "Admin" && (
             <Link href={"/dashboard"}>
               <DropdownMenuItem>
                 <LayoutGrid size={16} className="mr-2" />{" "}

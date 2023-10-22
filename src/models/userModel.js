@@ -5,7 +5,7 @@ const userSchema = new Schema(
   {
     name: String,
     phone: { type: String, required: true, unique: true },
-    role: { type: String, default: "general" },
+    role: { type: String, default: "General" },
     otp: String,
     otpExpires: Date,
     token: String,
@@ -18,7 +18,7 @@ const userSchema = new Schema(
     guardianPhone: String,
     education: String,
     institute: String,
-    status: { type: String, required: true, default: "unverified" },
+    status: { type: String, required: true, default: "Unverified" },
   },
   {
     timestamps: true,

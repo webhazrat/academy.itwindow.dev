@@ -14,7 +14,9 @@ export default async function handler(req, res) {
       if (user) {
         res.status(200).json({ status: 200, data: user });
       } else {
-        res.status(404).json({ status: 404, message: `User not found` });
+        res
+          .status(404)
+          .json({ status: 404, message: "ইউজার খুঁজে পাওয়া যায় নাই" });
       }
     } catch (error) {
       console.log({ userCatch: error });

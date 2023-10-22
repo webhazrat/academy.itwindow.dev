@@ -1,24 +1,24 @@
+import AccountPayment from "@/src/components/AccountPayments";
 import DashboardLayout from "@/src/components/DashboardLayout";
 import { DataTable } from "@/src/components/DataTable";
-import { checkAdmin } from "@/src/middleware/clientAuth";
+import { EnrollRequestsTableColumns } from "@/src/components/TableColumns";
 import { fetcher } from "@/src/lib/utils";
+import { checkAdmin } from "@/src/middleware/clientAuth";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
-import UserUpdate from "@/src/components/UserUpdate";
-import { useRouter } from "next/router";
-import { UsersTableColumns } from "@/src/components/TableColumns";
 
-export default function Users() {
+export default function EnrollCompleted() {
   const router = useRouter();
   const { page, search } = router.query;
-  const [user, setUser] = useState(null);
+  const [payment, setPayment] = useState(null);
   const [pagination, setPagination] = useState({
     pageIndex: page ? page - 1 : 0,
-    pageSize: 2,
+    pageSize: 10,
   });
   const [globalFilter, setGlobalFilter] = useState(search ? search : "");
   const { data, isLoading, mutate } = useSWR(
-    `/api/users?pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=createdAt&sortOrder=desc`,
+    `/api/enrolls?status=Completed&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=createdAt&sortOrder=desc`,
     fetcher
   );
 
@@ -26,12 +26,12 @@ export default function Users() {
     <DashboardLayout>
       <div>
         <div className="py-3 px-7 flex items-center justify-between bg-slate-50 dark:bg-slate-800 dark:bg-opacity-30">
-          <h1 className="text-lg font-semibold">ইউজারস</h1>
+          <h1 className="text-lg font-semibold">ইনরোল রিকুয়েস্টস</h1>
         </div>
         <div className="p-7">
           <DataTable
             isLoading={isLoading}
-            columns={UsersTableColumns(setUser)}
+            columns={EnrollRequestsTableColumns(setPayment)}
             data={data}
             pagination={pagination}
             setPagination={setPagination}
@@ -39,12 +39,15 @@ export default function Users() {
             setGlobalFilter={setGlobalFilter}
           />
 
-          {user && <UserUpdate user={user} setUser={setUser} mutate={mutate} />}
+          {payment && (
+            <AccountPayment enroll={payment} setEnroll={setPayment} />
+          )}
         </div>
       </div>
     </DashboardLayout>
   );
 }
+
 export async function getServerSideProps(context) {
   return checkAdmin(context);
 }

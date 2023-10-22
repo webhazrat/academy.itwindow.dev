@@ -7,7 +7,7 @@ export async function checkAdmin(context) {
   if (session) {
     await connectDB();
     const user = await userModel.findById(session.user._id).select("role");
-    if (user.role !== "admin") {
+    if (user.role !== "Admin") {
       return {
         redirect: {
           destination: `/login`,

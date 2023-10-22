@@ -1,3 +1,7 @@
+// accounts = Pending, Canceled, Approved
+// enroll = Pending, Completed, Ended
+// user = Verified, Unverified
+
 export const mainNavs = [
   {
     id: "home",
@@ -243,21 +247,21 @@ export const dashboardSideNav = [
       {
         id: 2,
         icon: "ClipboardPaste",
-        href: "/dashboard/enroll/requests",
+        href: "/dashboard/enrolls/requests",
         titleE: "Enroll Requests",
         title: "ইনরোল রিকুয়েস্টস",
       },
       {
         id: 3,
         icon: "GraduationCap",
-        href: "/dashboard/enroll/completed",
+        href: "/dashboard/enrolls/completed",
         titleE: "Enroll Completed",
         title: "ইনরোল কমপ্লিটেড",
       },
       {
         id: 4,
         icon: "CalendarCheck2",
-        href: "/dashboard/course-completed",
+        href: "/dashboard/courses/completed",
         titleE: "Course Completed",
         title: "কোর্স কমপ্লিটেড",
       },

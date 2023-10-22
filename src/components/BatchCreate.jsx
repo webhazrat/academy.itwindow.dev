@@ -29,7 +29,7 @@ import { useToast } from "./ui/use-toast";
 export default function BatchCreate({ mutate }) {
   const [isOpen, setIsOpen] = useState(null);
   const { data, isLoading } = useSWR(
-    "/api/courses?sortBy=createdAt&sortOrder=desc",
+    "/api/courses?sortBy=createdAt&sortOrder=asc",
     fetcher
   );
   const courses = data?.data;
@@ -112,6 +112,7 @@ export default function BatchCreate({ mutate }) {
       console.log({ batchCreateCatch: error });
     }
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -139,12 +140,13 @@ export default function BatchCreate({ mutate }) {
           <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto mb-16">
             <div className="space-y-5 p-7">
               <div className="space-y-2">
-                <Label className="courseId">কোর্স</Label>
+                <Label htmlFor="courseId">কোর্স</Label>
                 <Controller
                   name="courseId"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      id="courseId"
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -153,7 +155,7 @@ export default function BatchCreate({ mutate }) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {courses.length > 0 &&
+                          {courses?.length > 0 &&
                             courses.map((course) => (
                               <SelectItem key={course._id} value={course._id}>
                                 {course.title}

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       const session = await checkLogin(req, res);
       EnrollSchema.parse(req.body);
       let { courseId, paymentMethod, transactionId, amount } = req.body;
-      if (paymentMethod === "cash") {
+      if (paymentMethod === "Cash") {
         transactionId = "";
         amount = "";
       }
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       const enrollExist = await enrollModel.countDocuments({
         userId: session.user._id,
         courseId,
-        status: { $ne: "completed" },
+        status: { $ne: "Completed" },
       });
       if (enrollExist) {
         return res.status(400).json({

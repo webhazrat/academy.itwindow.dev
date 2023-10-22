@@ -6,7 +6,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { CourseSchema } from "@/src/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Minus, Plus } from "lucide-react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,14 @@ import {
 } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function CourseCreate({ mutate }) {
   const [isOpen, setIsOpen] = useState(null);
@@ -125,7 +133,7 @@ export default function CourseCreate({ mutate }) {
               সংযুক্ত করুন
             </Button>
           </div>
-          <ScrollArea className="h-[calc(100vh_-_200px)] overflow-y-auto  mb-16">
+          <ScrollArea className="max-h-[calc(100vh_-_200px)] h-full mb-16">
             <div className="grid lg:grid-cols-2 gap-5 p-7 pt-0">
               <div className="flex-1">
                 <div className="space-y-5">
@@ -396,6 +404,37 @@ export default function CourseCreate({ mutate }) {
                         {errors.fee.message}
                       </p>
                     )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="status">স্ট্যাটাস</Label>
+                    <Controller
+                      name="status"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="Published">
+                                Published
+                              </SelectItem>
+                              <SelectItem value="Unpublished">
+                                Unpublished
+                              </SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="order">অর্ডার</Label>
+                    <Input type="number" id="order" {...register("order")} />
                   </div>
                 </div>
               </div>

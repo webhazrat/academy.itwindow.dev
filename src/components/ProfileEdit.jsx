@@ -49,21 +49,33 @@ export default function ProfileEdit({ user, mutate, onSubmit }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="flex gap-2">
-          <Pencil size={14} />
+        <Button size="sm" variant="outline">
+          <Pencil size={14} className="mr-2" />
           আপডেট
         </Button>
       </DialogTrigger>
       <DialogContent className="p-0">
-        <DialogHeader className="p-7">
+        <DialogHeader className="p-7 pb-0">
           <DialogTitle>প্রোফাইল আপডেট</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto">
+        <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto  mb-16">
           <div className="p-7 pt-0">
             <form
               onSubmit={handleSubmit(handleEditSubmit)}
               className="space-y-5"
             >
+              <div className="fixed w-full bottom-0 px-7 left-0 dark:bg-background rounded-b-md z-40 border-t h-16 flex justify-end items-center">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-gradient text-white"
+                >
+                  {isSubmitting && (
+                    <Loader2 size={16} className="mr-2 animate-spin" />
+                  )}
+                  সংরক্ষণ
+                </Button>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="name">নাম</Label>
                 <Input id="name" type="text" {...register("name")} />
@@ -72,8 +84,10 @@ export default function ProfileEdit({ user, mutate, onSubmit }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">ইমেইল</Label>
-                <Input id="email" type="email" {...register("email")} />
+                <Label htmlFor="email">
+                  ইমেইল <small>(যদি থাকে)</small>
+                </Label>
+                <Input id="email" type="text" {...register("email")} />
                 {errors.email && (
                   <p className="text-sm text-red-400">{errors.email.message}</p>
                 )}
@@ -129,16 +143,6 @@ export default function ProfileEdit({ user, mutate, onSubmit }) {
                   </p>
                 )}
               </div>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-gradient text-white"
-              >
-                {isSubmitting && (
-                  <Loader2 size={16} className="mr-2 animate-spin" />
-                )}
-                সংরক্ষণ
-              </Button>
             </form>
           </div>
         </ScrollArea>
