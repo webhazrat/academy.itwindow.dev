@@ -37,10 +37,15 @@ export default function EnrollCompleted() {
             setPagination={setPagination}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
+            columnVisible={{ userId_image: false }}
           />
 
           {payment && (
-            <AccountPayment enroll={payment} setEnroll={setPayment} />
+            <AccountPayment
+              enroll={payment}
+              setEnroll={setPayment}
+              enrollMutate={mutate}
+            />
           )}
         </div>
       </div>

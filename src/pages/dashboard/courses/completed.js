@@ -18,7 +18,7 @@ export default function CourseCompleted() {
   });
   const [globalFilter, setGlobalFilter] = useState(search ? search : "");
   const { data, isLoading, mutate } = useSWR(
-    `/api/enrolls?status=verified&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=createdAt&sortOrder=desc`,
+    `/api/enrolls?status=Ended&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=createdAt&sortOrder=desc`,
     fetcher
   );
 
@@ -37,10 +37,15 @@ export default function CourseCompleted() {
             setPagination={setPagination}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
+            columnVisible={{ userId_image: false }}
           />
 
           {payment && (
-            <AccountPayment enroll={payment} setEnroll={setPayment} />
+            <AccountPayment
+              enroll={payment}
+              setEnroll={setPayment}
+              enrollMutate={mutate}
+            />
           )}
         </div>
       </div>

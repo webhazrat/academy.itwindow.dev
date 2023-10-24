@@ -32,6 +32,7 @@ export function DataTable({
   setPagination,
   globalFilter,
   setGlobalFilter,
+  columnVisible,
 }) {
   const [sorting, setSorting] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -53,7 +54,7 @@ export function DataTable({
     manualFiltering: true,
     state: {
       sorting,
-      columnVisibility,
+      columnVisibility: columnVisible,
       rowSelection,
       pagination,
       globalFilter,

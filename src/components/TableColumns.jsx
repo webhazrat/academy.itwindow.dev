@@ -9,6 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Checkbox } from "./ui/checkbox";
+import Image from "next/image";
+import { th } from "date-fns/locale";
 
 export const UsersTableColumns = (setUser) => [
   {
@@ -30,6 +32,10 @@ export const UsersTableColumns = (setUser) => [
     enableHiding: false,
   },
   {
+    accessorKey: "image",
+    enableHiding: false,
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
@@ -39,6 +45,24 @@ export const UsersTableColumns = (setUser) => [
         >
           Name <ChevronsUpDown className="w-3 h-3 ml-2" />
         </button>
+      );
+    },
+    cell: ({ row }) => {
+      const image = row.getValue("image")
+        ? `/uploads/${row.getValue("image")}`
+        : "/no-photo.png";
+      return (
+        <div className="flex gap-2 items-center">
+          <div className="flex flex-shrink-0">
+            <Image
+              src={image}
+              width={36}
+              height={36}
+              className="rounded-full"
+            />
+          </div>
+          {row.getValue("name")}
+        </div>
       );
     },
   },
@@ -91,6 +115,19 @@ export const UsersTableColumns = (setUser) => [
         >
           Status <ChevronsUpDown className="w-3 h-3 ml-2" />
         </button>
+      );
+    },
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      return (
+        <span
+          className={`${status === "Verified" && "text-green-400"} ${
+            (status === "Unverified" || status === "Suspended") &&
+            "text-red-400"
+          }`}
+        >
+          {status}
+        </span>
       );
     },
   },
@@ -215,6 +252,18 @@ export const CoursesTableColumns = (setPhoto, setCourse) => [
         </button>
       );
     },
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      return (
+        <span
+          className={`${status === "Unpublished" && "text-yellow-400"} ${
+            status === "Published" && "text-green-400"
+          }`}
+        >
+          {status}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "order",
@@ -306,6 +355,7 @@ export const EnrollRequestsTableColumns = (setPayment) => [
     ),
     enableHiding: false,
   },
+  { accessorKey: "userId.image", enableHiding: false },
   {
     accessorKey: "userId.name",
     header: ({ column }) => {
@@ -314,8 +364,26 @@ export const EnrollRequestsTableColumns = (setPayment) => [
           className="flex items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name <ChevronsUpDown size={12} className="ml-2" />
+          Name <ChevronsUpDown className="w-3 h-3 ml-2" />
         </button>
+      );
+    },
+    cell: ({ row }) => {
+      const image = row.getValue("userId_image")
+        ? `/uploads/${row.getValue("userId_image")}`
+        : "/no-photo.png";
+      return (
+        <div className="flex gap-2 items-center">
+          <div className="flex flex-shrink-0">
+            <Image
+              src={image}
+              width={36}
+              height={36}
+              className="rounded-full"
+            />
+          </div>
+          {row.getValue("userId_name")}
+        </div>
       );
     },
   },
@@ -448,7 +516,7 @@ export const EnrollRequestsTableColumns = (setPayment) => [
   },
 ];
 
-export const BatchesTableColumns = () => [
+export const BatchesTableColumns = (setBatch, setStudent) => [
   {
     id: "select",
     header: ({ table }) => (
@@ -534,6 +602,18 @@ export const BatchesTableColumns = () => [
         </button>
       );
     },
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      return (
+        <span
+          className={`${status === "Pending" && "text-yellow-400"} ${
+            (status === "Ongoing" || status === "Ended") && "text-green-400"
+          }`}
+        >
+          {status}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "createdAt",
@@ -573,12 +653,19 @@ export const BatchesTableColumns = () => [
             //   setPhoto(course);
             // }}
             >
+              অ্যাটেনডেন্স
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setStudent(batch);
+              }}
+            >
               স্টুডেন্টস
             </DropdownMenuItem>
             <DropdownMenuItem
-            // onClick={() => {
-            //   setCourse(course);
-            // }}
+              onClick={() => {
+                setBatch(batch);
+              }}
             >
               ইডিট
             </DropdownMenuItem>

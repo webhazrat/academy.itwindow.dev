@@ -14,7 +14,7 @@ export default function Users() {
   const [user, setUser] = useState(null);
   const [pagination, setPagination] = useState({
     pageIndex: page ? page - 1 : 0,
-    pageSize: 2,
+    pageSize: 10,
   });
   const [globalFilter, setGlobalFilter] = useState(search ? search : "");
   const { data, isLoading, mutate } = useSWR(
@@ -37,6 +37,7 @@ export default function Users() {
             setPagination={setPagination}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
+            columnVisible={{ image: false }}
           />
 
           {user && <UserUpdate user={user} setUser={setUser} mutate={mutate} />}

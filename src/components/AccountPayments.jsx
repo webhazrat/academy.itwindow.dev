@@ -20,6 +20,7 @@ import { Textarea } from "./ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EnrollSchema } from "../lib/validation";
 import { useToast } from "./ui/use-toast";
+import Image from "next/image";
 
 export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
   const { toast } = useToast();
@@ -149,8 +150,8 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
     }
   };
 
+  // enroll status update method
   const handleStatusSubmit = async (data) => {
-    console.log({ data2: data });
     try {
       const response = await fetch(`/api/enroll/update?id=${enroll._id}`, {
         method: "PUT",
@@ -183,30 +184,41 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
         <ScrollArea className="max-h-[calc(100vh_-_100px)] h-full">
           <div className="p-7 space-y-5">
             <div className="grid grid-cols-[7fr_5fr]">
-              <div className="space-y-1">
-                <p>
-                  <span className="dark:text-slate-400">নাম:</span>{" "}
-                  {enroll.userId.name}
-                </p>
-                <p>
-                  <span className="dark:text-slate-400">মোবাইল নাম্বার:</span>{" "}
-                  {enroll.userId.phone}
-                </p>
-                <p>
-                  <span className="dark:text-slate-400">ঠিকানা:</span>{" "}
-                  {enroll.userId.address}
-                </p>
-                <p>
-                  <span className="dark:text-slate-400">
-                    সর্বশেষ শিক্ষাগত যোগ্যতা:
-                  </span>{" "}
-                  {enroll.userId.education}
-                </p>
-                <p>
-                  <span className="dark:text-slate-400">প্রতিষ্ঠান:</span>{" "}
-                  {enroll.userId.institute}
-                </p>
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0">
+                  <Image
+                    src={`/uploads/${enroll.userId.image}`}
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <p>
+                    <span className="dark:text-slate-400">নাম:</span>{" "}
+                    {enroll.userId.name}
+                  </p>
+                  <p>
+                    <span className="dark:text-slate-400">মোবাইল নাম্বার:</span>{" "}
+                    {enroll.userId.phone}
+                  </p>
+                  <p>
+                    <span className="dark:text-slate-400">ঠিকানা:</span>{" "}
+                    {enroll.userId.address}
+                  </p>
+                  <p>
+                    <span className="dark:text-slate-400">
+                      সর্বশেষ শিক্ষাগত যোগ্যতা:
+                    </span>{" "}
+                    {enroll.userId.education}
+                  </p>
+                  <p>
+                    <span className="dark:text-slate-400">প্রতিষ্ঠান:</span>{" "}
+                    {enroll.userId.institute}
+                  </p>
+                </div>
               </div>
+
               <div className="flex flex-col gap-3 justify-between">
                 <div className="space-y-1">
                   <p>

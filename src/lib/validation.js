@@ -3,14 +3,14 @@ import { z } from "zod";
 export const OtpSendSchema = z.object({
   phone: z
     .string()
-    .min(1, "মোবাইল নাম্বার ইনপুট করুন।")
-    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
+    .min(1, "মোবাইল নাম্বার ইনপুট করুন")
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
 });
 
 export const UserRegisterSchema = z
   .object({
     name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
-    password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে।"),
+    password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে"),
     confirmPassword: z.string(),
     refer: z
       .string()
@@ -21,29 +21,29 @@ export const UserRegisterSchema = z
           phone === undefined ||
           /^(01[3456789]\d{8})$/.test(phone),
         {
-          message: "সঠিক মোবাইল নাম্বার ইনপুট করুন।",
+          message: "সঠিক মোবাইল নাম্বার ইনপুট করুন",
         }
       ),
     terms: z
       .boolean()
       .default(false)
       .refine((data) => data === true, {
-        message: "আপনাকে অবশ্যই শর্তাবলী মেনে নিতে হবে।",
+        message: "আপনাকে অবশ্যই শর্তাবলী মেনে নিতে হবে",
       }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে।",
+    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে",
     path: ["confirmPassword"],
   });
 
 // forgot password form validation
 export const ForgotPasswordSchema = z
   .object({
-    password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে।"),
+    password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে।",
+    message: "অবশ্যই উপরের পাসওয়ার্ডে সাথে মিলতে হবে",
     path: ["confirmPassword"],
   });
 
@@ -51,9 +51,9 @@ export const ForgotPasswordSchema = z
 export const LoginSchema = z.object({
   phone: z
     .string()
-    .min(1, "মোবাইল নাম্বার ইনপুট করুন।")
-    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন।"),
-  password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন।"),
+    .min(1, "মোবাইল নাম্বার ইনপুট করুন")
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
+  password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন"),
 });
 
 // user profile update
@@ -80,41 +80,41 @@ export const UserSchema = z.object({
 
 // course submit form validation
 export const CourseSchema = z.object({
-  title: z.string().min(1, "কোর্স টাইটেল ইনপুট করুন।"),
-  slug: z.string().regex(/^[a-z0-9-]+$/, "সঠিক স্লাগ ইনপুট করুন।"),
-  excerpt: z.string().min(1, "ছোট বিবরণ ইনপুট করুন।"),
-  description: z.string().min(1, "বিবরণ ইনপুট করুন।"),
+  title: z.string().min(1, "কোর্স টাইটেল ইনপুট করুন"),
+  slug: z.string().regex(/^[a-z0-9-]+$/, "সঠিক স্লাগ ইনপুট করুন"),
+  excerpt: z.string().min(1, "ছোট বিবরণ ইনপুট করুন"),
+  description: z.string().min(1, "বিবরণ ইনপুট করুন"),
   topics: z.array(
     z.object({
-      value: z.string().min(1, "কোর্সে শিক্ষানীয় বিষয় ইনপুট করুন।"),
+      value: z.string().min(1, "কোর্সে শিক্ষানীয় বিষয় ইনপুট করুন"),
     })
   ),
   details: z.array(
     z.object({
-      question: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন।"),
-      answer: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন।"),
+      question: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন"),
+      answer: z.string().min(1, "কোর্সের বিস্তারিত ইনপুট করুন"),
     })
   ),
   requirements: z.array(
     z.object({
-      value: z.string().min(1, "কোর্স করতে প্রয়োজনীয় বিষয় ইনপুট করুন।"),
+      value: z.string().min(1, "কোর্স করতে প্রয়োজনীয় বিষয় ইনপুট করুন"),
     })
   ),
   knows: z.array(
     z.object({
-      value: z.string().min(1, "কোর্স করতে জ্ঞাত বিষয় ইনপুট করুন।"),
+      value: z.string().min(1, "কোর্স করতে জ্ঞাত বিষয় ইনপুট করুন"),
     })
   ),
   hows: z.array(
     z.object({
-      value: z.string().min(1, "কোর্সটি কিভাবে করবে তা ইনপুট করুন।"),
+      value: z.string().min(1, "কোর্সটি কিভাবে করবে তা ইনপুট করুন"),
     })
   ),
   fee: z
     .string()
-    .min(1, "কোর্স ফি ইনপুট করুন।")
+    .min(1, "কোর্স ফি ইনপুট করুন")
     .refine((value) => !isNaN(value), {
-      message: "কোর্স ফি নাম্বারে ইনপুট করুন।",
+      message: "কোর্স ফি নাম্বারে ইনপুট করুন",
     }),
   status: z.string().optional(),
   order: z.string().optional(),
@@ -133,7 +133,7 @@ export const CourseImageSchema = z.object({
       return true;
     },
     {
-      message: "ইমেজ টাইপ (jpg, jpeg, png or svg) এবং সাইজ 1MB এর কম হতে হবে।",
+      message: "ইমেজ টাইপ (jpg, jpeg, png or svg) এবং সাইজ 1MB এর কম হতে হবে",
     }
   ),
 });
@@ -156,7 +156,7 @@ export const EnrollSchema = z
     paymentMethod: z
       .string()
       .refine((value) => ["Bkash", "Nagad", "Rocket", "Cash"].includes(value), {
-        message: "সঠিক পেমেন্ট পদ্ধতি নির্বাচন করুন।", // Custom error message
+        message: "সঠিক পেমেন্ট পদ্ধতি নির্বাচন করুন",
       }),
     transactionId: z.string().optional(),
     amount: z
@@ -179,7 +179,7 @@ export const EnrollSchema = z
   )
   .refine(
     (data) => {
-      return data.paymentMethod === "Cash" || !!data.amount;
+      return !!data.amount;
     },
     {
       path: ["amount"],
@@ -218,4 +218,10 @@ export const BatchSchema = z.object({
     },
     { message: "সঠিক টাইম ফরমেট (HH:mm) ইনপুট করুন" }
   ),
+  status: z.string().optional(),
+});
+
+// add student to batch form validation
+export const BatchStudentSchema = z.object({
+  userId: z.string().min(1, "ইউজার আইডি ইনপুট করুন"),
 });

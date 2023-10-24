@@ -1,6 +1,7 @@
 // accounts = Pending, Canceled, Approved
 // enroll = Pending, Completed, Ended
 // user = Verified, Unverified
+// batch = Pending, Ongoing, Ended
 
 export const mainNavs = [
   {

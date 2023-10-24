@@ -91,8 +91,8 @@ export default function UserUpdate({ user, setUser, mutate }) {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Roles</SelectLabel>
-                        <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="general">General</SelectItem>
+                        <SelectItem value="Admin">Admin</SelectItem>
+                        <SelectItem value="General">General</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -119,9 +119,9 @@ export default function UserUpdate({ user, setUser, mutate }) {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Status</SelectLabel>
-                        <SelectItem value="verified">Varified</SelectItem>
-                        <SelectItem value="unverified">Unverified</SelectItem>
-                        <SelectItem value="suspended">Suspended</SelectItem>
+                        <SelectItem value="Verified">Varified</SelectItem>
+                        <SelectItem value="Unverified">Unverified</SelectItem>
+                        <SelectItem value="Suspended">Suspended</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>

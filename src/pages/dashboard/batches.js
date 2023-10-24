@@ -1,4 +1,6 @@
+import AddStudents from "@/src/components/AddStudents";
 import BatchCreate from "@/src/components/BatchCreate";
+import BatchUpdate from "@/src/components/BatchUpdate";
 import DashboardLayout from "@/src/components/DashboardLayout";
 import { DataTable } from "@/src/components/DataTable";
 import { BatchesTableColumns } from "@/src/components/TableColumns";
@@ -9,11 +11,13 @@ import { useState } from "react";
 import useSWR from "swr";
 
 export default function Batches() {
+  const [batch, setBatch] = useState(null);
+  const [student, setStudent] = useState(null);
   const router = useRouter();
   const { page, search } = router.query;
   const [pagination, setPagination] = useState({
     pageIndex: page ? page - 1 : 0,
-    pageSize: 2,
+    pageSize: 10,
   });
   const [globalFilter, setGlobalFilter] = useState(search ? search : "");
   const { data, isLoading, mutate } = useSWR(
@@ -31,13 +35,23 @@ export default function Batches() {
         <div className="p-7">
           <DataTable
             isLoading={isLoading}
-            columns={BatchesTableColumns()}
+            columns={BatchesTableColumns(setBatch, setStudent)}
             data={data}
             pagination={pagination}
             setPagination={setPagination}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
           />
+          {batch && (
+            <BatchUpdate batch={batch} setBatch={setBatch} mutate={mutate} />
+          )}
+          {student && (
+            <AddStudents
+              batch={student}
+              setBatch={setStudent}
+              mutate={mutate}
+            />
+          )}
         </div>
       </div>
     </DashboardLayout>

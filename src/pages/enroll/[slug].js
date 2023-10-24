@@ -188,9 +188,7 @@ export default function Cart({ course }) {
                   )}
                 />
               </div>
-              {(paymentMethod === "Bkash" ||
-                paymentMethod === "Nagad" ||
-                paymentMethod === "Rocket") && (
+              {paymentMethod !== "Cash" && (
                 <Controller
                   name="transactionId"
                   control={control}
@@ -214,32 +212,28 @@ export default function Cart({ course }) {
                 <span>৳{course.data.fee}</span>
               </div>
 
-              {(paymentMethod === "Bkash" ||
-                paymentMethod === "Nagad" ||
-                paymentMethod === "Rocket") && (
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field }) => (
-                    <div className="space-y-2">
-                      <div className="flex justify-between gap-4 items-center">
-                        <Label htmlFor="amount">অ্যামাউন্ট</Label>
-                        <Input
-                          id="amount"
-                          type="text"
-                          {...field}
-                          className="max-w-[100px] text-right"
-                        />
-                      </div>
-                      {errors.amount && (
-                        <p className="text-sm text-red-400">
-                          {errors.amount.message}
-                        </p>
-                      )}
+              <Controller
+                name="amount"
+                control={control}
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <div className="flex justify-between gap-4 items-center">
+                      <Label htmlFor="amount">অ্যামাউন্ট</Label>
+                      <Input
+                        id="amount"
+                        type="text"
+                        {...field}
+                        className="max-w-[100px] text-right"
+                      />
                     </div>
-                  )}
-                />
-              )}
+                    {errors.amount && (
+                      <p className="text-sm text-red-400">
+                        {errors.amount.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+              />
               {errors.common && (
                 <p className="text-sm text-red-400">{errors.common.message}</p>
               )}

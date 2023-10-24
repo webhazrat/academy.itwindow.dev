@@ -37,6 +37,7 @@ export default function EnrollRequests() {
             setPagination={setPagination}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
+            columnVisible={{ userId_image: false }}
           />
 
           {payment && (

@@ -14,7 +14,6 @@ export default async function handler(req, res) {
       let { courseId, paymentMethod, transactionId, amount } = req.body;
       if (paymentMethod === "Cash") {
         transactionId = "";
-        amount = "";
       }
       await connectDB();
       const enrollExist = await enrollModel.countDocuments({
