@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     try {
       const session = await checkAdmin(req, res);
       BatchSchema.parse(req.body);
-      let { batchCode, courseId, classDays, time } = req.body;
+      let { code, courseId, days, time } = req.body;
       await connectDB();
       const courseExist = await courseModel.countDocuments({
         _id: courseId,
@@ -28,8 +28,8 @@ export default async function handler(req, res) {
       }
       await batchModel.create({
         courseId,
-        batchCode,
-        classDays,
+        code,
+        days,
         time,
       });
       res.status(200).json({

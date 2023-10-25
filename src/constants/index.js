@@ -276,9 +276,9 @@ export const dashboardSideNav = [
       {
         id: 6,
         icon: "ClipboardEdit",
-        href: "/dashboard/assignments",
-        titleE: "Assignments",
-        title: "এ্যাসাইনমেন্টস",
+        href: "/dashboard/attendance",
+        titleE: "Attendance",
+        title: "অ্যাটেনডেন্স",
       },
       {
         id: 7,

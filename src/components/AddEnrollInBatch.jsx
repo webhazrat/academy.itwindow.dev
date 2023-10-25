@@ -15,28 +15,30 @@ import {
 } from "./ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
-import { BatchStudentSchema } from "../lib/validation";
 import Label from "./Label";
 import Alert from "./Alert";
+import { BatchEnrollSchema } from "../lib/validation";
 
-export default function AddStudents({ batch, setBatch }) {
+export default function AddEnrollInBatch({ batch, setBatch }) {
   const { toast } = useToast();
   const { data, isLoading, mutate } = useSWR(
-    `/api/enrolls/filter?status=Completed&courseId=${batch.courseId._id}`,
+    `/api/enrolls/course?status=Completed&courseId=${batch.courseId._id}`,
     fetcher
   );
-  const enrolls = data?.data;
+  const courseWiseEnrolls = data?.data;
 
   const {
     data: data2,
     isLoading: isLoading2,
     mutate: mutate2,
-  } = useSWR(`/api/student/batch?id=${batch._id}`, fetcher);
-  const students = data2?.data;
+  } = useSWR(`/api/enrolls/batch?batchId=${batch._id}`, fetcher);
+  const batchWiseEnrolls = data2?.data;
 
-  const filteredEnrolls = enrolls?.filter(
+  const filteredEnrolls = courseWiseEnrolls?.filter(
     (enroll) =>
-      !students?.some((student) => student.userId._id === enroll.userId._id)
+      !batchWiseEnrolls?.some(
+        (student) => student.userId._id === enroll.userId._id
+      )
   );
 
   // add student to batch
@@ -48,25 +50,25 @@ export default function AddStudents({ batch, setBatch }) {
     setError,
     clearErrors,
   } = useForm({
-    resolver: zodResolver(BatchStudentSchema),
+    resolver: zodResolver(BatchEnrollSchema),
   });
 
-  // add student to a batch
-  const handleStudent = async (data) => {
-    (data.batchId = batch._id), (data.courseId = batch.courseId._id);
+  // add batch to an enroll
+  const batchAddInEnroll = async (data) => {
+    data.batchId = batch._id;
     try {
-      const response = await fetch(`/api/student/create`, {
-        method: "POST",
+      const response = await fetch(`/api/enroll/update?id=${data.enrollId}`, {
+        method: "PUT",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const createResponse = await response.json();
+      const updateResponse = await response.json();
       if (!response.ok) {
         // server custom zod pattern error
-        if (createResponse?.errors?.length > 0) {
-          createResponse.errors.forEach((error) => {
+        if (updateResponse?.errors?.length > 0) {
+          updateResponse.errors.forEach((error) => {
             setError(error.field, {
               type: "server",
               message: error.message,
@@ -75,41 +77,45 @@ export default function AddStudents({ batch, setBatch }) {
         }
         toast({
           variant: "destructive",
-          title: createResponse.title,
-          description: createResponse.message,
+          title: updateResponse.title,
+          description: updateResponse.message,
         });
       } else {
         toast({
           variant: "success",
-          title: createResponse.title,
-          description: createResponse.message,
+          title: updateResponse.title,
+          description: updateResponse.message,
         });
         mutate2();
-        reset({ userId: "" });
+        reset({ enrollId: "" });
         clearErrors();
       }
     } catch (error) {
-      console.log({ batchStudentAddCatch: error });
+      console.log({ addBatchInEnrolllCatch: error });
     }
   };
 
   // remove student from a bacth
-  const deleteStudent = async (id) => {
+  const removeEnrollFromBatch = async (id) => {
     try {
-      const response = await fetch(`/api/student/delete?id=${id}`, {
-        method: "DELETE",
+      const response = await fetch(`/api/enroll/update?id=${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ type: "unset", batchId: "" }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      const deleteResponse = await response.json();
+      const updateResponse = await response.json();
       if (response.ok) {
         mutate2();
         toast({
           variant: "success",
-          title: deleteResponse.title,
-          description: deleteResponse.message,
+          title: updateResponse.title,
+          description: "সঠিকভাবে ইনরোল ব্যাচ থেকে রিমুভ হয়েছে",
         });
       }
     } catch (error) {
-      console.log({ deleteStudentCatch: error });
+      console.log({ removeEnrollFromBatchCatch: error });
     }
   };
 
@@ -125,7 +131,7 @@ export default function AddStudents({ batch, setBatch }) {
               <div className="space-y-1">
                 <p>
                   <span className="dark:text-slate-400">ব্যাচ কোড:</span>{" "}
-                  {batch.batchCode}
+                  {batch.code}
                 </p>
                 <p>
                   <span className="dark:text-slate-400">কোর্স:</span>{" "}
@@ -133,7 +139,7 @@ export default function AddStudents({ batch, setBatch }) {
                 </p>
                 <p>
                   <span className="dark:text-slate-400">ক্লাস ডে:</span>{" "}
-                  {batch.classDays.join(", ")}
+                  {batch.days?.join(", ")}
                 </p>
                 <p>
                   <span className="dark:text-slate-400">ক্লাস টাইম:</span>{" "}
@@ -141,12 +147,12 @@ export default function AddStudents({ batch, setBatch }) {
                 </p>
               </div>
               {batch.status !== "Ended" && (
-                <form onSubmit={handleSubmit(handleStudent)}>
-                  <Label>ব্যাচে স্টুডেন্টস সংযুক্ত</Label>
+                <form onSubmit={handleSubmit(batchAddInEnroll)}>
+                  <Label>ব্যাচে ইনরোল সংযুক্ত</Label>
                   <div className="flex gap-3">
                     <div className="flex-1 space-y-1">
                       <Controller
-                        name="userId"
+                        name="enrollId"
                         control={control}
                         render={({ field }) => (
                           <Select
@@ -162,7 +168,7 @@ export default function AddStudents({ batch, setBatch }) {
                                   filteredEnrolls.map((enroll) => (
                                     <SelectItem
                                       key={enroll._id}
-                                      value={enroll.userId._id}
+                                      value={enroll._id}
                                     >
                                       {enroll.userId.name} -{" "}
                                       {enroll.userId.phone}
@@ -173,9 +179,9 @@ export default function AddStudents({ batch, setBatch }) {
                           </Select>
                         )}
                       />
-                      {errors.userId && (
+                      {errors.enrollId && (
                         <p className="text-sm text-red-400">
-                          {errors.userId.message}
+                          {errors.enrollId.message}
                         </p>
                       )}
                     </div>
@@ -205,32 +211,31 @@ export default function AddStudents({ batch, setBatch }) {
                 </tr>
               </thead>
               <tbody>
-                {isLoading && (
+                {isLoading ? (
                   <tr className={`dark:text-slate-400 text-sm`}>
-                    <td colSpan={5} className="text-center">
+                    <td colSpan={5} className="text-center border-b p-3">
                       Loading...
                     </td>
                   </tr>
-                )}
-                {students?.length > 0 &&
-                  students.map((student) => (
+                ) : batchWiseEnrolls?.length > 0 ? (
+                  batchWiseEnrolls.map((enroll) => (
                     <tr
                       className={`dark:text-slate-400 text-sm`}
-                      key={student._id}
+                      key={enroll._id}
                     >
                       <td className="border-b py-2">
-                        {formatDateTime(student.createdAt, "MMMM do, yyyy")}
+                        {formatDateTime(enroll.createdAt, "MMMM do, yyyy")}
                       </td>
-                      <td className="border-b p-2">{student.userId.name}</td>
-                      <td className="border-b p-2">{student.userId.phone}</td>
+                      <td className="border-b p-2">{enroll.userId.name}</td>
+                      <td className="border-b p-2">{enroll.userId.phone}</td>
                       <td className={`border-b p-2`}>
-                        {student.userId.address}
+                        {enroll.userId.address}
                       </td>
                       <td className="border-b p-2">
                         <Alert
                           title="আপনি কি এই স্টুডেন্ট কে এই ব্যাচ থেকে রিমুভ করতে চান?"
                           description="এই স্টুডেন্ট এই ব্যাচ থেকে রিমুভ হয়ে যাবে, তারপর এই ব্যাচে বিদ্যমান থাকবে না। আপনি কি নিশ্চিত রিমুভ করতে।"
-                          onClick={() => deleteStudent(student._id)}
+                          onClick={() => removeEnrollFromBatch(enroll._id)}
                         >
                           <Button
                             type="button"
@@ -243,7 +248,14 @@ export default function AddStudents({ batch, setBatch }) {
                         </Alert>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr className={`dark:text-slate-400 text-sm`}>
+                    <td colSpan={5} className="text-center border-b p-3">
+                      No data found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

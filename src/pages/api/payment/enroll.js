@@ -1,6 +1,6 @@
 import connectDB from "@/src/lib/connect";
 import { checkAdmin } from "@/src/middleware/serverAuth";
-import accountModel from "@/src/models/accountModel";
+import accountModel from "@/src/models/paymentModel";
 
 export default async function hanlder(req, res) {
   if (req.method === "GET") {

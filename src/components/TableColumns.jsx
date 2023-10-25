@@ -401,19 +401,6 @@ export const EnrollRequestsTableColumns = (setPayment) => [
     },
   },
   {
-    accessorKey: "userId.address",
-    header: ({ column }) => {
-      return (
-        <button
-          className="flex items-center"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Address <ChevronsUpDown size={12} className="ml-2" />
-        </button>
-      );
-    },
-  },
-  {
     accessorKey: "courseId.title",
     header: ({ column }) => {
       return (
@@ -422,6 +409,19 @@ export const EnrollRequestsTableColumns = (setPayment) => [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Course Title <ChevronsUpDown size={12} className="ml-2" />
+        </button>
+      );
+    },
+  },
+  {
+    accessorKey: "batchId.code",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Batch <ChevronsUpDown size={12} className="ml-2" />
         </button>
       );
     },
@@ -549,7 +549,7 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
     },
   },
   {
-    accessorKey: "batchCode",
+    accessorKey: "code",
     header: ({ column }) => {
       return (
         <button
@@ -562,14 +562,14 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
     },
   },
   {
-    accessorKey: "classDays",
+    accessorKey: "days",
     header: ({ column }) => {
       return (
         <button
           className="flex items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Class Days <ChevronsUpDown size={12} className="ml-2" />
+          Days <ChevronsUpDown size={12} className="ml-2" />
         </button>
       );
     },

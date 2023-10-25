@@ -25,6 +25,7 @@ export default async function handler(req, res) {
               { "userId.phone": { $regex: regex } },
               { "userId.address": { $regex: regex } },
               { "courseId.title": { $regex: regex } },
+              { "batchId.code": { $regex: regex } },
               { "courseId.fee": { $regex: regex } },
               { status: { $regex: regex } },
             ],
@@ -49,10 +50,24 @@ export default async function handler(req, res) {
           },
         },
         {
+          $lookup: {
+            from: "batches",
+            localField: "batchId",
+            foreignField: "_id",
+            as: "batchId",
+          },
+        },
+        {
           $unwind: "$userId",
         },
         {
           $unwind: "$courseId",
+        },
+        {
+          $unwind: {
+            path: "$batchId",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
           $match: match,

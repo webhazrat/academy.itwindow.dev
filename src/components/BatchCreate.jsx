@@ -47,13 +47,13 @@ export default function BatchCreate({ mutate }) {
     resolver: zodResolver(BatchSchema),
     defaultValues: {
       courseId: "",
-      classDays: [],
-      batchCode: "",
+      code: "",
+      days: [],
       time: "",
     },
   });
 
-  const days = [
+  const allDays = [
     "শনিবার",
     "রবিবার",
     "সোমবার",
@@ -65,14 +65,14 @@ export default function BatchCreate({ mutate }) {
 
   // class days value set to useForm
   const handleToggleChange = (day) => {
-    const classDays = getValues("classDays");
-    if (classDays.includes(day)) {
+    const days = getValues("days");
+    if (days.includes(day)) {
       setValue(
-        "classDays",
-        classDays.filter((i) => i !== day)
+        "days",
+        days.filter((i) => i !== day)
       );
     } else {
-      setValue("classDays", [...classDays, day]);
+      setValue("days", [...days, day]);
     }
   };
 
@@ -173,32 +173,30 @@ export default function BatchCreate({ mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="batchCode">ব্যাচ আইডি</Label>
+                <Label htmlFor="code">ব্যাচ আইডি</Label>
                 <Controller
-                  name="batchCode"
+                  name="code"
                   control={control}
                   render={({ field }) => (
                     <Input
                       type="text"
                       placeholder="BATCHXX"
-                      id="batchCode"
+                      id="code"
                       {...field}
                     />
                   )}
                 />
-                {errors.batchCode && (
-                  <p className="text-sm text-red-400">
-                    {errors.batchCode.message}
-                  </p>
+                {errors.code && (
+                  <p className="text-sm text-red-400">{errors.code.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="classDays">ক্লাস ডে</Label>
+                <Label htmlFor="days">ক্লাস ডে</Label>
                 <div className="flex flex-wrap items-center gap-2">
-                  {days.map((day) => (
+                  {allDays.map((day) => (
                     <Controller
                       key={day}
-                      name="classDays"
+                      name="days"
                       control={control}
                       render={({ field }) => {
                         return (
@@ -222,10 +220,8 @@ export default function BatchCreate({ mutate }) {
                     />
                   ))}
                 </div>
-                {errors.classDays && (
-                  <p className="text-sm text-red-400">
-                    {errors.classDays.message}
-                  </p>
+                {errors.days && (
+                  <p className="text-sm text-red-400">{errors.days.message}</p>
                 )}
               </div>
               <div className="space-y-2">

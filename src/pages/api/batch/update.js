@@ -13,17 +13,17 @@ export default async function handler(req, res) {
       const session = await checkAdmin(req, res);
       BatchSchema.parse(req.body);
       const { id } = req.query;
-      const { batchCode, courseId, classDays, time, status } = req.body;
+      const { code, courseId, days, time, status } = req.body;
       await connectDB();
       const batchExist = await batchModel.countDocuments({
-        batchCode,
+        code,
         _id: { $ne: id },
       });
       if (batchExist) {
         return res.status(400).json({
           errors: [
             {
-              field: "batchCode",
+              field: "code",
               message: "ব্যাচ কোডটি পূর্বেই ব্যবহার করা হয়েছে",
             },
           ],
@@ -31,8 +31,8 @@ export default async function handler(req, res) {
       }
       await batchModel.updateOne({
         courseId,
-        batchCode,
-        classDays,
+        code,
+        days,
         time,
         status,
       });

@@ -1,7 +1,7 @@
 import connectDB from "@/src/lib/connect";
 import { EnrollSchema } from "@/src/lib/validation";
 import { checkLogin } from "@/src/middleware/serverAuth";
-import accountModel from "@/src/models/accountModel";
+import accountModel from "@/src/models/paymentModel";
 import enrollModel from "@/src/models/enrollModel";
 import { z } from "zod";
 

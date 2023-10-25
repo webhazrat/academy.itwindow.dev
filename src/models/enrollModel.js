@@ -3,8 +3,9 @@ const { Schema } = mongoose;
 
 const enrollSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User" },
-    courseId: { type: Schema.Types.ObjectId, ref: "Course" },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+    batchId: { type: Schema.Types.ObjectId, ref: "Batch", required: true },
     status: { type: String, required: true, default: "Unverified" },
   },
   {

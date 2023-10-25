@@ -3,9 +3,9 @@ const { Schema } = mongoose;
 
 const batchSchema = new Schema(
   {
-    courseId: { type: Schema.Types.ObjectId, ref: "Course" },
-    batchCode: { type: String, required: true },
-    classDays: [String],
+    courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+    code: { type: String, required: true },
+    days: [String],
     time: String,
     status: { type: String, default: "Pending" },
   },

@@ -17,8 +17,8 @@ export default async function handler(req, res) {
       const match = {
         $or: [
           { "courseId.title": { $regex: regex } },
-          { batchCode: { $regex: regex } },
-          { classDays: { $regex: regex } },
+          { code: { $regex: regex } },
+          { days: { $regex: regex } },
           { time: { $regex: regex } },
           { status: { $regex: regex } },
         ],

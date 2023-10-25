@@ -43,7 +43,7 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
     },
   });
 
-  const days = [
+  const allDays = [
     "শনিবার",
     "রবিবার",
     "সোমবার",
@@ -55,14 +55,14 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
 
   // class days value set to useForm
   const handleToggleChange = (day) => {
-    const classDays = getValues("classDays");
-    if (classDays.includes(day)) {
+    const days = getValues("days");
+    if (days.includes(day)) {
       setValue(
-        "classDays",
-        classDays.filter((i) => i !== day)
+        "days",
+        days.filter((i) => i !== day)
       );
     } else {
-      setValue("classDays", [...classDays, day]);
+      setValue("days", [...days, day]);
     }
   };
 
@@ -157,38 +157,36 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="batchCode">ব্যাচ আইডি</Label>
+                <Label htmlFor="code">ব্যাচ আইডি</Label>
                 <Controller
-                  name="batchCode"
+                  name="code"
                   control={control}
                   render={({ field }) => (
                     <Input
                       type="text"
                       placeholder="BATCHXX"
-                      id="batchCode"
+                      id="code"
                       {...field}
                     />
                   )}
                 />
-                {errors.batchCode && (
-                  <p className="text-sm text-red-400">
-                    {errors.batchCode.message}
-                  </p>
+                {errors.code && (
+                  <p className="text-sm text-red-400">{errors.code.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="classDays">ক্লাস ডে</Label>
+                <Label htmlFor="days">ক্লাস ডে</Label>
                 <div className="flex flex-wrap items-center gap-2">
-                  {days.map((day) => (
+                  {allDays.map((day) => (
                     <Controller
                       key={day}
-                      name="classDays"
+                      name="days"
                       control={control}
                       render={({ field }) => {
                         return (
                           <label
                             className={`h-10 px-4 flex items-center rounded-md cursor-pointer border border-input hover:bg-accent hover:text-accent-foreground mb-0 transition-colors dark:text-slate-400 text-sm ${
-                              field.value.includes(day) &&
+                              field.value?.includes(day) &&
                               "bg-accent dark:!text-white"
                             }`}
                           >
@@ -197,7 +195,7 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                               className="hidden"
                               {...field}
                               onChange={() => handleToggleChange(day)}
-                              checked={field.value.includes(day)}
+                              checked={field.value?.includes(day)}
                             />
                             {day}
                           </label>
@@ -206,10 +204,8 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                     />
                   ))}
                 </div>
-                {errors.classDays && (
-                  <p className="text-sm text-red-400">
-                    {errors.classDays.message}
-                  </p>
+                {errors.days && (
+                  <p className="text-sm text-red-400">{errors.days.message}</p>
                 )}
               </div>
               <div className="space-y-2">

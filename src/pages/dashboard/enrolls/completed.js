@@ -1,6 +1,6 @@
-import AccountPayment from "@/src/components/AccountPayments";
 import DashboardLayout from "@/src/components/DashboardLayout";
 import { DataTable } from "@/src/components/DataTable";
+import EnrollPayments from "@/src/components/EnrollPayments";
 import { EnrollRequestsTableColumns } from "@/src/components/TableColumns";
 import { fetcher } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
@@ -41,7 +41,7 @@ export default function EnrollCompleted() {
           />
 
           {payment && (
-            <AccountPayment
+            <EnrollPayments
               enroll={payment}
               setEnroll={setPayment}
               enrollMutate={mutate}

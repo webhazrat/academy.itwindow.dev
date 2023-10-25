@@ -190,8 +190,8 @@ export const EnrollSchema = z
 // batch create schema validation
 export const BatchSchema = z.object({
   courseId: z.string().min(1, "কোর্স আইডি ইনপুট করুন"),
-  batchCode: z.string().min(1, "ব্যাচ কোড ইনপুট করুন"),
-  classDays: z
+  code: z.string().min(1, "ব্যাচ কোড ইনপুট করুন"),
+  days: z
     .array(
       z.enum([
         "শনিবার",
@@ -221,7 +221,7 @@ export const BatchSchema = z.object({
   status: z.string().optional(),
 });
 
-// add student to batch form validation
-export const BatchStudentSchema = z.object({
-  userId: z.string().min(1, "ইউজার আইডি ইনপুট করুন"),
+// add bacth id to enroll
+export const BatchEnrollSchema = z.object({
+  enrollId: z.string().min(1, "ইনরোল আইডি ইনপুট করুন"),
 });

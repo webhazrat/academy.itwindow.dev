@@ -22,16 +22,17 @@ import { EnrollSchema } from "../lib/validation";
 import { useToast } from "./ui/use-toast";
 import Image from "next/image";
 
-export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
+export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
   const { toast } = useToast();
   const [form, setForm] = useState({
     data: {},
     type: "",
   });
   const { data, isLoading, mutate } = useSWR(
-    `/api/accounts/enroll?id=${enroll._id}`,
+    `/api/payment/enroll?id=${enroll._id}`,
     fetcher
   );
+  const payments = data?.data;
 
   // create and update form
   const {
@@ -51,8 +52,6 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
       status: enroll.status,
     },
   });
-
-  const payments = data?.data;
   const totalPayment = payments?.reduce(
     (total, payment) =>
       payment.status === "Approved" ? total + Number(payment.amount) : total,
@@ -63,7 +62,7 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
     if (form.type === "update") {
       try {
         const response = await fetch(
-          `/api/accounts/update?id=${form.data._id}`,
+          `/api/payment/update?id=${form.data._id}`,
           {
             method: "PUT",
             body: JSON.stringify(data),
@@ -101,7 +100,7 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
     if (form.type === "create") {
       (data.enrollId = enroll._id), (data.userId = enroll.userId._id);
       try {
-        const response = await fetch(`/api/accounts/create`, {
+        const response = await fetch(`/api/payment/create`, {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
@@ -403,27 +402,34 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
               </form>
             )}
 
-            {isLoading ? (
-              <p>Loading...</p>
-            ) : (
-              <table className="table-auto border-t border-collapse w-full rounded-md">
-                <thead>
+            <table className="table-auto border-t border-collapse w-full rounded-md">
+              <thead>
+                <tr>
+                  <td className="border-b p-2 pr-0"></td>
+                  <td className="border-b p-2 pl-0">তারিখ</td>
+                  <td className="border-b p-2">পেমেন্ট মেথড</td>
+                  <td className="border-b p-2">ট্রানজেশন আইডি</td>
+                  <td className="border-b p-2">স্ট্যাটাস</td>
+                  <td className="border-b p-2">কমেন্ট</td>
+                  <td className="border-b p-2">অ্যামাউন্ট</td>
+                </tr>
+              </thead>
+              <tbody className="dark:text-slate-400">
+                {isLoading ? (
                   <tr>
-                    <td className="border-b p-2 pr-0"></td>
-                    <td className="border-b p-2 pl-0">তারিখ</td>
-                    <td className="border-b p-2">পেমেন্ট মেথড</td>
-                    <td className="border-b p-2">ট্রানজেশন আইডি</td>
-                    <td className="border-b p-2">স্ট্যাটাস</td>
-                    <td className="border-b p-2">কমেন্ট</td>
-                    <td className="border-b p-2">অ্যামাউন্ট</td>
+                    <td
+                      colSpan={7}
+                      className="border-b py-3 text-center text-sm"
+                    >
+                      Loading...
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {payments.length > 0 &&
-                    payments.map((payment) => (
+                ) : payments.length > 0 ? (
+                  <>
+                    {payments.map((payment) => (
                       <tr
                         key={payment._id}
-                        className={`dark:text-slate-400 text-sm ${
+                        className={`text-sm ${
                           payment._id === form.data._id &&
                           "bg-slate-50 dark:bg-slate-800"
                         }`}
@@ -466,26 +472,38 @@ export default function AccountPayment({ enroll, setEnroll, enrollMutate }) {
                         </td>
                       </tr>
                     ))}
+                    <tr className="text-white">
+                      <td colSpan={5}></td>
+                      <td className="border-b p-2 text-right">
+                        মোট পেইড{" "}
+                        <span>
+                          ({(totalPayment / enroll.courseId.fee) * 100}%)
+                        </span>
+                      </td>
+                      <td className="border-b p-2 text-right">
+                        {totalPayment}
+                      </td>
+                    </tr>
+                    <tr className="text-white">
+                      <td colSpan={5}></td>
+                      <td className="p-2 text-right">পাওনা</td>
+                      <td className="p-2 text-right">
+                        {enroll.courseId.fee - totalPayment}
+                      </td>
+                    </tr>
+                  </>
+                ) : (
                   <tr>
-                    <td colSpan={5}></td>
-                    <td className="border-b p-2 text-right">
-                      মোট পেইড{" "}
-                      <span>
-                        ({(totalPayment / enroll.courseId.fee) * 100}%)
-                      </span>
-                    </td>
-                    <td className="border-b p-2 text-right">{totalPayment}</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={5}></td>
-                    <td className="p-2 text-right">পাওনা</td>
-                    <td className="p-2 text-right">
-                      {enroll.courseId.fee - totalPayment}
+                    <td
+                      colSpan={7}
+                      className="border-b py-3 text-center text-sm"
+                    >
+                      No data found
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            )}
+                )}
+              </tbody>
+            </table>
           </div>
         </ScrollArea>
       </DialogContent>

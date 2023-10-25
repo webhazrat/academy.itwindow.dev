@@ -1,4 +1,4 @@
-import AddStudents from "@/src/components/AddStudents";
+import AddEnrollInBatch from "@/src/components/AddEnrollInBatch";
 import BatchCreate from "@/src/components/BatchCreate";
 import BatchUpdate from "@/src/components/BatchUpdate";
 import DashboardLayout from "@/src/components/DashboardLayout";
@@ -46,7 +46,7 @@ export default function Batches() {
             <BatchUpdate batch={batch} setBatch={setBatch} mutate={mutate} />
           )}
           {student && (
-            <AddStudents
+            <AddEnrollInBatch
               batch={student}
               setBatch={setStudent}
               mutate={mutate}
