@@ -32,7 +32,6 @@ export default function Attendance() {
   const { batchId, date } = router.query;
   const { toast } = useToast();
   const [batch, setBatch] = useState();
-  const [attDate, setAttDate] = useState();
   const [url, setUrl] = useState(null);
   const { data, isLoading } = useSWR(
     `/api/batches?pageSize=100&sortBy=createdAt&sortOrder=desc`,
@@ -51,17 +50,6 @@ export default function Attendance() {
     reset: reset2,
   } = useForm();
 
-  // useEffect(() => {
-  //   if (!isLoading && batches.length > 0 && batchId) {
-  //     fetchEnrolls(batchId);
-  //   }
-  // }, [isLoading]);
-
-  // const batchOnChange = async (batchId) => {
-  //   router.push(`?batchId=${batchId}`);
-  //   fetchEnrolls(batchId);
-  // };
-
   const {
     data: data2,
     isLoading: isLoading2,
@@ -69,24 +57,25 @@ export default function Attendance() {
   } = useSWR(url, fetcher);
   const attendances = data2?.data;
 
+  // attendances fetch with batch wise
   const batchDateAttendance = async (data) => {
-    setAttDate(data.date);
     reset2();
     const date = encodeURIComponent(data.date.toISOString());
     const batchId = data.batchId;
     router.push(`?batchId=${batchId}&date=${date}`);
+    batchFilter(batchId);
     setUrl(`/api/attendances/batch?batchId=${batchId}&date=${date}`);
   };
 
+  // attendance submit
   const handleAttendance = async (data) => {
     const attendances = Object.keys(data.attendance).map((key) => ({
-      enrollId: key,
+      _id: key,
       status: data.attendance[key],
-      userId: data.userId[key],
     }));
-    const formData = { attendances, date: attDate };
+    const formData = { attendances };
     try {
-      const response = await fetch(`/api/attendance/create`, {
+      const response = await fetch(`/api/attendances/create`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -108,6 +97,24 @@ export default function Attendance() {
     }
   };
 
+  // batches find with batchId to get batch details
+  const batchFilter = (batchId) => {
+    const batch = batches.find((batch) => batch._id === batchId);
+    setBatch(batch);
+  };
+
+  // attendances fetch when reload the url with params
+  useEffect(() => {
+    if (batchId && date) {
+      setUrl(`/api/attendances/batch?batchId=${batchId}&date=${date}`);
+    }
+  }, []);
+
+  // batch details when reload the url with params
+  useEffect(() => {
+    !isLoading && batchFilter(batchId);
+  }, [isLoading]);
+
   return (
     <DashboardLayout>
       <div>
@@ -115,16 +122,17 @@ export default function Attendance() {
           <h1 className="text-lg font-semibold">অ্যাটেনডেন্স</h1>
         </div>
         <div className="p-7">
-          <div className="space-y-5">
-            <div className="flex justify-between">
+          <div className="grid xl:grid-cols-[3fr_9fr] gap-5">
+            <div className="space-y-5">
               <form
-                className="flex-1 max-w-xs space-y-4"
+                className="space-y-4"
                 onSubmit={handleSubmit(batchDateAttendance)}
               >
                 <div>
                   <Controller
                     name="batchId"
                     control={control}
+                    defaultValue={batchId}
                     render={({ field }) => (
                       <Select
                         id="batchId"
@@ -152,7 +160,7 @@ export default function Attendance() {
                   <Controller
                     name="date"
                     control={control}
-                    defaultValue={new Date()}
+                    defaultValue={date ? new Date(date) : new Date()}
                     render={({ field }) => (
                       <Popover>
                         <PopoverTrigger asChild>
@@ -195,7 +203,7 @@ export default function Attendance() {
                 </div>
               </form>
               {batch && (
-                <div className="space-y-1">
+                <div className="space-y-1 p-4 border rounded-md">
                   <p>
                     <span className="dark:text-slate-400">কোর্স:</span>{" "}
                     {batch?.courseId?.title}
@@ -241,7 +249,7 @@ export default function Attendance() {
                   ) : attendances?.length > 0 ? (
                     attendances.map((attendance, index) => {
                       return (
-                        <tr key={attendance._id}>
+                        <tr key={attendance._id} className="hover:bg-muted/50 ">
                           <td className="border-b p-2">{++index}</td>
                           <td className="border-b p-2">
                             {attendance.userId.name}
@@ -262,16 +270,16 @@ export default function Attendance() {
                           <td className="border-b p-2">
                             <div className="hidden">
                               <Controller
-                                name={`userId.${attendance.enrollId}`}
+                                name={`attendanceId.${attendance._id}`}
                                 control={control2}
-                                defaultValue={attendance.userId._id}
+                                defaultValue={attendance._id}
                                 render={({ field }) => (
                                   <Input {...field} className="mb-2" />
                                 )}
                               />
                             </div>
                             <Controller
-                              name={`attendance.${attendance.enrollId}`}
+                              name={`attendance.${attendance._id}`}
                               control={control2}
                               defaultValue={attendance.status}
                               render={({ field }) => (
@@ -282,32 +290,32 @@ export default function Attendance() {
                                   onValueChange={field.onChange}
                                 >
                                   <Label
-                                    htmlFor={`present-${attendance.enrollId}`}
+                                    htmlFor={`present-${attendance._id}`}
                                     className="!mb-0 flex gap-2 items-center leading-none cursor-pointer text-sm"
                                   >
                                     <RadioGroupItem
                                       value="Present"
-                                      id={`present-${attendance.enrollId}`}
+                                      id={`present-${attendance._id}`}
                                     />
                                     উপস্থিত
                                   </Label>
                                   <Label
-                                    htmlFor={`absent-${attendance.enrollId}`}
+                                    htmlFor={`absent-${attendance._id}`}
                                     className="!mb-0 flex gap-2 items-center leading-none cursor-pointer text-sm"
                                   >
                                     <RadioGroupItem
                                       value="Absent"
-                                      id={`absent-${attendance.enrollId}`}
+                                      id={`absent-${attendance._id}`}
                                     />
                                     অনুপস্থিত
                                   </Label>
                                   <Label
-                                    htmlFor={`leave-${attendance.enrollId}`}
+                                    htmlFor={`leave-${attendance._id}`}
                                     className="!mb-0 flex gap-2 items-center leading-none cursor-pointer text-sm"
                                   >
                                     <RadioGroupItem
                                       value="Leave"
-                                      id={`leave-${attendance.enrollId}`}
+                                      id={`leave-${attendance._id}`}
                                     />
                                     ছুটি
                                   </Label>
@@ -329,7 +337,7 @@ export default function Attendance() {
               </table>
               <div className="text-right">
                 <Button
-                  disabled={isSubmitting2}
+                  disabled={isSubmitting2 || !attendances?.length}
                   size="sm"
                   className="text-white bg-gradient"
                 >

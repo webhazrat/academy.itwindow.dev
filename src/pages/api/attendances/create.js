@@ -2,32 +2,24 @@ import connectDB from "@/src/lib/connect";
 import { checkAdmin } from "@/src/middleware/serverAuth";
 import attendanceModel from "@/src/models/attendanceModel";
 
-// attendance create [path:dashboard/attendance]
+// attendance update [path:dashboard/attendance]
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const session = await checkAdmin(req, res);
-      let { attendances, date } = req.body;
-      const targetDate = date ? new Date(date) : new Date();
-      targetDate.setHours(0, 0, 0, 0);
-      const nextDay = new Date(targetDate);
-      nextDay.setDate(targetDate.getDate() + 1);
+      const { attendances } = req.body;
 
       const operations = attendances.map((attendance) => ({
         updateOne: {
           filter: {
-            enrollId: attendance.enrollId,
-            date: {
-              $gte: targetDate,
-              $lt: nextDay,
-            },
+            _id: attendance._id,
           },
           update: {
-            userId: attendance.userId,
-            status: attendance.status,
-            recorded: true,
+            $set: {
+              status: attendance.status,
+              recorded: "true",
+            },
           },
-          upsert: true,
         },
       }));
       await connectDB();

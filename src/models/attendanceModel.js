@@ -11,7 +11,7 @@ const attendanceSchema = new Schema(
       enum: ["Present", "Absent", "Leave"],
       default: "Present",
     },
-    recorded: Boolean,
+    recorded: { type: Boolean, default: false },
   },
   {
     timestamps: true,
