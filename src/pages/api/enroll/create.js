@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       const enrollExist = await enrollModel.countDocuments({
         userId: session.user._id,
         courseId,
-        status: { $ne: "Completed" },
+        status: { $ne: "Ended" },
       });
       if (enrollExist) {
         return res.status(400).json({

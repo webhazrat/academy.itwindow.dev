@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
-import { fetcher, formatDateTime } from "../lib/utils";
+import { fetcher, formatDateTime, total } from "../lib/utils";
 import { Input } from "./ui/input";
 import { Loader2, Pencil, Plus } from "lucide-react";
 import { Button } from "./ui/button";
@@ -29,7 +29,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
     type: "",
   });
   const { data, isLoading, mutate } = useSWR(
-    `/api/payment/enroll?id=${enroll._id}`,
+    `/api/payment/enroll?enrollId=${enroll._id}`,
     fetcher
   );
   const payments = data?.data;
@@ -52,11 +52,8 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
       status: enroll.status,
     },
   });
-  const totalPayment = payments?.reduce(
-    (total, payment) =>
-      payment.status === "Approved" ? total + Number(payment.amount) : total,
-    0
-  );
+
+  const totalPayment = total(payments, "Approved");
 
   const handlePaymentSubmit = async (data) => {
     if (form.type === "update") {

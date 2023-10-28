@@ -67,3 +67,12 @@ export function formatDateTime(dateTimeString, formatString) {
 
   return format(dateObject, formatString);
 }
+
+// total
+export const total = (payments, status) => {
+  return payments?.reduce(
+    (total, payment) =>
+      payment.status === "Approved" ? total + Number(payment.amount) : total,
+    0
+  );
+};

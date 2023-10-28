@@ -2,6 +2,7 @@ import connectDB from "@/src/lib/connect";
 import { checkLogin } from "@/src/middleware/serverAuth";
 import enrollModel from "@/src/models/enrollModel";
 import courseModel from "@/src/models/courseModel";
+import batchModel from "@/src/models/batchModel";
 
 // I have enrolled which courses [path:profile/my-courses]
 export default async function handler(req, res) {
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
       await connectDB();
       const courses = await enrollModel
         .find({ userId: session.user._id })
-        .populate(["courseId"]);
+        .populate(["courseId", "batchId"]);
       if (!courses) {
         return res
           .status(404)

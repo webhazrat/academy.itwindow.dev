@@ -6,8 +6,13 @@ const batchSchema = new Schema(
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     code: { type: String, required: true },
     days: [String],
+    date: Date,
     time: String,
-    status: { type: String, default: "Pending" },
+    status: {
+      type: String,
+      enum: ["Pending", "Ongoing", "Ended"],
+      default: "Pending",
+    },
   },
   {
     timestamps: true,

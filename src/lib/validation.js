@@ -211,6 +211,7 @@ export const BatchSchema = z.object({
         message: "কমপক্ষে একটি দিন সিলেক্ট করুন",
       }
     ),
+  date: z.string().optional(),
   time: z.string().refine(
     (data) => {
       const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;

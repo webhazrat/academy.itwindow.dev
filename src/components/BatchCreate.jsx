@@ -28,7 +28,7 @@ import { useToast } from "./ui/use-toast";
 
 export default function BatchCreate({ mutate }) {
   const [isOpen, setIsOpen] = useState(null);
-  const { data, isLoading } = useSWR(
+  const { data } = useSWR(
     "/api/courses?sortBy=createdAt&sortOrder=asc",
     fetcher
   );
@@ -49,6 +49,7 @@ export default function BatchCreate({ mutate }) {
       courseId: "",
       code: "",
       days: [],
+      date: "",
       time: "",
     },
   });
@@ -223,6 +224,16 @@ export default function BatchCreate({ mutate }) {
                 {errors.days && (
                   <p className="text-sm text-red-400">{errors.days.message}</p>
                 )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date">সময়</Label>
+                <Controller
+                  name="date"
+                  control={control}
+                  render={({ field }) => (
+                    <Input type="time" id="time" {...field} />
+                  )}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="time">সময়</Label>
