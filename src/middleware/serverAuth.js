@@ -3,6 +3,8 @@ import { authOptions } from "../pages/api/auth/[...nextauth]";
 import connectDB from "../lib/connect";
 import userModel from "../models/userModel";
 import enrollModel from "../models/enrollModel";
+import paymentModel from "../models/paymentModel";
+import { total } from "../lib/utils";
 
 export async function checkAdmin(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -45,4 +47,27 @@ export async function checkEnroll(req, res, enrollId) {
     }
   }
   return Promise.reject({ message: "Unauthorized route" });
+}
+
+export async function checkEnrollPayment(enrollId) {
+  await connectDB();
+  const fee = await enrollModel
+    .findById(enrollId)
+    .populate({ path: "courseId", select: "fee" });
+
+  const totalFee = fee && fee.courseId.fee;
+  const payments = await paymentModel.find({
+    enrollId,
+  });
+  const totalPaid = total(payments, "Approved");
+  const totalPending = total(payments, "Pending");
+  const totalDue = totalFee - totalPaid;
+  const totalRequest = totalDue - totalPending;
+  return Promise.resolve({
+    totalFee,
+    totalPaid,
+    totalPending,
+    totalDue,
+    totalRequest,
+  });
 }

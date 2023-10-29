@@ -1,7 +1,7 @@
 import connectDB from "@/src/lib/connect";
-import { EnrollSchema } from "@/src/lib/validation";
+import { PaymentSchema } from "@/src/lib/validation";
 import { checkLogin } from "@/src/middleware/serverAuth";
-import accountModel from "@/src/models/paymentModel";
+import paymentModel from "@/src/models/paymentModel";
 import enrollModel from "@/src/models/enrollModel";
 import { z } from "zod";
 
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const session = await checkLogin(req, res);
-      EnrollSchema.parse(req.body);
+      PaymentSchema.parse(req.body);
       let { courseId, paymentMethod, transactionId, amount } = req.body;
       if (paymentMethod === "Cash") {
         transactionId = "";
@@ -32,9 +32,8 @@ export default async function handler(req, res) {
         courseId,
       });
       if (enroll) {
-        await accountModel.create({
+        await paymentModel.create({
           enrollId: enroll._id,
-          userId: session.user._id,
           paymentMethod,
           transactionId,
           amount,

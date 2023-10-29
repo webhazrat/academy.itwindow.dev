@@ -11,6 +11,7 @@ import {
 import { Checkbox } from "./ui/checkbox";
 import Image from "next/image";
 import { th } from "date-fns/locale";
+import { format, parse, parseISO } from "date-fns";
 
 export const UsersTableColumns = (setUser) => [
   {
@@ -587,7 +588,10 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
       );
     },
     cell: ({ row }) => {
-      return formatDateTime(row.getValue("time"), "hh:mm a");
+      return format(
+        parse(row.getValue("time"), "HH:mm", new Date()),
+        "hh:mm a"
+      );
     },
   },
   {
@@ -628,7 +632,7 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
       );
     },
     cell: ({ row }) => {
-      return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      return format(new Date(row.getValue("createdAt")), "PPP");
     },
   },
   {
@@ -648,13 +652,6 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-            // onClick={() => {
-            //   setPhoto(course);
-            // }}
-            >
-              অ্যাটেনডেন্স
-            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 setStudent(batch);

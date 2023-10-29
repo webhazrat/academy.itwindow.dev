@@ -72,7 +72,7 @@ export function formatDateTime(dateTimeString, formatString) {
 export const total = (payments, status) => {
   return payments?.reduce(
     (total, payment) =>
-      payment.status === "Approved" ? total + Number(payment.amount) : total,
+      payment.status === status ? total + Number(payment.amount) : total,
     0
   );
 };

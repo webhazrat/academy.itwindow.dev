@@ -42,14 +42,15 @@ export default function BatchCreate({ mutate }) {
     getValues,
     formState: { errors, isSubmitting },
     reset,
+    setError,
     clearErrors,
   } = useForm({
     resolver: zodResolver(BatchSchema),
     defaultValues: {
       courseId: "",
       code: "",
+      startDate: null,
       days: [],
-      date: "",
       time: "",
     },
   });
@@ -141,7 +142,9 @@ export default function BatchCreate({ mutate }) {
           <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto mb-16">
             <div className="space-y-5 p-7">
               <div className="space-y-2">
-                <Label htmlFor="courseId">কোর্স</Label>
+                <Label htmlFor="courseId">
+                  কোর্স <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="courseId"
                   control={control}
@@ -174,7 +177,9 @@ export default function BatchCreate({ mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="code">ব্যাচ আইডি</Label>
+                <Label htmlFor="code">
+                  ব্যাচ আইডি <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="code"
                   control={control}
@@ -192,7 +197,9 @@ export default function BatchCreate({ mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="days">ক্লাস ডে</Label>
+                <Label htmlFor="days">
+                  ক্লাস ডে <span className="text-red-400">*</span>
+                </Label>
                 <div className="flex flex-wrap items-center gap-2">
                   {allDays.map((day) => (
                     <Controller
@@ -226,17 +233,9 @@ export default function BatchCreate({ mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="date">সময়</Label>
-                <Controller
-                  name="date"
-                  control={control}
-                  render={({ field }) => (
-                    <Input type="time" id="time" {...field} />
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="time">সময়</Label>
+                <Label htmlFor="time">
+                  সময় <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="time"
                   control={control}

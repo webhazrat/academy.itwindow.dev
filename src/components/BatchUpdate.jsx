@@ -1,11 +1,10 @@
 import Label from "@/src/components/Label";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { Loader2, Plus } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
-import { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../lib/utils";
 import {
@@ -19,9 +18,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BatchSchema } from "../lib/validation";
 import { useToast } from "./ui/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
+import { format, isValid } from "date-fns";
 
 export default function BatchUpdate({ batch, setBatch, mutate }) {
-  const { data, isLoading } = useSWR(
+  const { data } = useSWR(
     "/api/courses?sortBy=createdAt&sortOrder=asc",
     fetcher
   );
@@ -34,6 +36,7 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
     setValue,
     getValues,
     formState: { errors, isSubmitting },
+    setError,
     clearErrors,
   } = useForm({
     resolver: zodResolver(BatchSchema),
@@ -124,7 +127,9 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
           <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto mb-16">
             <div className="space-y-5 p-7">
               <div className="space-y-2">
-                <Label htmlFor="courseId">কোর্স</Label>
+                <Label htmlFor="courseId">
+                  কোর্স <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="courseId"
                   control={control}
@@ -157,7 +162,9 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="code">ব্যাচ আইডি</Label>
+                <Label htmlFor="code">
+                  ব্যাচ আইডি <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="code"
                   control={control}
@@ -175,7 +182,9 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="days">ক্লাস ডে</Label>
+                <Label htmlFor="days">
+                  ক্লাস ডে <span className="text-red-400">*</span>
+                </Label>
                 <div className="flex flex-wrap items-center gap-2">
                   {allDays.map((day) => (
                     <Controller
@@ -209,7 +218,44 @@ export default function BatchUpdate({ batch, setBatch, mutate }) {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="time">সময়</Label>
+                <Label htmlFor="startDate">ক্লাস শুরুর তারিখ</Label>
+                <Controller
+                  name="startDate"
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className="w-full flex justify-between dark:text-slate-400"
+                          >
+                            {field.value && isValid(new Date(field.value)) ? (
+                              format(new Date(field.value), "PPP")
+                            ) : (
+                              <span></span>
+                            )}
+
+                            <CalendarIcon size={16} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    );
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="time">
+                  সময় <span className="text-red-400">*</span>
+                </Label>
                 <Controller
                   name="time"
                   control={control}

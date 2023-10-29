@@ -151,7 +151,7 @@ export const ChangePasswordSchema = z
   });
 
 // enroll request in a course
-export const EnrollSchema = z
+export const PaymentSchema = z
   .object({
     paymentMethod: z
       .string()
@@ -211,7 +211,7 @@ export const BatchSchema = z.object({
         message: "কমপক্ষে একটি দিন সিলেক্ট করুন",
       }
     ),
-  date: z.string().optional(),
+  startDate: z.date().nullable(),
   time: z.string().refine(
     (data) => {
       const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;

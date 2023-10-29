@@ -1,30 +1,36 @@
 import connectDB from "@/src/lib/connect";
-import { EnrollSchema } from "@/src/lib/validation";
-import { checkAdmin } from "@/src/middleware/serverAuth";
-import accountModel from "@/src/models/paymentModel";
+import { PaymentSchema } from "@/src/lib/validation";
+import { checkEnroll, checkEnrollPayment } from "@/src/middleware/serverAuth";
+import paymentModel from "@/src/models/paymentModel";
 import { z } from "zod";
 
 export default async function hanlder(req, res) {
   if (req.method === "POST") {
     try {
-      const session = await checkAdmin(req, res);
-      EnrollSchema.parse(req.body);
-      let {
-        enrollId,
-        userId,
-        paymentMethod,
-        transactionId,
-        amount,
-        status,
-        comment,
-      } = req.body;
+      let { enrollId, paymentMethod, transactionId, amount, status, comment } =
+        req.body;
+      const enrolls = await checkEnroll(req, res, enrollId);
+      PaymentSchema.parse(req.body);
+      const { totalFee, totalPaid, totalPending, totalDue, totalRequest } =
+        await checkEnrollPayment(enrollId);
+      if (amount > totalRequest) {
+        return res.status(400).json({
+          errors: [
+            {
+              field: "amount",
+              message: `৳${totalRequest} এর বেশি পেমেন্ট
+              রিকুয়েস্ট সংযুক্ত করতে পারবেন না`,
+            },
+          ],
+        });
+      }
+
       if (paymentMethod === "Cash") {
         transactionId = "";
       }
       await connectDB();
-      await accountModel.create({
+      await paymentModel.create({
         enrollId,
-        userId,
         paymentMethod,
         transactionId,
         amount,
@@ -34,11 +40,11 @@ export default async function hanlder(req, res) {
       res.status(200).json({
         status: 200,
         title: "সফল!",
-        message: "পেমেন্ট সফলভাবে সংযুক্ত হয়েছে",
+        message: "পেমেন্ট রিকুয়েস্ট সফলভাবে সংযুক্ত হয়েছে",
       });
     } catch (error) {
-      console.log({ accountsCreateCatch: error });
-      // EnrollSchema zodError
+      console.log({ paymentCreateCatch: error });
+      // PaymentSchema zodError
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

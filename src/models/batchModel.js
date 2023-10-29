@@ -6,7 +6,7 @@ const batchSchema = new Schema(
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     code: { type: String, required: true },
     days: [String],
-    date: Date,
+    startDate: Date,
     time: String,
     status: {
       type: String,

@@ -6,7 +6,8 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
-import { formatDateTime, total } from "../lib/utils";
+import { total } from "../lib/utils";
+import { format } from "date-fns";
 
 export default function MyEnrollPayment({ payments, fee }) {
   const totalPayment = total(payments, "Approved");
@@ -34,13 +35,13 @@ export default function MyEnrollPayment({ payments, fee }) {
                 </tr>
               </thead>
               <tbody className="dark:text-slate-400">
-                {payments.length > 0 ? (
+                {payments?.length > 0 ? (
                   <>
                     {payments.map((payment, index) => (
                       <tr key={payment._id} className={`text-sm`}>
                         <td className="border-b p-2">{++index}</td>
                         <td className="border-b py-2">
-                          {formatDateTime(payment.createdAt, "MMMM do, yyyy")}
+                          {format(new Date(payment.createdAt), "PPP")}
                         </td>
                         <td className="border-b p-2">
                           {payment.paymentMethod}

@@ -11,9 +11,10 @@ export default async function handler(req, res) {
   if (req.method === "PUT") {
     try {
       const session = await checkAdmin(req, res);
+      req.body.startDate = new Date(req.body.startDate);
       BatchSchema.parse(req.body);
       const { id } = req.query;
-      const { code, courseId, days, time, status } = req.body;
+      const { code, courseId, days, startDate, time, status } = req.body;
       await connectDB();
       const batchExist = await batchModel.countDocuments({
         code,
@@ -33,6 +34,7 @@ export default async function handler(req, res) {
         courseId,
         code,
         days,
+        startDate,
         time,
         status,
       });

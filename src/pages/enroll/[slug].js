@@ -11,7 +11,7 @@ import { APP_URL } from "@/src/lib/utils";
 import { useForm, Controller } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EnrollSchema } from "@/src/lib/validation";
+import { PaymentSchema } from "@/src/lib/validation";
 import { useToast } from "@/src/components/ui/use-toast";
 
 export default function Cart({ course }) {
@@ -27,7 +27,7 @@ export default function Cart({ course }) {
     setError,
     clearErrors,
   } = useForm({
-    resolver: zodResolver(EnrollSchema),
+    resolver: zodResolver(PaymentSchema),
     defaultValues: {
       paymentMethod: "Bkash",
       transactionId: "",
@@ -95,17 +95,19 @@ export default function Cart({ course }) {
               </ListItem>
               <ListItem>
                 পেমেন্ট মেথড থেকে একটি মেথড সিলেক্ট করুন। পেমেন্ট মেথড বিকাশ,
-                নগদ, রকেট হলে - এই 01632269194 এ সেন্ড মানি করে তারপর যে নাম্বার
-                থেকে পেমেন্ট করা হচ্ছে তাতে প্রাপ্ত ট্রানজেকশন আইডি টি এখানে
-                ট্রানজেকশন আইডি ইনপুট বক্সে ইনপুট করুন।
+                নগদ, রকেট হলে - এই{" "}
+                <span className="dark:text-white">01632269194</span> এ সেন্ড
+                মানি করে তারপর যে নাম্বার থেকে পেমেন্ট করা হচ্ছে তাতে প্রাপ্ত
+                ট্রানজেকশন আইডি টি এখানে ট্রানজেকশন আইডি ইনপুট বক্সে ইনপুট করুন।
               </ListItem>
               <ListItem>
                 এরপর যে অ্যামাউন্ট টি সেন্ড করা হয়েছে সেই পরিমাণ অ্যামাউন্ট,
                 অ্যামাউন্ট ইনপুট বক্সে ইনপুট করুন।
               </ListItem>
               <ListItem>
-                অথবা সরাসরি অফিসে ক্যাশ দিতে চাইলে হ্যান্ড ক্যাশ সিলেক্ট করে
-                কনফার্ম করুন। পরে অফিসে ক্যাশ জমা দিলে ইনরোল সম্পন্ন করা হবে।
+                অথবা সরাসরি অফিসে ক্যাশ দিতে চাইলে হ্যান্ড ক্যাশ সিলেক্ট করে কত
+                টাকা পে করতে চান সেই পরিমাণ ইনপুট করে কনফার্ম করুন। পরে অফিসে
+                ক্যাশ জমা দিলে ইনরোল সম্পন্ন করা হবে।
               </ListItem>
               <p className="text-gradient">
                 [খুব শীঘ্রই মোবাইল ব্যাংকিং এর মাধ্যমে পেমেন্ট অটোমেশন সিস্টেম

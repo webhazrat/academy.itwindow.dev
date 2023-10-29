@@ -1,9 +1,13 @@
 import ListItem from "@/src/components/ListItem";
+import MyBatch from "@/src/components/MyBatch";
 import MyEnrollPayment from "@/src/components/MyEnrollPayment";
+import MyFeedback from "@/src/components/MyFeeback";
+import MyPay from "@/src/components/MyPay";
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
-import { fetcher, formatDateTime, total } from "@/src/lib/utils";
+import { fetcher, total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
+import { format } from "date-fns";
 import {
   AlertTriangle,
   BookOpen,
@@ -15,11 +19,11 @@ import Link from "next/link";
 import useSWR from "swr";
 
 export default function MyCourses() {
-  const { data, isLoading, mutate } = useSWR("/api/enroll", fetcher);
+  const { data, isLoading } = useSWR("/api/enroll", fetcher);
   const enrolls = data?.data;
 
   const enrollIds = enrolls?.map((enroll) => enroll._id);
-  const { data: paymentData } = useSWR(
+  const { data: paymentData, mutate } = useSWR(
     enrollIds ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}` : null,
     fetcher
   );
@@ -42,8 +46,10 @@ export default function MyCourses() {
             enrolls.length > 0 &&
             enrolls.map((enroll) => {
               const payments = getPaymentForEnroll(enroll._id);
-              const totalPayment = total(payments, "Approved");
+              const totalPaid = total(payments, "Approved");
+              const totalPending = total(payments, "Pending");
               const fee = enroll.courseId.fee;
+              const totalDue = !isNaN(totalPaid) && fee - totalPaid;
               const halfPayment = fee / 2;
               return (
                 <div className="space-y-3" key={enroll._id}>
@@ -56,7 +62,7 @@ export default function MyCourses() {
                       <div className="flex flex-wrap gap-3 text-sm">
                         <p className="text-[15px] flex items-center gap-2">
                           <Calendar size={16} />{" "}
-                          {formatDateTime(enroll.createdAt, "MMMM do, yyyy")}
+                          {format(new Date(enroll.createdAt), "MMMM do, yyyy")}
                         </p>
                         <Link href={"/"}>
                           <a className="flex items-center gap-2">
@@ -77,55 +83,54 @@ export default function MyCourses() {
                       <div className="space-y-2">
                         {enroll.status === "Completed" && (
                           <ListItem className="!gap-2">
-                            <p className="text-green-400">
-                              ইনরোলমেন্ট সম্পন্ন হয়েছে, আপনি পে করেছেন ৳
-                              {totalPayment}
-                            </p>
+                            ইনরোলমেন্ট সম্পন্ন হয়েছে, আপনি পে করেছেন ৳
+                            {totalPaid}
                           </ListItem>
                         )}
                         {enroll.stauts === "Ended" && (
                           <ListItem className="!gap-2">
-                            <p className="text-green-400">
-                              ধন্যবাদ! আপনি সফভাবে কোর্সটি সম্পন্ন করেছেন
-                            </p>
+                            ধন্যবাদ! আপনি সফভাবে কোর্সটি সম্পন্ন করেছেন
                           </ListItem>
                         )}
                         {enroll.status === "Pending" && (
                           <p className="flex items-center gap-2">
-                            <AlertTriangle size={18} className="text-red-400" />
+                            <AlertTriangle size={16} className="text-red-400" />
                             কোর্স ফি এর 50% ({halfPayment}) পে করার মাধ্যমে
                             কোর্সটিতে ইনরোলমেন্ট সম্পন্ন হবে, আপনি পে করেছেন ৳
-                            {totalPayment}
+                            {totalPaid}
                           </p>
                         )}
-                        <div className="flex justify-between items-center gap-5 text-sm">
+                        <div className="flex justify-between items-center gap-5">
                           <div className="divide-x-2">
-                            <Link href={"/"}>
-                              <a className="px-3 inline-block leading-none pl-0 hover:dark:text-white">
-                                ফিডব্যাক দিন
-                              </a>
-                            </Link>
-                            <Link href={"/"}>
-                              <a className="px-3 inline-block leading-none  hover:dark:text-white">
-                                ব্যাচ বিস্তারিত
-                              </a>
-                            </Link>
-                            <a className="px-3 inline-block leading-none  hover:dark:text-white">
+                            <div className="px-3 inline-block leading-none pl-0 hover:dark:text-white">
+                              <MyFeedback batch={enroll.batchId} />
+                            </div>
+                            <div className="px-3 inline-block leading-none  hover:dark:text-white">
+                              {enroll.batchId ? (
+                                <MyBatch batch={enroll.batchId} />
+                              ) : (
+                                "এখনও কোন ব্যাচে সংযুক্ত করা হয় নাই"
+                              )}
+                            </div>
+                            <div className="px-3 inline-block leading-none  hover:dark:text-white">
                               <MyEnrollPayment payments={payments} fee={fee} />
-                            </a>
+                            </div>
                           </div>
-                          {totalPayment === fee ? (
+                          {totalDue === 0 ? (
                             <ListItem className="!gap-2">
-                              <p className="text-green-400">পেমেন্ট সম্পন্ন</p>
+                              পেমেন্ট সম্পন্ন
                             </ListItem>
                           ) : (
                             <div className="flex items-center gap-2">
                               <span className="text-red-400">
-                                পাওনা ৳{fee - totalPayment}
+                                পাওনা ৳{totalDue}
                               </span>
-                              <Button variant="outline" className="h-8">
-                                <Link href={"/"}>পে করুন</Link>
-                              </Button>
+                              <MyPay
+                                enrollId={enroll._id}
+                                totalDue={totalDue}
+                                totalPending={totalPending}
+                                mutate={mutate}
+                              />
                             </div>
                           )}
                         </div>

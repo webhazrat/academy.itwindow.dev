@@ -1,5 +1,5 @@
 import connectDB from "@/src/lib/connect";
-import { EnrollSchema } from "@/src/lib/validation";
+import { PaymentSchema } from "@/src/lib/validation";
 import { checkAdmin } from "@/src/middleware/serverAuth";
 import accountModel from "@/src/models/paymentModel";
 import { z } from "zod";
@@ -9,7 +9,7 @@ export default async function hanlder(req, res) {
     const { id } = req.query;
     try {
       const session = await checkAdmin(req, res);
-      EnrollSchema.parse(req.body);
+      PaymentSchema.parse(req.body);
       let { paymentMethod, transactionId, amount, status, comment } = req.body;
       if (paymentMethod === "Cash") {
         transactionId = "";
@@ -25,8 +25,8 @@ export default async function hanlder(req, res) {
         message: "পেমেন্ট সফলভাবে আপডেট হয়েছে",
       });
     } catch (error) {
-      console.log({ accountsUpdateCatch: error });
-      // EnrollSchema zodError
+      console.log({ paymentUpdateCatch: error });
+      // PaymentSchema zodError
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

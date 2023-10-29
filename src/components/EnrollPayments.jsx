@@ -18,7 +18,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Textarea } from "./ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EnrollSchema } from "../lib/validation";
+import { PaymentSchema } from "../lib/validation";
 import { useToast } from "./ui/use-toast";
 import Image from "next/image";
 
@@ -43,7 +43,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
     setError,
     clearErrors,
   } = useForm({
-    resolver: zodResolver(EnrollSchema),
+    resolver: zodResolver(PaymentSchema),
   });
 
   // enroll status form
