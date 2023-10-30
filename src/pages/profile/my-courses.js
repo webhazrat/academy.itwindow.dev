@@ -95,8 +95,7 @@ export default function MyCourses() {
                           <p className="flex items-center gap-2">
                             <AlertTriangle size={16} className="text-red-400" />
                             কোর্স ফি এর 50% ({halfPayment}) পে করার মাধ্যমে
-                            কোর্সটিতে ইনরোলমেন্ট সম্পন্ন হবে, আপনি পে করেছেন ৳
-                            {totalPaid}
+                            কোর্সটিতে ইনরোলমেন্ট সম্পন্ন হবে
                           </p>
                         )}
                         <div className="flex justify-between items-center gap-5">

@@ -6,6 +6,7 @@ const enrollSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     batchId: { type: Schema.Types.ObjectId, ref: "Batch" },
+    first: Boolean,
     status: {
       type: String,
       required: true,

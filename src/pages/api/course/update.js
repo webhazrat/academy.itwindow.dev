@@ -7,13 +7,12 @@ import { z } from "zod";
 export default async function handler(req, res) {
   if (req.method === "PUT") {
     const { id } = req.query;
-    const data = req.body;
     try {
       const session = await checkAdmin(req, res);
       CourseSchema.parse(req.body);
       await connectDB();
       const slug = await courseModel.countDocuments({
-        slug: data.slug,
+        slug: req.body.slug,
         _id: { $ne: id },
       });
       if (slug) {
@@ -26,7 +25,7 @@ export default async function handler(req, res) {
           ],
         });
       } else {
-        await courseModel.findByIdAndUpdate(id, data, { new: true });
+        await courseModel.findByIdAndUpdate(id, req.body);
         res.status(200).json({
           status: 200,
           title: "সফল!",
@@ -35,6 +34,7 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.log({ courseUpdateCatch: error });
+      // CourseSchema zod validation error
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           errors: error.errors.map((err) => ({

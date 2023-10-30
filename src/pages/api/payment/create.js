@@ -7,8 +7,7 @@ import { z } from "zod";
 export default async function hanlder(req, res) {
   if (req.method === "POST") {
     try {
-      let { enrollId, paymentMethod, transactionId, amount, status, comment } =
-        req.body;
+      let { enrollId, paymentMethod, transactionId } = req.body;
       const enrolls = await checkEnroll(req, res, enrollId);
       PaymentSchema.parse(req.body);
       const { totalFee, totalPaid, totalPending, totalDue, totalRequest } =
@@ -29,14 +28,7 @@ export default async function hanlder(req, res) {
         transactionId = "";
       }
       await connectDB();
-      await paymentModel.create({
-        enrollId,
-        paymentMethod,
-        transactionId,
-        amount,
-        status,
-        comment,
-      });
+      await paymentModel.create(req.body);
       res.status(200).json({
         status: 200,
         title: "সফল!",

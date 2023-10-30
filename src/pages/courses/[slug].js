@@ -3,7 +3,7 @@ import FeedbackItem from "@/src/components/FeebackItem";
 import Layout from "@/src/components/Layout";
 import ListItem from "@/src/components/ListItem";
 import { Button } from "@/src/components/ui/button";
-import { APP_URL } from "@/src/lib/utils";
+import { APP_URL, fetcher } from "@/src/lib/utils";
 import {
   CheckCheck,
   Presentation,
@@ -13,21 +13,27 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import useSWR from "swr";
 
-export default function SingleCourse({ course }) {
-  const { data } = course;
+export default function SingleCourse({ courseData }) {
+  const course = courseData.data;
+
+  const { data: feedbacks, isLoading } = useSWR(
+    `/api/feedbacks/course?courseId=${course._id}`,
+    fetcher
+  );
   return (
     <>
       <Layout border>
         <div className="container my-20">
-          {!data ? (
+          {!course ? (
             <p>Loading...</p>
           ) : (
             <div className="flex flex-col md:flex-row items-start gap-8">
               <div className="space-y-8">
                 <div className="space-y-3">
-                  <h1 className="text-3xl font-semibold">{data.title}</h1>
-                  <p className="dark:text-slate-400">{data.description}</p>
+                  <h1 className="text-3xl font-semibold">{course.title}</h1>
+                  <p className="dark:text-slate-400">{course.description}</p>
 
                   <div className="border rounded-md py-4 px-6">
                     <div className="dark:text-slate-400 flex flex-wrap gap-5">
@@ -53,8 +59,8 @@ export default function SingleCourse({ course }) {
                 <div className="space-y-3">
                   <h3 className="text-xl font-semibold">কোর্সে যা শিখবেন</h3>
                   <div className="grid lg:grid-cols-2 gap-6">
-                    {data.topics.length &&
-                      data.topics.map((topic, index) => (
+                    {course.topics.length &&
+                      course.topics.map((topic, index) => (
                         <ListItem key={index}>{topic.value}</ListItem>
                       ))}
                   </div>
@@ -64,7 +70,7 @@ export default function SingleCourse({ course }) {
                   <h3 className="text-xl font-semibold">
                     কোর্স সম্পর্কে বিস্তারিত
                   </h3>
-                  <Accordions faqs={data.details} />
+                  <Accordions faqs={course.details} />
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-10">
@@ -73,8 +79,8 @@ export default function SingleCourse({ course }) {
                       কোর্সটির জন্য যা যা প্রয়োজন
                     </h3>
                     <div className="space-y-4">
-                      {data.requirements.length &&
-                        data.requirements.map((requirement, index) => (
+                      {course.requirements.length &&
+                        course.requirements.map((requirement, index) => (
                           <div
                             key={index}
                             className="dark:text-slate-400 flex items-center gap-3"
@@ -90,8 +96,8 @@ export default function SingleCourse({ course }) {
                       কোর্সটির করতে যা জানতে হবে
                     </h3>
                     <div className="space-y-4">
-                      {data.knows.length &&
-                        data.knows.map((know, index) => (
+                      {course.knows.length &&
+                        course.knows.map((know, index) => (
                           <div
                             key={index}
                             className="dark:text-slate-400 flex items-center gap-3"
@@ -109,8 +115,8 @@ export default function SingleCourse({ course }) {
                     কিভাবে কোর্সটি করবেন?
                   </h3>
                   <div className="space-y-4">
-                    {data.hows.length &&
-                      data.hows.map((how, index) => (
+                    {course.hows.length &&
+                      course.hows.map((how, index) => (
                         <ListItem key={index}>{how.value}</ListItem>
                       ))}
                   </div>
@@ -118,11 +124,13 @@ export default function SingleCourse({ course }) {
 
                 <div className="space-y-3">
                   <h3 className="text-xl font-semibold">
-                    শিক্ষার্থীরা যা বলেছে
+                    {feedbacks?.data.length > 0 && "শিক্ষার্থীরা যা বলেছে"}
                   </h3>
                   <div className="grid lg:grid-cols-2 gap-4">
-                    <FeedbackItem />
-                    <FeedbackItem />
+                    {feedbacks?.data.length > 0 &&
+                      feedbacks.data.map((feedback) => (
+                        <FeedbackItem key={feedback._id} feedback={feedback} />
+                      ))}
                   </div>
                 </div>
               </div>
@@ -203,8 +211,8 @@ export default function SingleCourse({ course }) {
                 </div>
 
                 <div className="md:relative fixed bottom-0 z-50 left-0 rounded-none w-full flex md:flex-col justify-between gap-3 items-center bg-card border md:rounded-md p-4">
-                  <p className="text-2xl font-medium">৳{data.fee}</p>
-                  <Link href={`/enroll/${data.slug}`}>
+                  <p className="text-2xl font-medium">৳{course.fee}</p>
+                  <Link href={`/enroll/${course.slug}`}>
                     <Button className="bg-gradient text-white md:w-full">
                       কোর্সটিতে ইনরোল করুন
                     </Button>
@@ -222,10 +230,10 @@ export default function SingleCourse({ course }) {
 export const getServerSideProps = async (context) => {
   const { slug } = context.query;
   const response = await fetch(`${APP_URL}/api/course/${slug}`);
-  const course = await response.json();
+  const courseData = await response.json();
   return {
     props: {
-      course,
+      courseData,
     },
     notFound: response.status === 200 ? false : true,
   };

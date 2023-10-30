@@ -4,30 +4,34 @@ import Image from "next/image";
 export default function FeedbackItem({ feedback }) {
   return (
     <div className="dark:text-slate-400 border p-5 rounded-md space-y-4">
-      <div className="flex gap-1 text-yellow-600">
-        <Star size={14} />
-        <Star size={14} />
-        <Star size={14} />
-        <Star size={14} />
-        <Star size={14} />
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((_, index) => (
+          <Star
+            key={index}
+            size={14}
+            className={`${index < feedback.star && "text-yellow-600"}`}
+          />
+        ))}
       </div>
-      <p>
-        এই কোর্সটি আমার আইটি জগতে একটি শ্রেষ্ঠ প্রাথমিক পরিচিতি দেওয়ার জন্য
-        একটি অসাধারণ সুযোগ ছিল। শিক্ষকের প্রদর্শন ছিল ব্যক্তিগত এবং কোর্সের সাথে
-        সম্পর্ক সৃজন করার জন্য উপকরণ ছিল।
-      </p>
-      <div className="flex gap-3">
-        <div>
+      <p>{feedback.comment}</p>
+      <div className="flex gap-3 items-center">
+        <div className="border w-10 h-10 rounded-full flex-shrink-0">
           <Image
-            src={"/hazrat.jpg"}
+            src={`${
+              feedback.userId.image
+                ? `/uploads/${feedback.userId.image}`
+                : "/no-photo.png"
+            }`}
             height={40}
             width={40}
             className="rounded-full"
           />
         </div>
         <div>
-          <h4 className="dark:text-white">হযরত আলী</h4>
-          <p className="text-sm">কম্পিউটার সাইন্স, নর্থ আইটি</p>
+          <h4 className="dark:text-white">{feedback.userId.name}</h4>
+          <p className="text-sm">
+            {feedback.userId.education}, {feedback.userId.institute}
+          </p>
         </div>
       </div>
     </div>

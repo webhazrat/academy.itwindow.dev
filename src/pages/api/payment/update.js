@@ -10,15 +10,12 @@ export default async function hanlder(req, res) {
     try {
       const session = await checkAdmin(req, res);
       PaymentSchema.parse(req.body);
-      let { paymentMethod, transactionId, amount, status, comment } = req.body;
+      let { paymentMethod, transactionId } = req.body;
       if (paymentMethod === "Cash") {
         transactionId = "";
       }
       await connectDB();
-      await accountModel.updateOne(
-        { _id: id },
-        { $set: { paymentMethod, transactionId, amount, status, comment } }
-      );
+      await accountModel.updateOne({ _id: id }, { $set: req.body });
       res.status(200).json({
         status: 200,
         title: "সফল!",

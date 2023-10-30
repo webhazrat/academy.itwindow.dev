@@ -5,7 +5,7 @@ const feedbackSchema = new Schema(
   {
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    star: { type: Number, required: true },
+    star: { type: String, required: true },
     comment: String,
     status: {
       type: String,

@@ -34,44 +34,29 @@ export default function FeedbackUpdate({ feedback, setFeedback, mutate }) {
     },
   });
 
-  console.log({ feedback });
-
   // feedback update data submit
   const handleFeedback = async (data) => {
-    data._id = feedback._id;
-    console.log({ data });
-    // try {
-    //   const response = await fetch(`/api/batch/update?id=${batch._id}`, {
-    //     method: "PUT",
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   const updateResponse = await response.json();
-    //   if (!response.ok) {
-    //     // server custom zod pattern error
-    //     if (updateResponse?.errors?.length > 0) {
-    //       updateResponse.errors.forEach((error) => {
-    //         setError(error.field, {
-    //           type: "server",
-    //           message: error.message,
-    //         });
-    //       });
-    //     }
-    //   } else {
-    //     toast({
-    //       variant: "success",
-    //       title: updateResponse.title,
-    //       description: updateResponse.message,
-    //     });
-    //     mutate();
-    //     clearErrors();
-    //     setBatch(null);
-    //   }
-    // } catch (error) {
-    //   console.log({ batchUpdateCatch: error });
-    // }
+    try {
+      const response = await fetch(`/api/feedback/update?id=${feedback._id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const updateResponse = await response.json();
+      if (response.ok) {
+        toast({
+          variant: "success",
+          title: updateResponse.title,
+          description: updateResponse.message,
+        });
+        mutate();
+        setFeedback(null);
+      }
+    } catch (error) {
+      console.log({ feedbackUpdateCatch: error });
+    }
   };
 
   return (
@@ -147,16 +132,12 @@ export default function FeedbackUpdate({ feedback, setFeedback, mutate }) {
                       <SelectContent>
                         <SelectGroup>
                           <SelectItem value="Pending">Pending</SelectItem>
-                          <SelectItem value="Ongoing">Ongoing</SelectItem>
-                          <SelectItem value="Ended">Ended</SelectItem>
+                          <SelectItem value="Approved">Approved</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
                   )}
                 />
-                {errors.time && (
-                  <p className="text-sm text-red-400">{errors.time.message}</p>
-                )}
               </div>
             </div>
           </ScrollArea>

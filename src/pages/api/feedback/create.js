@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         message: "ফিডব্যাক সফলভাবে সংযুক্ত হয়েছে",
       });
     } catch (error) {
-      console.log({ feedbackCreteCatch: error });
+      console.log({ feedbackCreateCatch: error });
       // FeedbackSchema zod validation error
       if (error instanceof z.ZodError) {
         return res.status(400).json({

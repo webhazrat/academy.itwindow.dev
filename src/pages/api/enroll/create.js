@@ -12,9 +12,7 @@ export default async function handler(req, res) {
       const session = await checkLogin(req, res);
       PaymentSchema.parse(req.body);
       let { courseId, paymentMethod, transactionId, amount } = req.body;
-      if (paymentMethod === "Cash") {
-        transactionId = "";
-      }
+      transactionId = paymentMethod === "Cash" && "";
       await connectDB();
       const enrollExist = await enrollModel.countDocuments({
         userId: session.user._id,
@@ -27,9 +25,16 @@ export default async function handler(req, res) {
           message: "এই কোর্সে পূর্বেই ইনরোল হয়েছেন",
         });
       }
+      // is it first course enrollment?
+      const exist = await enrollModel.countDocuments({
+        userId: session.user._id,
+      });
+      const first = exist ? false : true;
+
       const enroll = await enrollModel.create({
         userId: session.user._id,
         courseId,
+        first,
       });
       if (enroll) {
         await paymentModel.create({

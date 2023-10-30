@@ -118,19 +118,6 @@ export default function Home({ courses }) {
             </Link>
           </div>
         </div>
-
-        <div id="student-feedback" className="container mb-20 scroll-mt-10">
-          <div>
-            <h2 className="text-3xl font-semibold text-center mb-6">
-              শিক্ষার্থীদের অভিমত
-            </h2>
-            <div className="grid md:grid-cols-3 gap-4">
-              <FeedbackItem />
-              <FeedbackItem />
-              <FeedbackItem />
-            </div>
-          </div>
-        </div>
       </Layout>
     </>
   );

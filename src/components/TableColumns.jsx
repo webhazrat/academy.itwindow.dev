@@ -426,6 +426,10 @@ export const EnrollRequestsTableColumns = (setPayment) => [
         </button>
       );
     },
+    cell: ({ row }) => {
+      const code = row.original.batchId?.code;
+      return <span>{code || "N/A"}</span>;
+    },
   },
   {
     accessorKey: "courseId.fee",

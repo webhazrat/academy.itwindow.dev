@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       req.body.startDate = new Date(req.body.startDate);
       BatchSchema.parse(req.body);
       const { id } = req.query;
-      const { code, courseId, days, startDate, time, status } = req.body;
+      const { code } = req.body;
       await connectDB();
       const batchExist = await batchModel.countDocuments({
         code,
@@ -30,14 +30,7 @@ export default async function handler(req, res) {
           ],
         });
       }
-      await batchModel.updateOne({
-        courseId,
-        code,
-        days,
-        startDate,
-        time,
-        status,
-      });
+      await batchModel.findByIdAndUpdate(id, req.body);
       res.status(200).json({
         title: "সফল!",
         message: "ব্যাচ সফলভাবে আপডেট হয়েছে",
