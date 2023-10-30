@@ -676,3 +676,151 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
     },
   },
 ];
+
+export const FeedbacksTableColumns = (setFeedback) => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: "courseId.title",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Course Title <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+  },
+  {
+    accessorKey: "userId.name",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+  },
+  {
+    accessorKey: "userId.phone",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Phone <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+  },
+  {
+    accessorKey: "star",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Star <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+  },
+
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      return (
+        <span
+          className={`${status === "Pending" && "text-yellow-400"} ${
+            status === "Approved" && "text-green-400"
+          }`}
+        >
+          {status}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          CreatedAt <ChevronsUpDown className="w-3 h-3 ml-2" />
+        </button>
+      );
+    },
+    cell: ({ row }) => {
+      return format(new Date(row.getValue("createdAt")), "PPP");
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const feedback = row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 ring-0 focus-visible:ring-transparent"
+            >
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => {
+                setFeedback(feedback);
+              }}
+            >
+              ইডিট
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-red-500 hover:!text-red-500">
+              ডিলিট
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];

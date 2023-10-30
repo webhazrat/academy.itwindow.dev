@@ -4,7 +4,6 @@ import MyEnrollPayment from "@/src/components/MyEnrollPayment";
 import MyFeedback from "@/src/components/MyFeeback";
 import MyPay from "@/src/components/MyPay";
 import ProfileLayout from "@/src/components/ProfileLayout";
-import { Button } from "@/src/components/ui/button";
 import { fetcher, total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import { format } from "date-fns";
@@ -103,7 +102,7 @@ export default function MyCourses() {
                         <div className="flex justify-between items-center gap-5">
                           <div className="divide-x-2">
                             <div className="px-3 inline-block leading-none pl-0 hover:dark:text-white">
-                              <MyFeedback batch={enroll.batchId} />
+                              <MyFeedback courseId={enroll.courseId._id} />
                             </div>
                             <div className="px-3 inline-block leading-none  hover:dark:text-white">
                               {enroll.batchId ? (

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 
 export const OtpSendSchema = z.object({
   phone: z
@@ -225,4 +225,15 @@ export const BatchSchema = z.object({
 // add bacth id to enroll
 export const BatchEnrollSchema = z.object({
   enrollId: z.string().min(1, "ইনরোল আইডি ইনপুট করুন"),
+});
+
+// feedback create validation
+export const FeedbackSchema = z.object({
+  star: z
+    .string()
+    .refine((value) => ["1", "2", "3", "4", "5"].includes(value), {
+      message: "স্টার 1-5 হতে হবে",
+    }),
+  comment: z.string().min(1, { message: "কমেন্ট ইনপুট করুন" }),
+  status: z.string().optional(),
 });
