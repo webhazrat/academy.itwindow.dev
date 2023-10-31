@@ -7,7 +7,8 @@ import userModel from "@/src/models/userModel";
 // all feedbacks retrieve [path:dashboard/feedbacks]
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { sortBy, sortOrder, pageIndex, pageSize, search } = req.query;
+    const { sortBy, sortOrder, pageIndex, pageSize, search, status } =
+      req.query;
     const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
@@ -15,12 +16,18 @@ export default async function handler(req, res) {
       const sort =
         sortBy && sortOrder ? { [sortBy]: sortOrder === "asc" ? 1 : -1 } : {};
       const regex = new RegExp(search, "i");
+      const statusRegex = new RegExp(`^${status}$`, "i");
       const match = {
-        $or: [
-          { "userId.name": { $regex: regex } },
-          { "userId.phone": { $regex: regex } },
-          { "courseId.title": { $regex: regex } },
-          { status: { $regex: regex } },
+        $and: [
+          ...(status ? [{ status: { $regex: statusRegex } }] : []),
+          {
+            $or: [
+              { "userId.name": { $regex: regex } },
+              { "userId.phone": { $regex: regex } },
+              { "courseId.title": { $regex: regex } },
+              { status: { $regex: regex } },
+            ],
+          },
         ],
       };
       const aggregationPipeline = [

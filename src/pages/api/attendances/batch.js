@@ -17,9 +17,7 @@ export default async function handler(req, res) {
 
       await connectDB();
 
-      const enrolls = await enrollModel
-        .find({ batchId })
-        .populate({ path: "userId" });
+      const enrolls = await enrollModel.find({ batchId });
 
       const attendances = [];
       for (const enroll of enrolls) {

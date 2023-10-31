@@ -29,9 +29,7 @@ export default function FeedbackItem({ feedback }) {
         </div>
         <div>
           <h4 className="dark:text-white">{feedback.userId.name}</h4>
-          <p className="text-sm">
-            {feedback.userId.education}, {feedback.userId.institute}
-          </p>
+          <p className="text-sm">{feedback.userId.education}</p>
         </div>
       </div>
     </div>

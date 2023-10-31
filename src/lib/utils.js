@@ -76,3 +76,26 @@ export const total = (payments, status) => {
     0
   );
 };
+
+// status color
+export const statusColor = (status) => {
+  const warning = ["Pending"];
+  const success = [
+    "Completed",
+    "Approved",
+    "Verified",
+    "Ongoing",
+    "Ended",
+    "Published",
+  ];
+  const danger = ["Unverified", "Unpublished", "Canceled"];
+  if (warning.includes(status)) {
+    return "text-yellow-400";
+  }
+  if (success.includes(status)) {
+    return "text-green-400";
+  }
+  if (danger.includes(status)) {
+    return "text-red-400";
+  }
+};

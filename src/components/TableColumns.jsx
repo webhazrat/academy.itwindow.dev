@@ -1,5 +1,5 @@
 import { ChevronsUpDown, MoreHorizontal } from "lucide-react";
-import { formatDateTime } from "../lib/utils";
+import { statusColor } from "../lib/utils";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -10,8 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Checkbox } from "./ui/checkbox";
 import Image from "next/image";
-import { th } from "date-fns/locale";
-import { format, parse, parseISO } from "date-fns";
+import { format, parse } from "date-fns";
 
 export const UsersTableColumns = (setUser) => [
   {
@@ -120,16 +119,7 @@ export const UsersTableColumns = (setUser) => [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return (
-        <span
-          className={`${status === "Verified" && "text-green-400"} ${
-            (status === "Unverified" || status === "Suspended") &&
-            "text-red-400"
-          }`}
-        >
-          {status}
-        </span>
-      );
+      return <span className={`${statusColor(status)}`}>{status}</span>;
     },
   },
   {
@@ -145,7 +135,7 @@ export const UsersTableColumns = (setUser) => [
       );
     },
     cell: ({ row }) => {
-      return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      return format(new Date(row.getValue("createdAt")), "PPP");
     },
   },
   {
@@ -255,15 +245,7 @@ export const CoursesTableColumns = (setPhoto, setCourse) => [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return (
-        <span
-          className={`${status === "Unpublished" && "text-yellow-400"} ${
-            status === "Published" && "text-green-400"
-          }`}
-        >
-          {status}
-        </span>
-      );
+      return <span className={`${statusColor(status)}`}>{status}</span>;
     },
   },
   {
@@ -292,7 +274,7 @@ export const CoursesTableColumns = (setPhoto, setCourse) => [
       );
     },
     cell: ({ row }) => {
-      return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      return format(new Date(row.getValue("createdAt")), "PPP");
     },
   },
   {
@@ -458,15 +440,7 @@ export const EnrollRequestsTableColumns = (setPayment) => [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return (
-        <span
-          className={`${status === "Pending" && "text-yellow-400"} ${
-            (status === "Completed" || status === "Ended") && "text-green-400"
-          }`}
-        >
-          {status}
-        </span>
-      );
+      return <span className={`${statusColor(status)}`}>{status}</span>;
     },
   },
   {
@@ -482,7 +456,7 @@ export const EnrollRequestsTableColumns = (setPayment) => [
       );
     },
     cell: ({ row }) => {
-      return formatDateTime(row.getValue("createdAt"), "MMMM do, yyyy");
+      return format(new Date(row.getValue("createdAt")), "PPP");
     },
   },
   {
@@ -612,15 +586,7 @@ export const BatchesTableColumns = (setBatch, setStudent) => [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return (
-        <span
-          className={`${status === "Pending" && "text-yellow-400"} ${
-            (status === "Ongoing" || status === "Ended") && "text-green-400"
-          }`}
-        >
-          {status}
-        </span>
-      );
+      return <span className={`${statusColor(status)}`}>{status}</span>;
     },
   },
   {
@@ -767,15 +733,7 @@ export const FeedbacksTableColumns = (setFeedback) => [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      return (
-        <span
-          className={`${status === "Pending" && "text-yellow-400"} ${
-            status === "Approved" && "text-green-400"
-          }`}
-        >
-          {status}
-        </span>
-      );
+      return <span className={`${statusColor(status)}`}>{status}</span>;
     },
   },
   {

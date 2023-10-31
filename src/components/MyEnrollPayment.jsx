@@ -6,7 +6,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
-import { total } from "../lib/utils";
+import { statusColor, total } from "../lib/utils";
 import { format } from "date-fns";
 
 export default function MyEnrollPayment({ payments, fee }) {
@@ -27,8 +27,8 @@ export default function MyEnrollPayment({ payments, fee }) {
                 <tr>
                   <td className="border-b p-2 pr-0"></td>
                   <td className="border-b p-2 pl-0">তারিখ</td>
-                  <td className="border-b p-2">পেমেন্ট মেথড</td>
-                  <td className="border-b p-2">ট্রানজেশন আইডি</td>
+                  <td className="border-b p-2">মেথড</td>
+                  <td className="border-b p-2">ট্রানজেকশন আইডি</td>
                   <td className="border-b p-2">স্ট্যাটাস</td>
                   <td className="border-b p-2">কমেন্ট</td>
                   <td className="border-b p-2">অ্যামাউন্ট</td>
@@ -38,7 +38,10 @@ export default function MyEnrollPayment({ payments, fee }) {
                 {payments?.length > 0 ? (
                   <>
                     {payments.map((payment, index) => (
-                      <tr key={payment._id} className={`text-sm`}>
+                      <tr
+                        key={payment._id}
+                        className={`text-sm hover:bg-muted/50`}
+                      >
                         <td className="border-b p-2">{++index}</td>
                         <td className="border-b py-2">
                           {format(new Date(payment.createdAt), "PPP")}
@@ -50,13 +53,9 @@ export default function MyEnrollPayment({ payments, fee }) {
                           {payment.transactionId}
                         </td>
                         <td
-                          className={`border-b p-2 ${
-                            payment.status === "Pending" && "text-yellow-400"
-                          } ${
-                            payment.status === "Canceled" && "text-red-400"
-                          } ${
-                            payment.status === "Approved" && "text-green-400"
-                          }`}
+                          className={`border-b p-2 ${statusColor(
+                            payment.status
+                          )}`}
                         >
                           {payment.status}
                         </td>

@@ -11,8 +11,15 @@ import Accordions from "../components/Accordion";
 import Layout from "../components/Layout";
 import FeedbackItem from "../components/FeebackItem";
 import { getCourses } from "../lib/getData";
+import useSWR from "swr";
+import { fetcher } from "../lib/utils";
 
 export default function Home({ courses }) {
+  const { data: feedbacks } = useSWR(
+    `/api/feedbacks?status=Approved&pageSize=3&sortBy=createdAt&sortOrder=asc`,
+    fetcher
+  );
+
   return (
     <>
       <Layout>
@@ -118,6 +125,21 @@ export default function Home({ courses }) {
             </Link>
           </div>
         </div>
+
+        {feedbacks?.data?.length > 0 && (
+          <div id="student-feedback" className="container mb-20 scroll-mt-10">
+            <div>
+              <h2 className="text-3xl font-semibold text-center mb-6">
+                শিক্ষার্থীদের অভিমত
+              </h2>
+              <div className="grid md:grid-cols-3 gap-4">
+                {feedbacks.data.map((feedback) => (
+                  <FeedbackItem key={feedback._id} feedback={feedback} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </Layout>
     </>
   );

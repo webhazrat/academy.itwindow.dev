@@ -8,7 +8,7 @@ export default function ProfileSideNav() {
   const router = useRouter();
   return (
     <>
-      <div className="flex flex-col gap-2 border rounded-md p-2 flex-shrink-0">
+      <div className="flex flex-col gap-2 border rounded-md p-2">
         {profileSideNav.map((link) => {
           const active = isActive(router.pathname, link.href);
           return (

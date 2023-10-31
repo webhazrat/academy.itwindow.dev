@@ -321,7 +321,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="transactionId">ট্রানজেশন আইডি</Label>
+                    <Label htmlFor="transactionId">ট্রানজেকশন আইডি</Label>
                     <Controller
                       name="transactionId"
                       control={control}
@@ -404,8 +404,8 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                 <tr>
                   <td className="border-b p-2 pr-0"></td>
                   <td className="border-b p-2 pl-0">তারিখ</td>
-                  <td className="border-b p-2">পেমেন্ট মেথড</td>
-                  <td className="border-b p-2">ট্রানজেশন আইডি</td>
+                  <td className="border-b p-2">মেথড</td>
+                  <td className="border-b p-2">ট্রানজেকশন আইডি</td>
                   <td className="border-b p-2">স্ট্যাটাস</td>
                   <td className="border-b p-2">কমেন্ট</td>
                   <td className="border-b p-2">অ্যামাউন্ট</td>

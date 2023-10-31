@@ -4,6 +4,7 @@ import MyEnrollPayment from "@/src/components/MyEnrollPayment";
 import MyFeedback from "@/src/components/MyFeeback";
 import MyPay from "@/src/components/MyPay";
 import ProfileLayout from "@/src/components/ProfileLayout";
+import { useUserEnrolls } from "@/src/hook/useUserEnrolls";
 import { fetcher, total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import { format } from "date-fns";
@@ -18,8 +19,7 @@ import Link from "next/link";
 import useSWR from "swr";
 
 export default function MyCourses() {
-  const { data, isLoading } = useSWR("/api/enroll", fetcher);
-  const enrolls = data?.data;
+  const { enrolls, isLoading } = useUserEnrolls();
 
   const enrollIds = enrolls?.map((enroll) => enroll._id);
   const { data: paymentData, mutate } = useSWR(
@@ -59,7 +59,7 @@ export default function MyCourses() {
                         <h2 className="text-[17px]">৳{fee}</h2>
                       </div>
                       <div className="flex flex-wrap gap-3 text-sm">
-                        <p className="text-[15px] flex items-center gap-2">
+                        <p className="text-sm flex items-center gap-2">
                           <Calendar size={16} />{" "}
                           {format(new Date(enroll.createdAt), "MMMM do, yyyy")}
                         </p>
@@ -98,22 +98,22 @@ export default function MyCourses() {
                             কোর্সটিতে ইনরোলমেন্ট সম্পন্ন হবে
                           </p>
                         )}
-                        <div className="flex justify-between items-center gap-5">
-                          <div className="divide-x-2">
-                            <div className="px-3 inline-block leading-none pl-0 hover:dark:text-white">
-                              <MyFeedback courseId={enroll.courseId._id} />
-                            </div>
-                            <div className="px-3 inline-block leading-none  hover:dark:text-white">
-                              {enroll.batchId ? (
+                        <div className="flex justify-between items-center gap-4">
+                          <ul className="flex gap-8 list-disc pl-5 text-sm">
+                            {enroll.status === "Completed" && (
+                              <li className="hover:dark:text-white">
+                                <MyFeedback courseId={enroll.courseId._id} />
+                              </li>
+                            )}
+                            {enroll.batchId && (
+                              <li className=" hover:dark:text-white">
                                 <MyBatch batch={enroll.batchId} />
-                              ) : (
-                                "এখনও কোন ব্যাচে সংযুক্ত করা হয় নাই"
-                              )}
-                            </div>
-                            <div className="px-3 inline-block leading-none  hover:dark:text-white">
+                              </li>
+                            )}
+                            <li className=" hover:dark:text-white">
                               <MyEnrollPayment payments={payments} fee={fee} />
-                            </div>
-                          </div>
+                            </li>
+                          </ul>
                           {totalDue === 0 ? (
                             <ListItem className="!gap-2">
                               পেমেন্ট সম্পন্ন

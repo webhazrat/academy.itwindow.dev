@@ -10,17 +10,23 @@ export default async function handler(req, res) {
     try {
       const session = await checkLogin(req, res);
       await connectDB();
-      const courses = await enrollModel
+      const enrolls = await enrollModel
         .find({ userId: session.user._id })
-        .populate(["courseId", "batchId"]);
-      if (!courses) {
+        .populate({
+          path: "courseId",
+          select: "_id title slug fee",
+        })
+        .populate({
+          path: "batchId",
+        });
+      if (!enrolls) {
         return res
           .status(404)
           .json({ status: 404, message: "কোন কোর্স পাওয়া যায় নাই" });
       }
-      res.status(200).json({ status: 200, data: courses });
+      res.status(200).json({ status: 200, data: enrolls });
     } catch (error) {
-      console.log({ userCatch: error });
+      console.log({ enrollsUserCatch: error });
       res.status(500).json({ status: 500, message: "Internal server error" });
     }
   } else {

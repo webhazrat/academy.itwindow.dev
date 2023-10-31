@@ -5,10 +5,10 @@ import paymentModel from "@/src/models/paymentModel";
 // enroll wise payments [path: dashboard/enrolls/[*], profile/my-courses]
 export default async function hanlder(req, res) {
   if (req.method === "GET") {
-    const { enrollId } = req.query;
     try {
-      const enrolls = await checkEnroll(req, res, enrollId);
+      const { enrollId } = req.query;
       const enrollIds = enrollId.split(",");
+      const enrolls = await checkEnroll(req, res, enrollIds);
       await connectDB();
       const payments = await paymentModel.find({
         enrollId: { $in: enrollIds },

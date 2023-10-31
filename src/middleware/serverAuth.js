@@ -28,7 +28,7 @@ export async function checkLogin(req, res) {
   return Promise.reject({ message: "Unauthorized route" });
 }
 
-export async function checkEnroll(req, res, enrollId) {
+export async function checkEnroll(req, res, enrollIds) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     await connectDB();
@@ -39,7 +39,10 @@ export async function checkEnroll(req, res, enrollId) {
       const enrolls = await enrollModel
         .find({ userId: session.user._id })
         .select("_id");
-      if (enrolls.includes(enrollId)) {
+      const enrollIdsInc = enrollIds.some((id) =>
+        enrolls.some((enroll) => enroll._id.toString() === id)
+      );
+      if (enrollIdsInc) {
         return Promise.resolve(session);
       } else {
         return Promise.reject({ message: "Unauthorized route" });

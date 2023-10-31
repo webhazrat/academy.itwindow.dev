@@ -78,7 +78,9 @@ export default function MyPay({ enrollId, totalDue, totalPending, mutate }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">পে করুন</Button>
+        <Button variant="outline" size="sm">
+          পে করুন
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-sm p-0">
         <DialogHeader className="p-7 pb-0">
