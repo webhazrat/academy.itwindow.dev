@@ -9,8 +9,8 @@ import useSWR from "swr";
 
 export default function ReferralEnroll() {
   const { user } = useUserProfile();
-  const { data, isLoading } = useSWR("/api/user/refer", fetcher);
-  const users = data?.data;
+  const { data: usersData, isLoading } = useSWR("/api/user/refer", fetcher);
+  const users = usersData?.data;
 
   return (
     <>
@@ -60,7 +60,7 @@ export default function ReferralEnroll() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.length > 0 &&
+                  {users?.length > 0 &&
                     users.map((user) => (
                       <tr key={user._id} className="dark:text-slate-400">
                         <td className="border-b py-2">{user.name}</td>

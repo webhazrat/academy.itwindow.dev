@@ -3,11 +3,6 @@ import Label from "@/src/components/Label";
 import { Button } from "@/src/components/ui/button";
 import { Calendar } from "@/src/components/ui/calendar";
 import { Input } from "@/src/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/src/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 import {
   Select,
@@ -20,8 +15,7 @@ import {
 import { useToast } from "@/src/components/ui/use-toast";
 import { fetcher, formatDateTime } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
-import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -122,7 +116,7 @@ export default function Attendance() {
           <h1 className="text-lg font-semibold">অ্যাটেনডেন্স</h1>
         </div>
         <div className="p-7">
-          <div className="grid xl:grid-cols-[3fr_9fr] gap-5">
+          <div className="flex lg:flex-row flex-col gap-5">
             <div className="space-y-5">
               <form
                 className="space-y-4"
@@ -162,29 +156,13 @@ export default function Attendance() {
                     control={control}
                     defaultValue={date ? new Date(date) : new Date()}
                     render={({ field }) => (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className="w-full flex justify-start dark:text-slate-400"
-                          >
-                            <CalendarIcon size={16} className="mr-2" />
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span></span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                        className="p-0"
+                      />
                     )}
                   />
                 </div>
@@ -226,7 +204,7 @@ export default function Attendance() {
 
             <form
               onSubmit={handleSubmit2(handleAttendance)}
-              className="space-y-5"
+              className="space-y-5 flex-1"
             >
               <table className="table-auto border-t border-collapse w-full rounded-md text-sm">
                 <thead>
