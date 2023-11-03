@@ -42,7 +42,7 @@ export default function MyCourses() {
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            enrolls.length > 0 &&
+            enrolls?.length > 0 &&
             enrolls.map((enroll) => {
               const payments = getPaymentForEnroll(enroll._id);
               const totalPaid = total(payments, "Approved");

@@ -1,5 +1,4 @@
 import connectDB from "@/src/lib/connect";
-import { checkAdmin } from "@/src/middleware/serverAuth";
 import courseModel from "@/src/models/courseModel";
 import feedbackModel from "@/src/models/feedbackModel";
 import userModel from "@/src/models/userModel";
@@ -12,7 +11,6 @@ export default async function handler(req, res) {
     const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
-      const session = await checkAdmin(req, res);
       const sort =
         sortBy && sortOrder ? { [sortBy]: sortOrder === "asc" ? 1 : -1 } : {};
       const regex = new RegExp(search, "i");
