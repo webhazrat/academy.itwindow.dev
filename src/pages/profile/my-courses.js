@@ -16,21 +16,12 @@ import {
   Video,
 } from "lucide-react";
 import Link from "next/link";
-import useSWR from "swr";
 
 export default function MyCourses() {
-  const { enrolls, isLoading } = useUserEnrolls();
-
-  const enrollIds = enrolls?.map((enroll) => enroll._id);
-  const { data: paymentData, mutate } = useSWR(
-    enrollIds ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}` : null,
-    fetcher
-  );
+  const { enrollsData, paymentsData, isLoading, mutate } = useUserEnrolls();
 
   const getPaymentForEnroll = (enrollId) => {
-    return paymentData?.data?.filter(
-      (payment) => payment.enrollId === enrollId
-    );
+    return paymentsData?.filter((payment) => payment.enrollId === enrollId);
   };
 
   return (
@@ -42,12 +33,12 @@ export default function MyCourses() {
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            enrolls?.length > 0 &&
-            enrolls.map((enroll) => {
+            enrollsData?.length > 0 &&
+            enrollsData.map((enroll) => {
               const payments = getPaymentForEnroll(enroll._id);
               const totalPaid = total(payments, "Approved");
               const totalPending = total(payments, "Pending");
-              const fee = enroll.courseId.fee;
+              const fee = enroll.fee;
               const totalDue = !isNaN(totalPaid) && fee - totalPaid;
               const halfPayment = fee / 2;
               return (
@@ -99,7 +90,7 @@ export default function MyCourses() {
                           </p>
                         )}
                         <div className="flex justify-between items-center gap-4">
-                          <ul className="flex gap-8 list-disc pl-5 text-sm">
+                          <ul className="flex gap-3 list-inside list-disc text-sm">
                             {enroll.status === "Completed" && (
                               <li className="hover:dark:text-white">
                                 <MyFeedback courseId={enroll.courseId._id} />

@@ -1,5 +1,7 @@
 import connectDB from "@/src/lib/connect";
 import { checkLogin } from "@/src/middleware/serverAuth";
+import enrollModel from "@/src/models/enrollModel";
+import paymentModel from "@/src/models/paymentModel";
 import userModel from "@/src/models/userModel";
 
 export default async function handler(req, res) {
@@ -10,13 +12,31 @@ export default async function handler(req, res) {
       const users = await userModel
         .find({ refer: session.user._id })
         .select("name phone");
-      if (users) {
-        res.status(200).json({ status: 200, data: users });
-      } else {
-        res.status(404).json({ status: 404, message: `User not found` });
-      }
+
+      const usersWithEnrollments = await Promise.all(
+        users.map(async (user) => {
+          const enrollId = await enrollModel
+            .findOne({
+              userId: user._id,
+              first: true,
+            })
+            .populate({ path: "courseId", select: "title" })
+            .select("status");
+          const payments = await paymentModel
+            .find({
+              enrollId,
+              status: "Approved",
+            })
+            .select("amount status");
+          return {
+            ...user.toObject(),
+            enrollId: { ...enrollId.toObject(), payments },
+          };
+        })
+      );
+      res.status(200).json({ status: 200, data: usersWithEnrollments });
     } catch (error) {
-      console.log({ userCatch: error });
+      console.log({ userReferCatch: error });
       res.status(500).json({ status: 500, message: "Internal server error" });
     }
   } else {

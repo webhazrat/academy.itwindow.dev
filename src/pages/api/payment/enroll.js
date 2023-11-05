@@ -2,7 +2,7 @@ import connectDB from "@/src/lib/connect";
 import { checkEnroll } from "@/src/middleware/serverAuth";
 import paymentModel from "@/src/models/paymentModel";
 
-// enroll wise payments [path: dashboard/enrolls/[*], profile/my-courses]
+// enrollIds wise payments [path: dashboard/enrolls/[*], profile/my-courses]
 export default async function hanlder(req, res) {
   if (req.method === "GET") {
     try {

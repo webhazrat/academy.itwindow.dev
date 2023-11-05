@@ -386,6 +386,10 @@ export default function CourseUpdate({ course, setCourse, mutate }) {
                     )}
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="prevFee">পূর্বের ফি</Label>
+                    <Input type="text" id="prevFee" {...register("prevFee")} />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="status">স্ট্যাটাস</Label>
                     <Controller
                       name="status"

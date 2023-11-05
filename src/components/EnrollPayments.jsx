@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
-import { fetcher, formatDateTime, total } from "../lib/utils";
+import { fetcher, statusColor, total } from "../lib/utils";
 import { Input } from "./ui/input";
 import { Loader2, Pencil, Plus } from "lucide-react";
 import { Button } from "./ui/button";
@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PaymentSchema } from "../lib/validation";
 import { useToast } from "./ui/use-toast";
 import Image from "next/image";
+import { format } from "date-fns";
 
 export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
   const { toast } = useToast();
@@ -223,7 +224,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                   </p>
                   <p>
                     <span className="dark:text-slate-400">ফি:</span> ৳
-                    {enroll.courseId.fee}
+                    {enroll.fee}
                   </p>
                 </div>
 
@@ -444,7 +445,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                           </Button>
                         </td>
                         <td className="border-b py-2">
-                          {formatDateTime(payment.createdAt, "MMMM do, yyyy")}
+                          {format(new Date(payment.createdAt), "PPP")}
                         </td>
                         <td className="border-b p-2">
                           {payment.paymentMethod}
@@ -453,13 +454,9 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                           {payment.transactionId}
                         </td>
                         <td
-                          className={`border-b p-2 ${
-                            payment.status === "Pending" && "text-yellow-400"
-                          } ${
-                            payment.status === "Canceled" && "text-red-400"
-                          } ${
-                            payment.status === "Approved" && "text-green-400"
-                          }`}
+                          className={`border-b p-2 ${statusColor(
+                            payment.status
+                          )}`}
                         >
                           {payment.status}
                         </td>
@@ -473,9 +470,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                       <td colSpan={5}></td>
                       <td className="border-b p-2 text-right">
                         মোট পেইড{" "}
-                        <span>
-                          ({(totalPayment / enroll.courseId.fee) * 100}%)
-                        </span>
+                        <span>({(totalPayment / enroll.fee) * 100}%)</span>
                       </td>
                       <td className="border-b p-2 text-right">
                         {totalPayment}
@@ -485,7 +480,7 @@ export default function EnrollPayments({ enroll, setEnroll, enrollMutate }) {
                       <td colSpan={5}></td>
                       <td className="p-2 text-right">পাওনা</td>
                       <td className="p-2 text-right">
-                        {enroll.courseId.fee - totalPayment}
+                        {enroll.fee - totalPayment}
                       </td>
                     </tr>
                   </>

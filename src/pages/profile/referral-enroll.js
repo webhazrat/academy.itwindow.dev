@@ -2,13 +2,14 @@ import ListItem from "@/src/components/ListItem";
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { Button } from "@/src/components/ui/button";
 import { useUserProfile } from "@/src/hook/useUserProfile";
-import { fetcher } from "@/src/lib/utils";
+import { fetcher, statusColor, total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import React from "react";
 import useSWR from "swr";
 
 export default function ReferralEnroll() {
   const { user } = useUserProfile();
+
   const { data: usersData, isLoading } = useSWR("/api/user/refer", fetcher);
   const users = usersData?.data;
 
@@ -61,19 +62,29 @@ export default function ReferralEnroll() {
                 </thead>
                 <tbody>
                   {users?.length > 0 &&
-                    users.map((user) => (
-                      <tr key={user._id} className="dark:text-slate-400">
-                        <td className="border-b py-2">{user.name}</td>
-                        <td className="border-b py-2">
-                          <a href={`tel:+88${user.phone}`}>{user.phone}</a>
-                        </td>
-                        <td className="border-b py-2">-</td>
-                        <td className="border-b py-2 text-green-400">-</td>
-                        <td className="border-b py-2 text-right text-green-400">
-                          -
-                        </td>
-                      </tr>
-                    ))}
+                    users.map((user) => {
+                      return (
+                        <tr key={user._id} className="dark:text-slate-400">
+                          <td className="border-b py-2">{user.name}</td>
+                          <td className="border-b py-2">
+                            <a href={`tel:+88${user.phone}`}>{user.phone}</a>
+                          </td>
+                          <td className="border-b py-2">
+                            {user?.enrollId?.courseId?.title || "-"}
+                          </td>
+                          <td
+                            className={`border-b py-2 text-sm ${statusColor(
+                              user?.enrollId?.status
+                            )}`}
+                          >
+                            {user?.enrollId?.status || "-"}
+                          </td>
+                          <td className="border-b py-2 text-right text-green-400">
+                            {total(user.enrollId?.payments, "Approved")}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             )}

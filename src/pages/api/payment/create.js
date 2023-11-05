@@ -1,6 +1,6 @@
 import connectDB from "@/src/lib/connect";
 import { PaymentSchema } from "@/src/lib/validation";
-import { checkEnroll, checkEnrollPayment } from "@/src/middleware/serverAuth";
+import { checkEnroll } from "@/src/middleware/serverAuth";
 import paymentModel from "@/src/models/paymentModel";
 import { z } from "zod";
 
@@ -10,20 +10,6 @@ export default async function hanlder(req, res) {
       let { enrollId, paymentMethod, transactionId } = req.body;
       const enrolls = await checkEnroll(req, res, enrollId);
       PaymentSchema.parse(req.body);
-      const { totalFee, totalPaid, totalPending, totalDue, totalRequest } =
-        await checkEnrollPayment(enrollId);
-      if (amount > totalRequest) {
-        return res.status(400).json({
-          errors: [
-            {
-              field: "amount",
-              message: `৳${totalRequest} এর বেশি পেমেন্ট
-              রিকুয়েস্ট সংযুক্ত করতে পারবেন না`,
-            },
-          ],
-        });
-      }
-
       if (paymentMethod === "Cash") {
         transactionId = "";
       }

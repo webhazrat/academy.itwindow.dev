@@ -211,7 +211,14 @@ export default function SingleCourse({ courseData }) {
                 </div>
 
                 <div className="md:relative fixed bottom-0 z-50 left-0 rounded-none w-full flex md:flex-col justify-between gap-3 items-center bg-card border md:rounded-md p-4">
-                  <p className="text-2xl font-medium">৳{course.fee}</p>
+                  <p className="text-2xl font-medium flex items-center gap-2">
+                    ৳{course.fee}{" "}
+                    {course.prevFee > course.fee && (
+                      <del className="dark:text-slate-400 text-lg">
+                        ৳{course.prevFee}
+                      </del>
+                    )}
+                  </p>
                   <Link href={`/enroll/${course.slug}`}>
                     <Button className="bg-gradient text-white md:w-full">
                       কোর্সটিতে ইনরোল করুন

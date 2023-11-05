@@ -19,11 +19,6 @@ export default async function handler(req, res) {
         .populate({
           path: "batchId",
         });
-      if (!enrolls) {
-        return res
-          .status(404)
-          .json({ status: 404, message: "কোন কোর্স পাওয়া যায় নাই" });
-      }
       res.status(200).json({ status: 200, data: enrolls });
     } catch (error) {
       console.log({ enrollsUserCatch: error });

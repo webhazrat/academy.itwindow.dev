@@ -40,6 +40,7 @@ export default function Cart({ course }) {
       router.push(`/login?redirect=${encodeURIComponent(router.asPath)}`);
     } else {
       data.courseId = course.data._id;
+      data.fee = course.data.fee;
       try {
         const response = await fetch("/api/enroll/create", {
           method: "POST",
@@ -90,8 +91,12 @@ export default function Cart({ course }) {
               <h1 className="text-xl font-medium mb-5">কোর্সে ইনরোল প্রোসেস</h1>
               <ListItem>
                 কোর্সটির প্রতিটি সেশন সরাসরি আমারে ল্যাবে নেওয়া হবে, তাই কোর্স
-                ফি এর কমপক্ষে 50% ({Number(course.data.fee) / 2} টাকা) দিয়ে
-                কোর্সে ইনরোল কনফার্ম করা যাবে। তাছাড়া ইনরোল কনফার্ম হবে না।
+                ফি এর কমপক্ষে{" "}
+                <span className="dark:text-white">
+                  {" "}
+                  50% ({Number(course.data.fee) / 2} টাকা)
+                </span>{" "}
+                দিয়ে কোর্সে ইনরোল কনফার্ম করা যাবে। তাছাড়া ইনরোল কনফার্ম হবে না।
               </ListItem>
               <ListItem>
                 পেমেন্ট মেথড থেকে একটি মেথড সিলেক্ট করুন। পেমেন্ট মেথড বিকাশ,

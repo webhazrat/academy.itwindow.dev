@@ -206,6 +206,11 @@ export const profileSideNav = [
   },
   {
     id: 6,
+    title: "উইথড্রো বিবরণ",
+    href: "/profile/withdraw-history",
+  },
+  {
+    id: 7,
     title: "পাসওয়ার্ড পরিবর্তন",
     href: "/profile/change-password",
   },

@@ -116,6 +116,7 @@ export const CourseSchema = z.object({
     .refine((value) => !isNaN(value), {
       message: "কোর্স ফি নাম্বারে ইনপুট করুন",
     }),
+  prevFee: z.string().optional(),
   status: z.string().optional(),
   order: z.string().optional(),
 });

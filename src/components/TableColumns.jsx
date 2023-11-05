@@ -414,7 +414,7 @@ export const EnrollRequestsTableColumns = (setPayment) => [
     },
   },
   {
-    accessorKey: "courseId.fee",
+    accessorKey: "fee",
     header: ({ column }) => {
       return (
         <button

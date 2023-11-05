@@ -14,9 +14,14 @@ export default function CourseItem({ course }) {
           <h3 className="text-[20px] font-semibold">{course.title}</h3>
           <p className="dark:text-slate-400">{course.excerpt}</p>
         </div>
-        <h4 className="text-lg font-medium">
-          ৳{course.fee}{" "}
-          <span className="text-sm dark:text-slate-400">/ফুল কোর্স</span>
+        <h4 className="text-lg font-medium flex justify-between items-center">
+          <span>
+            ৳{course.fee}{" "}
+            {course.prevFee > course.fee && (
+              <del className="dark:text-slate-400">৳{course.prevFee}</del>
+            )}
+          </span>
+          <span className="text-sm dark:text-slate-400"> /কোর্স</span>
         </h4>
       </div>
     </>

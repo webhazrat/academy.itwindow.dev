@@ -51,26 +51,3 @@ export async function checkEnroll(req, res, enrollIds) {
   }
   return Promise.reject({ message: "Unauthorized route" });
 }
-
-export async function checkEnrollPayment(enrollId) {
-  await connectDB();
-  const fee = await enrollModel
-    .findById(enrollId)
-    .populate({ path: "courseId", select: "fee" });
-
-  const totalFee = fee && fee.courseId.fee;
-  const payments = await paymentModel.find({
-    enrollId,
-  });
-  const totalPaid = total(payments, "Approved");
-  const totalPending = total(payments, "Pending");
-  const totalDue = totalFee - totalPaid;
-  const totalRequest = totalDue - totalPending;
-  return Promise.resolve({
-    totalFee,
-    totalPaid,
-    totalPending,
-    totalDue,
-    totalRequest,
-  });
-}

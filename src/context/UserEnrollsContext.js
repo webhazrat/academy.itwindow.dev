@@ -7,13 +7,24 @@ export const UserEnrollsContext = createContext();
 
 export function UserEnrollsProvider({ children }) {
   const { data: session } = useSession();
-  const { data: enrollsData, isLoading } = useSWR(
+  const { data: enrolls, isLoading } = useSWR(
     session ? "/api/enrolls/userId" : null,
+    fetcher
+  );
+
+  const enrollIds = enrolls?.data?.map((enroll) => enroll._id);
+  const { data: payments, mutate } = useSWR(
+    enrollIds ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}` : null,
     fetcher
   );
   return (
     <UserEnrollsContext.Provider
-      value={{ enrolls: enrollsData?.data, isLoading }}
+      value={{
+        enrollsData: enrolls?.data,
+        paymentsData: payments?.data,
+        isLoading,
+        mutate,
+      }}
     >
       {children}
     </UserEnrollsContext.Provider>

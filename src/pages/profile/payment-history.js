@@ -1,24 +1,15 @@
 import ProfileLayout from "@/src/components/ProfileLayout";
-import { Button } from "@/src/components/ui/button";
 import { useUserEnrolls } from "@/src/hook/useUserEnrolls";
-import { fetcher, statusColor } from "@/src/lib/utils";
+import { statusColor } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import { format } from "date-fns";
-import useSWR from "swr";
 
 export default function PaymentHistory() {
-  const { enrolls, isLoading } = useUserEnrolls();
-
-  const enrollIds = enrolls?.map((enroll) => enroll._id);
-  const { data: paymentData } = useSWR(
-    enrollIds ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}` : null,
-    fetcher
-  );
-  const payments = paymentData?.data;
+  const { enrollsData, paymentsData, isLoading } = useUserEnrolls();
 
   // course title from enrolls
   const getCourseTitle = (enrollId) => {
-    const enroll = enrolls.find((enroll) => enroll._id === enrollId);
+    const enroll = enrollsData.find((enroll) => enroll._id === enrollId);
     return enroll.courseId.title;
   };
 
@@ -39,8 +30,8 @@ export default function PaymentHistory() {
                   <td className="border-b py-2">কমেন্ট</td>
                   <td className="border-b py-2 text-right">অ্যামাউন্ট</td>
                 </tr>
-                {payments?.length > 0 &&
-                  payments.map((payment, index) => {
+                {paymentsData?.length > 0 &&
+                  paymentsData.map((payment) => {
                     const courseTitle = getCourseTitle(payment.enrollId);
                     return (
                       <tr
