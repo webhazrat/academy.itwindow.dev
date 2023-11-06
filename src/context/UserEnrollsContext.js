@@ -14,7 +14,9 @@ export function UserEnrollsProvider({ children }) {
 
   const enrollIds = enrolls?.data?.map((enroll) => enroll._id);
   const { data: payments, mutate } = useSWR(
-    enrollIds ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}` : null,
+    enrollIds?.length > 0
+      ? `/api/payment/enroll?enrollId=${enrollIds.join(",")}`
+      : null,
     fetcher
   );
   return (

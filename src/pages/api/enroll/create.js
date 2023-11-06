@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     try {
       const session = await checkLogin(req, res);
       PaymentSchema.parse(req.body);
-      let { courseId, paymentMethod, transactionId, amount } = req.body;
+      let { courseId, paymentMethod, transactionId, fee, amount } = req.body;
       transactionId = paymentMethod === "Cash" && "";
       await connectDB();
       const enrollExist = await enrollModel.countDocuments({
@@ -34,6 +34,7 @@ export default async function handler(req, res) {
       const enroll = await enrollModel.create({
         userId: session.user._id,
         courseId,
+        fee,
         first,
       });
       if (enroll) {

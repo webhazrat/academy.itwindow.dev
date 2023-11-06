@@ -22,15 +22,17 @@ export default async function handler(req, res) {
             })
             .populate({ path: "courseId", select: "title" })
             .select("status");
+
           const payments = await paymentModel
             .find({
               enrollId,
               status: "Approved",
             })
             .select("amount status");
+          const enrollIdObject = enrollId ? enrollId.toObject() : null;
           return {
             ...user.toObject(),
-            enrollId: { ...enrollId.toObject(), payments },
+            enrollId: { ...enrollIdObject, payments },
           };
         })
       );

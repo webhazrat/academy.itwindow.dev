@@ -4,7 +4,7 @@ import { Button } from "@/src/components/ui/button";
 import { useUserProfile } from "@/src/hook/useUserProfile";
 import { fetcher, statusColor, total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 
 export default function ReferralEnroll() {
@@ -12,6 +12,8 @@ export default function ReferralEnroll() {
 
   const { data: usersData, isLoading } = useSWR("/api/user/refer", fetcher);
   const users = usersData?.data;
+
+  console.log({ users });
 
   return (
     <>
@@ -63,6 +65,10 @@ export default function ReferralEnroll() {
                 <tbody>
                   {users?.length > 0 &&
                     users.map((user) => {
+                      const totalPaidAmmount = total(
+                        user.enrollId?.payments,
+                        "Approved"
+                      );
                       return (
                         <tr key={user._id} className="dark:text-slate-400">
                           <td className="border-b py-2">{user.name}</td>
@@ -80,7 +86,7 @@ export default function ReferralEnroll() {
                             {user?.enrollId?.status || "-"}
                           </td>
                           <td className="border-b py-2 text-right text-green-400">
-                            {total(user.enrollId?.payments, "Approved")}
+                            {totalPaidAmmount}
                           </td>
                         </tr>
                       );
