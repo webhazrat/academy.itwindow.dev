@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-import { format, parse, parseISO } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -10,7 +9,7 @@ export const isActive = (path, href) => {
   return path == href ? true : false;
 };
 
-export const APP_URL = "http://localhost:3000";
+export const APP_URL = "https://course.itwindow.dev";
 
 export const OTP_EXPIRE_TIME = 5 * 60;
 
@@ -57,15 +56,6 @@ export function getCroppedImg(imageSrc, pixelCrop) {
       resolve(file);
     }, "image/jpeg");
   });
-}
-
-// date form
-export function formatDateTime(dateTimeString, formatString) {
-  const dateObject = dateTimeString.includes("T")
-    ? parseISO(dateTimeString)
-    : parse(dateTimeString, "HH:mm", new Date());
-
-  return format(dateObject, formatString);
 }
 
 // total

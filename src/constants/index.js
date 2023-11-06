@@ -2,6 +2,7 @@
 // enroll = Pending, Completed, Ended
 // user = Verified, Unverified
 // batch = Pending, Ongoing, Ended
+// withdraw = Pending, Completed
 
 export const mainNavs = [
   {
@@ -308,6 +309,13 @@ export const dashboardSideNav = [
       },
       {
         id: 2,
+        icon: "CircleDollarSign",
+        href: "/dashboard/withdraw",
+        titleE: "Withdraw",
+        title: "উইথড্রো",
+      },
+      {
+        id: 3,
         icon: "FolderOpen",
         href: "/dashboard/reports",
         titleE: "Reports",

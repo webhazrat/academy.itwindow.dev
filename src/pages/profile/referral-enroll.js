@@ -13,7 +13,12 @@ export default function ReferralEnroll() {
   const { data: usersData, isLoading } = useSWR("/api/user/refer", fetcher);
   const users = usersData?.data;
 
-  console.log({ users });
+  let totalPaidAmmounts = 0;
+  users?.map((user) => {
+    totalPaidAmmounts += total(user.enrollId?.payments, "Approved");
+  });
+
+  const commission = totalPaidAmmounts * (10 / 100);
 
   return (
     <>
@@ -23,8 +28,13 @@ export default function ReferralEnroll() {
 
           <div className="space-y-5">
             <div className="bg-card flex flex-col gap-2 rounded-md p-4 max-w-xs">
-              <strong>৳100</strong>
-              <Button className="bg-gradient text-white">পে আউট</Button>
+              <strong>৳{commission}</strong>
+              <Button
+                disabled={commission < 100}
+                className="bg-gradient text-white"
+              >
+                পে আউট
+              </Button>
 
               <p className="dark:text-slate-400 text-sm">
                 পে আউট করার জন্য সর্বনিম্ন ৳100 হতে হবে।

@@ -13,8 +13,9 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { useToast } from "@/src/components/ui/use-toast";
-import { fetcher, formatDateTime } from "@/src/lib/utils";
+import { fetcher } from "@/src/lib/utils";
 import { checkAdmin } from "@/src/middleware/clientAuth";
+import { format, parse } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -196,7 +197,8 @@ export default function Attendance() {
                   </p>
                   <p>
                     <span className="dark:text-slate-400">ক্লাস টাইম:</span>{" "}
-                    {batch?.time && formatDateTime(batch?.time, "hh:mm a")}
+                    {batch?.time &&
+                      format(parse(batch.time, "HH:mm", new Date()), "hh:mm a")}
                   </p>
                 </div>
               )}

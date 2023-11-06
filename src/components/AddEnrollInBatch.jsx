@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import useSWR from "swr";
-import { fetcher, formatDateTime } from "../lib/utils";
+import { fetcher } from "../lib/utils";
 import {
   Select,
   SelectContent,
@@ -18,6 +18,7 @@ import { useToast } from "./ui/use-toast";
 import Label from "./Label";
 import Alert from "./Alert";
 import { BatchEnrollSchema } from "../lib/validation";
+import { format, parse } from "date-fns";
 
 export default function AddEnrollInBatch({ batch, setBatch }) {
   const { toast } = useToast();
@@ -143,7 +144,7 @@ export default function AddEnrollInBatch({ batch, setBatch }) {
                 </p>
                 <p>
                   <span className="dark:text-slate-400">ক্লাস টাইম:</span>{" "}
-                  {formatDateTime(batch.time, "hh:mm a")}
+                  {format(parse(batch.time, "HH:mm", new Date()), "hh:mm a")}
                 </p>
               </div>
               {batch.status !== "Ended" && (
@@ -224,7 +225,7 @@ export default function AddEnrollInBatch({ batch, setBatch }) {
                       key={enroll._id}
                     >
                       <td className="border-b py-2">
-                        {formatDateTime(enroll.createdAt, "MMMM do, yyyy")}
+                        {format(new Date(enroll.createdAt), "PPP")}
                       </td>
                       <td className="border-b p-2">{enroll.userId.name}</td>
                       <td className="border-b p-2">{enroll.userId.phone}</td>
