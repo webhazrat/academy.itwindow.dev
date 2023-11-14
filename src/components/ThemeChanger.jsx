@@ -14,6 +14,7 @@ export default function ThemeChanger({ theme, setTheme }) {
       variant="ghost"
       onClick={(e) => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
     >
+      <span className="sr-only">Theme Changer</span>
       {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
     </Button>
   );

@@ -92,11 +92,8 @@ export default function HeaderNavigation() {
 
           <ThemeChanger theme={theme} setTheme={setTheme} />
           <Button size="sm" variant="ghost">
-            <Link href={"/"}>
-              <a>
-                <Search size={16} />
-              </a>
-            </Link>
+            <span className="sr-only">Search</span>
+            <Search size={16} />
           </Button>
           {!session && (
             <>

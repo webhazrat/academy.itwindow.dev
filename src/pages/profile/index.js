@@ -54,6 +54,7 @@ export default function Profile() {
                       width={150}
                       height={150}
                       className="rounded-full"
+                      alt={user?.name}
                     />
                   </div>
 

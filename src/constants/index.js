@@ -95,6 +95,7 @@ export const features = [
   {
     id: 1,
     title: "রিয়েলটাইম মাল্টিমেডিয়া ক্লাস",
+    titleE: "Realtime Multimedia Class",
     icon: "/multimedia.svg",
     description:
       "রিয়েলটাইম মাল্টিমেডিয়া ক্লাসে আমরা অত্যন্ত আকর্ষণীয় এবং সবোর্ণ শিক্ষা সরবরাহ করছি।",
@@ -102,6 +103,7 @@ export const features = [
   {
     id: 2,
     title: "সমস্যা সমাধানের জন্য রেকর্ডেড ভিডিও",
+    titleE: "Recorded video for troubleshooting",
     icon: "/video.svg",
     description:
       "রেকর্ডেড ভিডিও একটি প্রভাবশালী উপায় যাতে সমস্যা সমাধানে আরও ভালো বোঝানো এবং প্রতিনিধিত্ব করা যায়।",
@@ -109,6 +111,7 @@ export const features = [
   {
     id: 3,
     title: "অ্যাসাইনমেন্ট ও প্রজেক্ট",
+    titleE: "Assignments and Projects",
     icon: "/assignment.svg",
     description:
       "অ্যাসাইনমেন্ট ও প্রজেক্ট ব্যবহার করে আমরা শিক্ষার প্রক্রিয়াকে আরো গভীরভাবে সম্পন্ন করি।",
@@ -116,6 +119,7 @@ export const features = [
   {
     id: 4,
     title: "ফ্রিল্যান্সিং সাপোর্ট ও টিম এ কাজ",
+    titleE: "Freelancing support and team work",
     icon: "/support.svg",
     description:
       "সফল ফ্রিল্যান্সিং ক্যারিয়ার শুরু করার জন্য সাপোর্ট ও একটি সক্ষম টিমের সাথে কাজ করার সুযোগ।",

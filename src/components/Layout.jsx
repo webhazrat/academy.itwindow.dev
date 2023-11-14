@@ -5,13 +5,6 @@ import Footer from "./Footer";
 export default function Layout({ children, border }) {
   return (
     <>
-      <Head>
-        <title>ITWINDOW - Enhance Yourself</title>
-        <meta
-          name="description"
-          content="You are providing our popular IT courses via this website"
-        />
-      </Head>
       <main>
         <div className={`${border && "border-b"}`}>
           <div className="container">
