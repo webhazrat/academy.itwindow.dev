@@ -7,6 +7,7 @@ import { APP_URL, fetcher } from "@/src/lib/utils";
 import {
   CheckCheck,
   Presentation,
+  Share2,
   StickyNote,
   Users2,
   Video,
@@ -15,11 +16,10 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 import { NextSeo } from "next-seo";
+import SocialShare from "@/src/components/SocialShare";
 
 export default function SingleCourse({ courseData }) {
   const course = courseData.data;
-
-  console.log({ course });
 
   const { data: feedbacks, isLoading } = useSWR(
     `/api/feedbacks/course?courseId=${course._id}`,
@@ -54,20 +54,29 @@ export default function SingleCourse({ courseData }) {
                 <div className="border rounded-md py-4 px-6">
                   <div className="dark:text-slate-400 flex flex-wrap gap-5">
                     <p className="flex items-center gap-2">
-                      <Users2 size={18} className="text-[#43AF7B]" /> কোর্সটি
+                      <Users2 size={14} className="text-[#43AF7B]" /> কোর্সটি
                       করেছেন 10 জন
                     </p>
                     <p className="flex items-center gap-2">
-                      <Presentation size={18} className="text-[#43AF7B]" />
-                      প্রতি সপ্তাহে 4 টি করে মোট 48 টি ক্লাস
+                      <Presentation size={16} className="text-[#43AF7B]" />
+                      মোট 48 টি ক্লাস
                     </p>
                     <p className="flex items-center gap-2">
-                      <StickyNote size={18} className="text-[#43AF7B]" /> 10 টি
+                      <StickyNote size={16} className="text-[#43AF7B]" /> 10 টি
                       নোট
                     </p>
                     <p className="flex items-center gap-2">
-                      <Video size={18} className="text-[#43AF7B]" /> 10 টি ভিডিও
+                      <Video size={16} className="text-[#43AF7B]" /> 10 টি ভিডিও
                     </p>
+                    <div className="flex items-center gap-2">
+                      <Share2 size={16} className="text-[#43AF7B]" />
+                      <SocialShare
+                        url={`${APP_URL}/courses/${course.slug}`}
+                        title={course.title}
+                        description={course.description}
+                        hastag="#ict, #hsc_ict, #freelancing, #skill_development, #web_design, #web_development, #wordpress, #wordpress_theme_development, #wordpress_plugin_development, #react, #nextjs, #nodejs, #mongodb, #mysql"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -169,13 +178,13 @@ export default function SingleCourse({ courseData }) {
                 <div className="flex items-center justify-center gap-4 p-3">
                   <a href="https://www.facebook.com/webhazrat" target="_blank">
                     <Image
-                      src={"/socials/facebook-f.svg"}
+                      src={"/socials/facebook.svg"}
                       width={16}
                       height={16}
                       alt="facebook"
                     />
                   </a>
-                  <a href="#">
+                  <a href="https://twitter.com/webhazrat">
                     <Image
                       src={"/socials/twitter.svg"}
                       width={16}
@@ -183,7 +192,7 @@ export default function SingleCourse({ courseData }) {
                       alt="twitter"
                     />
                   </a>
-                  <a href="#">
+                  <a href="https://www.instagram.com/webhazrat">
                     <Image
                       src={"/socials/instagram.svg"}
                       width={16}
@@ -191,15 +200,15 @@ export default function SingleCourse({ courseData }) {
                       alt="twitter"
                     />
                   </a>
-                  <a href="#">
+                  <a href="https://www.linkedin.com/in/webhazrat/">
                     <Image
-                      src={"/socials/linkedin-in.svg"}
+                      src={"/socials/linkedin.svg"}
                       width={16}
                       height={16}
                       alt="twitter"
                     />
                   </a>
-                  <a href="#">
+                  <a href="https://www.youtube.com/@y.itwindow">
                     <Image
                       src={"/socials/youtube.svg"}
                       width={16}

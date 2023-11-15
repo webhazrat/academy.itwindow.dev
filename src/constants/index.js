@@ -297,6 +297,13 @@ export const dashboardSideNav = [
         titleE: "Feedbacks",
         title: "ফিডব্যাক",
       },
+      {
+        id: 8,
+        icon: "Tv",
+        href: "/dashboard/seminars",
+        titleE: "Seminars",
+        title: "ফ্রি সেমিনার",
+      },
     ],
   },
   {

@@ -6,8 +6,11 @@ import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserRegisterSchema } from "../lib/validation";
+import { useState } from "react";
+import ToggleInputType from "./ToggleInputType";
 
 export default function UserDataInput({ handleSubmitUserData, phone, token }) {
+  const [type, setType] = useState("password");
   const {
     register,
     handleSubmit,
@@ -19,6 +22,10 @@ export default function UserDataInput({ handleSubmitUserData, phone, token }) {
   } = useForm({
     resolver: zodResolver(UserRegisterSchema),
   });
+
+  const handleType = (from, to) => {
+    setType((prev) => (prev === from ? to : from));
+  };
 
   const handleSubmitForm = async (data) => {
     (data.phone = phone), (data.token = token);
@@ -68,7 +75,12 @@ export default function UserDataInput({ handleSubmitUserData, phone, token }) {
               পাসওয়ার্ড কমপক্ষে আট(8) অক্ষরের হতে হবে
             </p>
           </div>
-          <Input id="password" type="password" {...register("password")} />
+          <div className="relative">
+            <Input id="password" type={type} {...register("password")} />
+            <ToggleInputType
+              handleType={() => handleType("password", "text")}
+            />
+          </div>
           {errors.password && (
             <p className="text-sm text-red-400">{errors.password.message}</p>
           )}
@@ -83,7 +95,7 @@ export default function UserDataInput({ handleSubmitUserData, phone, token }) {
           </div>
           <Input
             id="confirmPassword"
-            type="password"
+            type={type}
             {...register("confirmPassword")}
           />
           {errors.confirmPassword && (

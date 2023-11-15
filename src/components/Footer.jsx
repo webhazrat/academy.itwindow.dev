@@ -2,9 +2,12 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { isActive } from "../lib/utils";
 
 export default function Footer() {
   const { theme } = useTheme();
+  const router = useRouter();
   return (
     <div>
       <div className="grid md:grid-cols-[5fr_3fr_4fr] gap-12 py-12">
@@ -33,7 +36,15 @@ export default function Footer() {
           <h3 className="text-xl font-semibold mb-6">কুইজ লিংক</h3>
           <div className="dark:text-slate-400 flex flex-col gap-3">
             <Link href={"/"}>আপকামিং লাইভ ব্যাচ</Link>
-            <Link href={"/"}>ফ্রি সেমিনার</Link>
+            <Link href={"/seminar"}>
+              <a
+                className={`${
+                  isActive(router.asPath, "/seminar") && "text-gradient"
+                }`}
+              >
+                ফ্রি সেমিনার
+              </a>
+            </Link>
             <Link href={"/"}>রিফান্ড পলিসি</Link>
             <Link href={"/"}>প্রাইভেসী পলিসি</Link>
             <Link href={"/"}>টার্মস এবং শর্তাবলী</Link>
@@ -56,7 +67,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <a target="_blank" href="https://www.facebook.com/itwindow.dev">
               <Image
-                src={"/socials/facebook-f.svg"}
+                src={"/socials/facebook.svg"}
                 width={16}
                 height={16}
                 alt="facebook"
@@ -80,7 +91,7 @@ export default function Footer() {
             </a>
             <a target="_blank" href="https://www.linkedin.com/company/itwindow">
               <Image
-                src={"/socials/linkedin-in.svg"}
+                src={"/socials/linkedin.svg"}
                 width={16}
                 height={16}
                 alt="twitter"

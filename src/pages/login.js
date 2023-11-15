@@ -12,8 +12,11 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { checkLoggedin } from "../middleware/clientAuth";
 import Link from "next/link";
+import ToggleInputType from "../components/ToggleInputType";
+import { useState } from "react";
 
 export default function Login() {
+  const [type, setType] = useState("password");
   const router = useRouter();
   const {
     register,
@@ -23,6 +26,10 @@ export default function Login() {
   } = useForm({
     resolver: zodResolver(LoginSchema),
   });
+
+  const handleType = (from, to) => {
+    setType((prev) => (prev === from ? to : from));
+  };
 
   const handleLogin = async (data) => {
     const status = await signIn("credentials", {
@@ -93,11 +100,16 @@ export default function Login() {
                         পাসওয়ার্ড কমপক্ষে আট(8) অক্ষরের হতে হবে।
                       </p>
                     </div>
-                    <Input
-                      type="password"
-                      id="password"
-                      {...register("password")}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={type}
+                        id="password"
+                        {...register("password")}
+                      />
+                      <ToggleInputType
+                        handleType={() => handleType("password", "text")}
+                      />
+                    </div>
                     {errors.password && (
                       <p className="text-sm text-red-400">
                         {errors.password.message}

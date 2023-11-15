@@ -1,5 +1,6 @@
 import Label from "@/src/components/Label";
 import ProfileLayout from "@/src/components/ProfileLayout";
+import ToggleInputType from "@/src/components/ToggleInputType";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { useToast } from "@/src/components/ui/use-toast";
@@ -7,9 +8,12 @@ import { ChangePasswordSchema } from "@/src/lib/validation";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function PresentReport() {
+  const [type, setType] = useState("password");
+  const [type2, setType2] = useState("password");
   const { toast } = useToast();
   const {
     register,
@@ -21,6 +25,14 @@ export default function PresentReport() {
   } = useForm({
     resolver: zodResolver(ChangePasswordSchema),
   });
+
+  const handleType = (from, to) => {
+    setType((prev) => (prev === from ? to : from));
+  };
+
+  const handleType2 = (from, to) => {
+    setType2((prev) => (prev === from ? to : from));
+  };
 
   const handleChangePassword = async (data) => {
     try {
@@ -73,11 +85,17 @@ export default function PresentReport() {
                     অ্যাকাউন্ট করার সময় যে পাসওয়ার্ডটি সেট করেছেন
                   </p>
                 </div>
-                <Input
-                  type="password"
-                  id="prevPassword"
-                  {...register("prevPassword")}
-                />
+                <div className="relative">
+                  <Input
+                    type={type}
+                    id="prevPassword"
+                    {...register("prevPassword")}
+                  />
+                  <ToggleInputType
+                    handleType={() => handleType("password", "text")}
+                  />
+                </div>
+
                 {errors.prevPassword && (
                   <p className="text-sm text-red-400">
                     {errors.prevPassword.message}
@@ -91,11 +109,17 @@ export default function PresentReport() {
                     যে নতুন পাসওয়ার্ড সেট করতে চান সেটি ইনপুট করুন
                   </p>
                 </div>
-                <Input
-                  type="password"
-                  id="newPassword"
-                  {...register("newPassword")}
-                />
+                <div className="relative">
+                  <Input
+                    type={type2}
+                    id="newPassword"
+                    {...register("newPassword")}
+                  />
+                  <ToggleInputType
+                    handleType={() => handleType2("password", "text")}
+                  />
+                </div>
+
                 {errors.newPassword && (
                   <p className="text-sm text-red-400">
                     {errors.newPassword.message}
@@ -112,7 +136,7 @@ export default function PresentReport() {
                   </p>
                 </div>
                 <Input
-                  type="password"
+                  type={type2}
                   id="confirmPassword"
                   {...register("confirmPassword")}
                 />

@@ -76,48 +76,50 @@ export default function PresentReport() {
                 ))}
             </div>
 
-            <div className="space-y-3">
-              <div className="flex gap-4">
-                <p className="flex items-center gap-2">
-                  <span className="block h-3 w-3 bg-green-400 rounded-full"></span>{" "}
-                  উপস্থিত
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="block h-3 w-3 bg-red-400 rounded-full"></span>{" "}
-                  অনুপস্থিত
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="block h-3 w-3 bg-yellow-400 rounded-full"></span>{" "}
-                  ছুটি
-                </p>
+            {enrollBatches?.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex gap-4">
+                  <p className="flex items-center gap-2">
+                    <span className="block h-3 w-3 bg-green-400 rounded-full"></span>{" "}
+                    উপস্থিত
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="block h-3 w-3 bg-red-400 rounded-full"></span>{" "}
+                    অনুপস্থিত
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="block h-3 w-3 bg-yellow-400 rounded-full"></span>{" "}
+                    ছুটি
+                  </p>
+                </div>
+                <Calendar
+                  mode="multiple"
+                  fromMonth={fromMonth}
+                  toMonth={toMonth}
+                  numberOfMonths={2}
+                  modifiers={{
+                    present,
+                    absent,
+                    leave,
+                  }}
+                  modifiersStyles={{
+                    present: {
+                      backgroundColor: "rgba(74, 222, 128, 1)",
+                      color: "black",
+                    },
+                    absent: {
+                      backgroundColor: "rgba(248, 113, 113, 1)",
+                      color: "black",
+                    },
+                    leave: {
+                      backgroundColor: "rgba(250, 204, 21, 1)",
+                      color: "black",
+                    },
+                  }}
+                  className="p-0"
+                />
               </div>
-              <Calendar
-                mode="multiple"
-                fromMonth={fromMonth}
-                toMonth={toMonth}
-                numberOfMonths={2}
-                modifiers={{
-                  present,
-                  absent,
-                  leave,
-                }}
-                modifiersStyles={{
-                  present: {
-                    backgroundColor: "rgba(74, 222, 128, 1)",
-                    color: "black",
-                  },
-                  absent: {
-                    backgroundColor: "rgba(248, 113, 113, 1)",
-                    color: "black",
-                  },
-                  leave: {
-                    backgroundColor: "rgba(250, 204, 21, 1)",
-                    color: "black",
-                  },
-                }}
-                className="p-0"
-              />
-            </div>
+            )}
           </div>
         </div>
       </ProfileLayout>

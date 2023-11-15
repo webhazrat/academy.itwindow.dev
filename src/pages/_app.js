@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                   "Unlock your potential with ITWINDOW's HSC ICT and freelancing skill development courses. Dive into the world of web design, development, and web application development. Master the art of WordPress theme and plugin development. Elevate your career with hands-on learning and personalized guidance. Join us and empower yourself for success in the ever-evolving landscape of technology and freelancing.",
                 images: [
                   {
-                    url: "",
+                    url: `${APP_URL}/itwindow-cover.svg`,
                     alt: "ITWINDOW",
                   },
                 ],

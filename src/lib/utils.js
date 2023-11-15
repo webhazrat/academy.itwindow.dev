@@ -9,7 +9,7 @@ export const isActive = (path, href) => {
   return path == href ? true : false;
 };
 
-export const APP_URL = "http://localhost:3000/";
+export const APP_URL = "http://localhost:3000";
 
 export const OTP_EXPIRE_TIME = 5 * 60;
 

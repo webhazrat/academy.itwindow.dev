@@ -5,12 +5,12 @@ export default function Commission() {
   return (
     <>
       <NextSeo
-        title="Commission | ITWINDOW"
+        title="Commission | ITWINDOW - Enhance Yourself"
         description="আপনার রেফারেল মোবাইল নাম্বার ব্যবহার করে কেউ যদি অ্যাকাউন্ট করে তাহলে যে রেফারেলে অ্যাকাউন্ট করবে সে যদি এই প্লাটফর্ম থেকে কোন কোর্সে ইনরোল করে কোর্স ফি প্রদান করে তাহলে পেমেন্টের 10% (কমিশন) অ্যামাউন্ট আপনার প্রোফাইলে সংযুক্ত হবে।"
         canonical={`${APP_URL}/commission`}
         openGraph={{
           url: `${APP_URL}/commission`,
-          title: "Commission | ITWINDOW",
+          title: "Commission | ITWINDOW - Enhance Yourself",
           description:
             "আপনার রেফারেল মোবাইল নাম্বার ব্যবহার করে কেউ যদি অ্যাকাউন্ট করে তাহলে যে রেফারেলে অ্যাকাউন্ট করবে সে যদি এই প্লাটফর্ম থেকে কোন কোর্সে ইনরোল করে কোর্স ফি প্রদান করে তাহলে পেমেন্টের 10% (কমিশন) অ্যামাউন্ট আপনার প্রোফাইলে সংযুক্ত হবে।",
           images: [

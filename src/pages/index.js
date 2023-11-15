@@ -10,11 +10,16 @@ import { Phone } from "lucide-react";
 import Accordions from "../components/Accordion";
 import Layout from "../components/Layout";
 import FeedbackItem from "../components/FeebackItem";
-import { getCourses } from "../lib/getData";
 import useSWR from "swr";
 import { fetcher } from "../lib/utils";
 
-export default function Home({ courses }) {
+export default function Home() {
+  const { data: courseData } = useSWR(
+    `/api/courses?sortBy=createdAt&sortOrder=asc`,
+    fetcher
+  );
+  const courses = courseData?.data;
+
   const { data: feedbacks } = useSWR(
     `/api/feedbacks?status=Approved&pageSize=3&sortBy=createdAt&sortOrder=asc`,
     fetcher
@@ -29,13 +34,14 @@ export default function Home({ courses }) {
 
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {courses.map((course) => (
-              <Link href={`/courses/${course.slug}`} key={course._id}>
-                <a>
-                  <CourseItem course={course} />
-                </a>
-              </Link>
-            ))}
+            {courses?.length > 0 &&
+              courses.map((course) => (
+                <Link href={`/courses/${course.slug}`} key={course._id}>
+                  <a>
+                    <CourseItem course={course} />
+                  </a>
+                </Link>
+              ))}
           </div>
           <p className="mt-4 dark:text-slate-400 text-[15px] text-center">
             বি.দ্র: আমাদের কোনও কোর্স আপতত রেকর্ডেড না এবং আমাদের ল্যাবে ক্লাস
@@ -145,9 +151,9 @@ export default function Home({ courses }) {
   );
 }
 
-export async function getServerSideProps() {
-  const courses = await getCourses();
-  return {
-    props: { courses },
-  };
-}
+// export async function getServerSideProps() {
+//   const courses = await getCourses();
+//   return {
+//     props: { courses },
+//   };
+// }
