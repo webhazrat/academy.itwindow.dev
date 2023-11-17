@@ -11,7 +11,6 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectLabel,
 } from "./ui/select";
 
 export default function UserUpdate({ user, setUser, mutate }) {
@@ -20,7 +19,6 @@ export default function UserUpdate({ user, setUser, mutate }) {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
     reset,
     clearErrors,
   } = useForm({
@@ -31,39 +29,29 @@ export default function UserUpdate({ user, setUser, mutate }) {
   });
 
   const handleUserUpdate = async (data) => {
-    console.log({ data });
-    // try {
-    //   const response = await fetch(`/api/course/update?id=${course._id}`, {
-    //     method: "PUT",
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   const updateResponse = await response.json();
-    //   if (!response.ok) {
-    //     // server custom zod pattern error
-    //     if (updateResponse?.errors?.length > 0) {
-    //       updateResponse.errors.forEach((error) => {
-    //         setError(error.field, {
-    //           type: "server",
-    //           message: error.message,
-    //         });
-    //       });
-    //     }
-    //   } else {
-    //     toast({
-    //       variant: "success",
-    //       title: updateResponse.title,
-    //       description: updateResponse.message,
-    //     });
-    //     mutate();
-    //     reset();
-    //     clearErrors();
-    //   }
-    // } catch (error) {
-    //   console.log({ courseUpdateCatch: error });
-    // }
+    try {
+      const response = await fetch(`/api/users/update?id=${user._id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const updateResponse = await response.json();
+      if (response.ok) {
+        toast({
+          variant: "success",
+          title: updateResponse.title,
+          description: updateResponse.message,
+        });
+        mutate();
+        reset();
+        setUser(null);
+        clearErrors();
+      }
+    } catch (error) {
+      console.log({ userUpdateCatch: error });
+    }
   };
 
   return (
@@ -90,7 +78,6 @@ export default function UserUpdate({ user, setUser, mutate }) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Roles</SelectLabel>
                         <SelectItem value="Admin">Admin</SelectItem>
                         <SelectItem value="General">General</SelectItem>
                       </SelectGroup>
@@ -118,7 +105,6 @@ export default function UserUpdate({ user, setUser, mutate }) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Status</SelectLabel>
                         <SelectItem value="Verified">Varified</SelectItem>
                         <SelectItem value="Unverified">Unverified</SelectItem>
                         <SelectItem value="Suspended">Suspended</SelectItem>

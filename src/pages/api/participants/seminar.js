@@ -1,39 +1,44 @@
 import connectDB from "@/src/lib/connect";
-import courseModel from "@/src/models/courseModel";
+import participantModel from "@/src/models/participantModel";
 
+// seminar wise participants [path:dashboard/participants/[seminarId]]
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { sortBy, sortOrder, pageIndex, pageSize, search } = req.query;
+    const { seminarId, sortBy, sortOrder, pageIndex, pageSize, search } =
+      req.query;
     const index = parseInt(pageIndex) || 0;
     const size = parseInt(pageSize) || 10;
     try {
       const sort =
         sortBy && sortOrder ? { [sortBy]: sortOrder === "asc" ? 1 : -1 } : {};
       const regex = new RegExp(search, "i");
+
       const match = {
+        seminarId,
         $or: [
-          { title: { $regex: regex } },
-          { excerpt: { $regex: regex } },
-          { fee: { $regex: regex } },
-          { status: { $regex: regex } },
+          { name: { $regex: regex } },
+          { phone: { $regex: regex } },
+          { address: { $regex: regex } },
+          { occupation: { $regex: regex } },
+          { institute: { $regex: regex } },
         ],
       };
       await connectDB();
-      const courses = await courseModel
+      const participants = await participantModel
         .find(match)
         .sort(sort)
         .skip(index * size)
         .limit(size);
+      const total = await participantModel.countDocuments(match);
 
-      const total = await courseModel.countDocuments(match);
       res.status(200).json({
-        data: courses,
+        data: participants,
         total,
         page: Math.ceil(total / size),
         pageSize: size,
       });
     } catch (error) {
-      console.log({ coursesCatch: error });
+      console.log({ participantsSeminarCatch: error });
       return res
         .status(500)
         .json({ status: 500, message: "Internal server error" });

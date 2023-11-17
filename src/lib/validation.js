@@ -3,13 +3,14 @@ import * as z from "zod";
 export const OtpSendSchema = z.object({
   phone: z
     .string()
-    .min(1, "মোবাইল নাম্বার ইনপুট করুন")
     .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
 });
 
 export const UserRegisterSchema = z
   .object({
-    name: z.string().min(1, "পুরো নাম ইনপুট করুন।"),
+    name: z
+      .string()
+      .refine((data) => data.trim() !== "", { message: "পুরো নাম ইনপুট করুন" }),
     password: z.string().min(8, "পাসওয়ার্ড কমপক্ষে আট অক্ষরের হতে হবে"),
     confirmPassword: z.string(),
     refer: z
@@ -51,14 +52,17 @@ export const ForgotPasswordSchema = z
 export const LoginSchema = z.object({
   phone: z
     .string()
-    .min(1, "মোবাইল নাম্বার ইনপুট করুন")
     .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
-  password: z.string().min(1, "পাসওয়ার্ড ইনপুট করুন"),
+  password: z
+    .string()
+    .refine((data) => data.trim() !== "", { message: "পাসওয়ার্ড ইনপুট করুন" }),
 });
 
 // user profile update
 export const UserSchema = z.object({
-  name: z.string().min(1, "পুরো নাম ইনপুট করুন"),
+  name: z
+    .string()
+    .refine((data) => data.trim() !== "", { message: "পুরো নাম ইনপুট করুন" }),
   email: z
     .string()
     .refine(
@@ -68,14 +72,21 @@ export const UserSchema = z.object({
       }
     )
     .optional(),
-  address: z.string().min(1, "বর্তমান ঠিকানা ইনপুট করুন"),
-  guardian: z.string().min(1, "অভিভাবকের ইনপুট করুন"),
+  address: z.string().refine((data) => data.trim() !== "", {
+    message: "বর্তমান ঠিকানা ইনপুট করুন",
+  }),
+  guardian: z
+    .string()
+    .refine((data) => data.trim() !== "", { message: "অভিভাবকের ইনপুট করুন" }),
   guardianPhone: z
     .string()
-    .min(1, "অভিভাবকের মোবাইল নাম্বার ইনপুট করুন")
-    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
-  education: z.string().min(1, "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন"),
-  institute: z.string().min(1, "প্রতিষ্ঠানের নাম ইনপুট করুন"),
+    .regex(/^(01[3456789]\d{8})$/, "অভিভাবকের সঠিক মোবাইল নাম্বার ইনপুট করুন"),
+  education: z.string().refine((data) => data.trim() !== "", {
+    message: "সর্বশেষ শিক্ষাগত যোগ্যতা ইনপুট করুন",
+  }),
+  institute: z.string().refine((data) => data.trim() !== "", {
+    message: "প্রতিষ্ঠানের নাম ইনপুট করুন",
+  }),
 });
 
 // course submit form validation
@@ -237,4 +248,34 @@ export const FeedbackSchema = z.object({
     }),
   comment: z.string().min(1, { message: "কমেন্ট ইনপুট করুন" }),
   status: z.string().optional(),
+});
+
+// seminar create validation
+export const SeminarSchema = z.object({
+  title: z.string().refine((data) => data.trim() !== "", {
+    message: "সেমিনার টাইটেল ইনপুট করুন",
+  }),
+  shortDescription: z.string().refine((data) => data.trim() !== "", {
+    message: "শর্ট ডেসক্রিপশন ইনপুট করুন",
+  }),
+  description: z.string().refine((data) => data.trim() !== "", {
+    message: "ডেসক্রিপশন ইনপুট করুন",
+  }),
+  status: z.string().optional(),
+});
+
+// participant create validation
+export const ParticipantSchema = z.object({
+  name: z.string().refine((data) => data.trim() !== "", {
+    message: "নাম ইনপুট করুন",
+  }),
+  phone: z
+    .string()
+    .regex(/^(01[3456789]\d{8})$/, "সঠিক মোবাইল নাম্বার ইনপুট করুন"),
+  address: z.string().refine((data) => data.trim() !== "", {
+    message: "ঠিকানা ইনপুট করুন",
+  }),
+  occupation: z.string().optional(),
+  education: z.string().optional(),
+  institute: z.string().optional(),
 });

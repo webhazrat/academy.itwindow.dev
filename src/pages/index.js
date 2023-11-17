@@ -12,18 +12,27 @@ import Layout from "../components/Layout";
 import FeedbackItem from "../components/FeebackItem";
 import useSWR from "swr";
 import { fetcher } from "../lib/utils";
+import { Skeleton } from "../components/ui/skeleton";
 
 export default function Home() {
-  const { data: courseData } = useSWR(
+  const { data: coursesData, isLoading } = useSWR(
     `/api/courses?sortBy=createdAt&sortOrder=asc`,
     fetcher
   );
-  const courses = courseData?.data;
+  const courses = coursesData?.data;
 
-  const { data: feedbacks } = useSWR(
+  const { data: feedbacksData } = useSWR(
     `/api/feedbacks?status=Approved&pageSize=3&sortBy=createdAt&sortOrder=asc`,
     fetcher
   );
+  const feedbacks = feedbacksData?.data;
+
+  const { data: seminarsData } = useSWR(
+    `/api/seminars?status=Published&pageSize=3&sortBy=createdAt&sortOrder=asc`,
+    fetcher
+  );
+
+  const seminars = seminarsData?.data;
 
   return (
     <>
@@ -34,6 +43,18 @@ export default function Home() {
 
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {isLoading &&
+              [1, 2, 3, 4, 5, 6].map((index) => (
+                <div key={index} className="p-7 space-y-3 bg-card rounded-md">
+                  <Skeleton className="h-12 w-12" />
+                  <Skeleton className="h-8" />
+                  <Skeleton className="h-24" />
+                  <div className="flex gap-10">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                  </div>
+                </div>
+              ))}
             {courses?.length > 0 &&
               courses.map((course) => (
                 <Link href={`/courses/${course.slug}`} key={course._id}>
@@ -112,34 +133,34 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div className="container mb-20">
-          <div className="flex flex-col md:flex-row items-center gap-5 justify-between bg-card p-11 rounded-md border shadow-sm">
-            <div className="space-y-2 text-center md:text-left">
-              <h3 className="text-2xl font-semibold">
-                সঠিক সিদ্ধান্ত নিতে ফ্রি সেমিনারে অংশগ্রহন করুন
-              </h3>
-              <p className="dark:text-slate-400">
-                আগামী 01/10/2023 ইং- রবিবার বিকাল 4.30মি. (আইসিটি ক্র্যাশ কোর্স)
-                আপনিও অংশগ্রহন করতে পারেন।
-              </p>
+        {seminars?.length > 0 && (
+          <div className="container mb-20">
+            <div className="flex flex-col md:flex-row items-center gap-5 justify-between bg-card p-11 rounded-md border shadow-sm">
+              <div className="space-y-2 text-center md:text-left">
+                <h3 className="text-2xl font-semibold">
+                  {seminars?.[0]?.title}
+                </h3>
+                <p className="dark:text-slate-400">
+                  {seminars?.[0]?.shortDescription}
+                </p>
+              </div>
+              <Link href={"/seminar"}>
+                <Button className="bg-gradient text-white flex-shrink-0">
+                  ফ্রি সেমিনার
+                </Button>
+              </Link>
             </div>
-            <Link href={"/seminar"}>
-              <Button className="bg-gradient text-white flex-shrink-0">
-                ফ্রি সেমিনার
-              </Button>
-            </Link>
           </div>
-        </div>
+        )}
 
-        {feedbacks?.data?.length > 0 && (
+        {feedbacks?.length > 0 && (
           <div id="student-feedback" className="container mb-20 scroll-mt-10">
             <div>
               <h2 className="text-3xl font-semibold text-center mb-6">
                 শিক্ষার্থীদের অভিমত
               </h2>
               <div className="grid md:grid-cols-3 gap-4">
-                {feedbacks.data.map((feedback) => (
+                {feedbacks.map((feedback) => (
                   <FeedbackItem key={feedback._id} feedback={feedback} />
                 ))}
               </div>
@@ -150,10 +171,3 @@ export default function Home() {
     </>
   );
 }
-
-// export async function getServerSideProps() {
-//   const courses = await getCourses();
-//   return {
-//     props: { courses },
-//   };
-// }
