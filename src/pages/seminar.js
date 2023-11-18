@@ -74,117 +74,127 @@ export default function Seminar() {
       <Layout border>
         <div className="container my-20">
           <div className="max-w-3xl space-y-3 m-auto">
-            <h1>{seminars?.[0]?.shortDescription}</h1>
-            <p className="dark:text-slate-400">{seminars?.[0]?.description}</p>
-
-            <form
-              className="space-y-4"
-              onSubmit={handleSubmit(handleParticipant)}
-            >
-              <div className="grid grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <Label htmlFor="name">
-                    নাম <span className="text-red-400">*</span>
-                  </Label>
-                  <Controller
-                    name="name"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Input type="text" id="name" {...field} />
-                    )}
-                  />
-                  {errors.name && (
-                    <p className="text-sm text-red-400">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">
-                    মোবাইল নাম্বার <span className="text-red-400">*</span>
-                  </Label>
-                  <Controller
-                    name="phone"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Input type="text" id="phone" {...field} />
-                    )}
-                  />
-                  {errors.phone && (
-                    <p className="text-sm text-red-400">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <Label htmlFor="address">
-                    ঠিকানা <span className="text-red-400">*</span>
-                  </Label>
-                  <Controller
-                    name="address"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Input type="text" id="address" {...field} />
-                    )}
-                  />
-                  {errors.address && (
-                    <p className="text-sm text-red-400">
-                      {errors.address.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="occupation">পেশা</Label>
-                  <Controller
-                    name="occupation"
-                    control={control}
-                    render={({ field }) => (
-                      <Input type="text" id="occupation" {...field} />
-                    )}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="occupation">সর্বশেষ শিক্ষাগত যোগ্যতা</Label>
-                  <Controller
-                    name="occupation"
-                    control={control}
-                    render={({ field }) => (
-                      <Input type="text" id="occupation" {...field} />
-                    )}
-                  />
-                </div>
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="institute">প্রতিষ্ঠান</Label>
-                  <Controller
-                    name="institute"
-                    control={control}
-                    render={({ field }) => (
-                      <Input type="text" id="institute" {...field} />
-                    )}
-                  />
-                </div>
-              </div>
-              <p className="dark:text-slate-400 text-sm">
-                [নোট: যদি পেশা স্টুডেন্ট হয় তাহলে প্রতিষ্ঠান হবে আপনার শিক্ষা
-                প্রতিষ্ঠান। আর যদি পেশা চাকরি বা অন্য কিছু হয় তাহলে প্রতিষ্ঠান
-                হবে আপনি যে প্রতিষ্ঠানে কর্মরত।]
-              </p>
+            {seminars?.length > 0 ? (
               <div>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient text-white"
+                <h1>{seminars?.[0]?.shortDescription}</h1>
+                <p className="dark:text-slate-400">
+                  {seminars?.[0]?.description}
+                </p>
+
+                <form
+                  className="space-y-4"
+                  onSubmit={handleSubmit(handleParticipant)}
                 >
-                  {isSubmitting && (
-                    <Loader2 size={16} className="mr-2 animate-spin" />
-                  )}{" "}
-                  রেজিস্ট্রেশন
-                </Button>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">
+                        নাম <span className="text-red-400">*</span>
+                      </Label>
+                      <Controller
+                        name="name"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input type="text" id="name" {...field} />
+                        )}
+                      />
+                      {errors.name && (
+                        <p className="text-sm text-red-400">
+                          {errors.name.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">
+                        মোবাইল নাম্বার <span className="text-red-400">*</span>
+                      </Label>
+                      <Controller
+                        name="phone"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input type="text" id="phone" {...field} />
+                        )}
+                      />
+                      {errors.phone && (
+                        <p className="text-sm text-red-400">
+                          {errors.phone.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="col-span-2 space-y-2">
+                      <Label htmlFor="address">
+                        ঠিকানা <span className="text-red-400">*</span>
+                      </Label>
+                      <Controller
+                        name="address"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input type="text" id="address" {...field} />
+                        )}
+                      />
+                      {errors.address && (
+                        <p className="text-sm text-red-400">
+                          {errors.address.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="occupation">পেশা</Label>
+                      <Controller
+                        name="occupation"
+                        control={control}
+                        render={({ field }) => (
+                          <Input type="text" id="occupation" {...field} />
+                        )}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="occupation">
+                        সর্বশেষ শিক্ষাগত যোগ্যতা
+                      </Label>
+                      <Controller
+                        name="occupation"
+                        control={control}
+                        render={({ field }) => (
+                          <Input type="text" id="occupation" {...field} />
+                        )}
+                      />
+                    </div>
+                    <div className="space-y-2 col-span-2">
+                      <Label htmlFor="institute">প্রতিষ্ঠান</Label>
+                      <Controller
+                        name="institute"
+                        control={control}
+                        render={({ field }) => (
+                          <Input type="text" id="institute" {...field} />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <p className="dark:text-slate-400 text-sm">
+                    [নোট: যদি পেশা স্টুডেন্ট হয় তাহলে প্রতিষ্ঠান হবে আপনার
+                    শিক্ষা প্রতিষ্ঠান। আর যদি পেশা চাকরি বা অন্য কিছু হয় তাহলে
+                    প্রতিষ্ঠান হবে আপনি যে প্রতিষ্ঠানে কর্মরত।]
+                  </p>
+                  <div>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-gradient text-white"
+                    >
+                      {isSubmitting && (
+                        <Loader2 size={16} className="mr-2 animate-spin" />
+                      )}{" "}
+                      রেজিস্ট্রেশন
+                    </Button>
+                  </div>
+                </form>
               </div>
-            </form>
+            ) : (
+              <h1>কোন সেমিনার চলমান নাই।</h1>
+            )}
           </div>
         </div>
       </Layout>

@@ -1,46 +1,50 @@
-import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Carousel({ items }) {
+export default function Carousel({ items, autoplayInterval = 5000 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === items?.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000);
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  const prevSlide = () => {
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + items.length) % items.length
+    );
+  };
 
-  const handleDotClick = (index) => {
+  const goToSlide = (index) => {
     setCurrentIndex(index);
   };
 
+  useEffect(() => {
+    const autoplay = setInterval(() => {
+      nextSlide();
+    }, autoplayInterval);
+
+    return () => clearInterval(autoplay);
+  }, [currentIndex, autoplayInterval]);
+
   return (
     <div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentIndex}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-        >
-          {items?.length && (
-            <>
-              <motion.img
-                src={items[currentIndex]?.image}
-                className="m-auto"
-                alt="carousel"
-              />
-              <motion.p className="font-semibold dark:text-slate-400 mt-5">
-                {items[currentIndex]?.title}
-              </motion.p>
-            </>
-          )}
-        </motion.div>
-      </AnimatePresence>
+      <div>
+        {items?.length && (
+          <>
+            <Image
+              src={items[currentIndex]?.image}
+              priority
+              width={300}
+              height={150}
+              className="m-auto"
+              alt="carousel"
+            />
+            <p className="font-semibold dark:text-slate-400 mt-5">
+              {items[currentIndex]?.title}
+            </p>
+          </>
+        )}
+      </div>
       <div className="flex items-center justify-center gap-[6px] mt-5">
         {items?.map((_, index) => (
           <span
@@ -48,7 +52,7 @@ export default function Carousel({ items }) {
             className={`cursor-pointer w-2 h-2 rounded-full block ${
               index === currentIndex ? "bg-gradient" : "bg-slate-100"
             }`}
-            onClick={() => handleDotClick(index)}
+            onClick={() => goToSlide(index)}
           ></span>
         ))}
       </div>
