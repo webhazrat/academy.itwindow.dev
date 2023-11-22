@@ -18,7 +18,7 @@ export default async function handler(req, res) {
           phone,
         })
         .select("status token");
-      if (user.status === "verified") {
+      if (user.status === "Verified") {
         return res.status(400).json({
           errors: [
             {
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
             name,
             password: hashPassword,
             refer: userId,
-            status: "verified",
+            status: "Verified",
           },
           $unset: {
             otp: 1,
