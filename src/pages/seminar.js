@@ -151,14 +151,14 @@ export default function Seminar() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="occupation">
+                      <Label htmlFor="education">
                         সর্বশেষ শিক্ষাগত যোগ্যতা
                       </Label>
                       <Controller
-                        name="occupation"
+                        name="education"
                         control={control}
                         render={({ field }) => (
-                          <Input type="text" id="occupation" {...field} />
+                          <Input type="text" id="education" {...field} />
                         )}
                       />
                     </div>
