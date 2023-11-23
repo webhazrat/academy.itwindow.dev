@@ -18,7 +18,12 @@ const userSchema = new Schema(
     guardianPhone: String,
     education: String,
     institute: String,
-    status: { type: String, required: true, default: "Unverified" },
+    status: {
+      type: String,
+      required: true,
+      enum: ["Verified", "Unverified"],
+      default: "Unverified",
+    },
   },
   {
     timestamps: true,
