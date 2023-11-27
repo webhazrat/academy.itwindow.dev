@@ -91,7 +91,7 @@ export default function SeminarUpdate({ seminar, setSeminar, mutate }) {
               {isSubmitting && (
                 <Loader2 size={16} className="mr-2 animate-spin" />
               )}
-              সংযুক্ত করুন
+              আপডেট করুন
             </Button>
           </div>
           <ScrollArea className="max-h-[calc(100vh_-_200px)] overflow-y-auto mb-16">

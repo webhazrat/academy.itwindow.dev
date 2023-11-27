@@ -73,7 +73,7 @@ export default function Seminar() {
     <>
       <Layout border>
         <div className="container my-20">
-          <div className="max-w-3xl space-y-3 m-auto">
+          <div className="max-w-3xl space-y-3">
             {seminars?.length > 0 ? (
               <div>
                 <h1>{seminars?.[0]?.shortDescription}</h1>

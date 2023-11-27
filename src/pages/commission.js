@@ -1,6 +1,8 @@
 import Layout from "../components/Layout";
 import { NextSeo } from "next-seo";
 import { APP_URL } from "../lib/utils";
+import { Button } from "../components/ui/button";
+import Link from "next/link";
 export default function Commission() {
   return (
     <>
@@ -71,6 +73,11 @@ export default function Commission() {
                 হবে।
               </p>
             </div>
+            <Link href="/join">
+              <Button className="bg-gradient text-white">
+                সাইন আপ / ইনরোল করুন
+              </Button>
+            </Link>
           </div>
         </div>
       </Layout>

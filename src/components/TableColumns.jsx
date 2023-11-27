@@ -897,9 +897,9 @@ export const PaticipantsTableColumns = () => [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => {
-                setEditSeminar(seminar);
-              }}
+            // onClick={() => {
+            //   setEditSeminar(seminar);
+            // }}
             >
               ইডিট
             </DropdownMenuItem>
