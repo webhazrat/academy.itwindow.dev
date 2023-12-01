@@ -39,7 +39,7 @@ export default function Cart({ course }) {
     if (!session) {
       router.push(`/login?redirect=${encodeURIComponent(router.asPath)}`);
     } else {
-      if (data.amount > course.data.fee) {
+      if (Number(data.amount) > Number(course.data.fee)) {
         setError("amount", {
           type: "client",
           message: `অ্যামাউন্ট ${course.data.fee} এর বেশি হতে পারেনা`,

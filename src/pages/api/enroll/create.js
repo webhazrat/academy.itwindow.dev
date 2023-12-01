@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       const session = await checkLogin(req, res);
       PaymentSchema.parse(req.body);
       let { courseId, paymentMethod, transactionId, fee, amount } = req.body;
-      transactionId = paymentMethod === "Cash" && "";
+      transactionId = paymentMethod === "Cash" ? "" : transactionId;
       await connectDB();
       const enrollExist = await enrollModel.countDocuments({
         userId: session.user._id,

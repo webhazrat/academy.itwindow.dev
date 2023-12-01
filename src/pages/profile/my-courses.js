@@ -5,7 +5,7 @@ import MyFeedback from "@/src/components/MyFeeback";
 import MyPay from "@/src/components/MyPay";
 import ProfileLayout from "@/src/components/ProfileLayout";
 import { useUserEnrolls } from "@/src/hook/useUserEnrolls";
-import { fetcher, total } from "@/src/lib/utils";
+import { total } from "@/src/lib/utils";
 import { checkLogin } from "@/src/middleware/clientAuth";
 import { format } from "date-fns";
 import {
@@ -16,9 +16,20 @@ import {
   Video,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function MyCourses() {
-  const { enrollsData, paymentsData, isLoading, mutate } = useUserEnrolls();
+  const {
+    enrollsData,
+    paymentsData,
+    isLoading,
+    enrollsMutate,
+    paymentsMutate,
+  } = useUserEnrolls();
+
+  useEffect(() => {
+    enrollsMutate();
+  }, []);
 
   const getPaymentForEnroll = (enrollId) => {
     return paymentsData?.filter((payment) => payment.enrollId === enrollId);
@@ -118,7 +129,7 @@ export default function MyCourses() {
                                 enrollId={enroll._id}
                                 totalDue={totalDue}
                                 totalPending={totalPending}
-                                mutate={mutate}
+                                mutate={paymentsMutate}
                               />
                             </div>
                           )}
