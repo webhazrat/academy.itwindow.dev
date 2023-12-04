@@ -13,13 +13,10 @@ import FeedbackItem from "../components/FeebackItem";
 import useSWR from "swr";
 import { fetcher } from "../lib/utils";
 import { Skeleton } from "../components/ui/skeleton";
+import { useCourses } from "../hook/useCourses";
 
 export default function Home() {
-  const { data: coursesData, isLoading } = useSWR(
-    `/api/courses?sortBy=createdAt&sortOrder=asc`,
-    fetcher
-  );
-  const courses = coursesData?.data;
+  const { courses, isLoading } = useCourses();
 
   const { data: feedbacksData } = useSWR(
     `/api/feedbacks?status=Approved&pageSize=3&sortBy=createdAt&sortOrder=asc`,

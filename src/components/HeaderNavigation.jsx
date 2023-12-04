@@ -17,10 +17,12 @@ import MobileMenu from "./MobileMenu";
 import LoggedDropdown from "./LoggedDropdown";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
+import { useCourses } from "../hook/useCourses";
 
 export default function HeaderNavigation() {
   const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
+  const { courses } = useCourses();
   return (
     <div className="py-4 flex justify-between items-center dark:text-white text-[15px]">
       <Link href={"/"}>
@@ -67,18 +69,34 @@ export default function HeaderNavigation() {
                     <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
                     <NavigationMenuContent className="dark:bg-background">
                       <div className="grid grid-cols-2 gap-4 p-10 w-[600px]">
-                        {link.sub.map((subLink) => (
-                          <Link key={subLink.id} href={subLink.href}>
-                            <a className="flex items-center gap-3 transition-all hover:text-gradient">
-                              <Image
-                                src={subLink.icon}
-                                width={18}
-                                height={18}
-                              />{" "}
-                              {subLink.title}
-                            </a>
-                          </Link>
-                        ))}
+                        {link.id === "courses" && courses?.length > 0
+                          ? courses.map((course) => (
+                              <Link
+                                key={course._id}
+                                href={`/courses/${course.slug}`}
+                              >
+                                <a className="flex items-center gap-3 transition-all hover:text-gradient">
+                                  <Image
+                                    src={`/courses/${course.image}`}
+                                    width={18}
+                                    height={18}
+                                  />{" "}
+                                  {course.title}
+                                </a>
+                              </Link>
+                            ))
+                          : link.sub.map((subLink) => (
+                              <Link key={subLink.id} href={subLink.href}>
+                                <a className="flex items-center gap-3 transition-all hover:text-gradient">
+                                  <Image
+                                    src={subLink.icon}
+                                    width={18}
+                                    height={18}
+                                  />{" "}
+                                  {subLink.title}
+                                </a>
+                              </Link>
+                            ))}
                       </div>
                     </NavigationMenuContent>
                   </>

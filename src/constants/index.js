@@ -15,44 +15,7 @@ export const mainNavs = [
     id: "courses",
     title: "কোর্সসমূহ",
     href: false,
-    sub: [
-      {
-        id: "hsc-ict-crush-course",
-        title: "এইচএসসি আইসিটি ক্র্যাশ কোর্স",
-        href: "/courses/hsc-ict-crush-course",
-        icon: "/courses/ict.svg",
-      },
-      {
-        id: "web-design",
-        title: "ওয়েব ডিজাইন",
-        href: "/courses/web-design",
-        icon: "/courses/web-design.svg",
-      },
-      {
-        id: "wordpress-theme-development",
-        title: "ওয়ার্ডপ্রেস থিম ডেভেলপমেন্ট",
-        href: "/courses/wordpress-theme-development",
-        icon: "/courses/wptheme.svg",
-      },
-      {
-        id: "wordpress-plugin-development",
-        title: "ওয়ার্ডপ্রেস প্লাগিন ডেভেলপমেন্ট",
-        href: "/courses/wordpress-plugin-development",
-        icon: "/courses/wpplugin.svg",
-      },
-      {
-        id: "thinking-in-react",
-        title: "থিংকিং ইন রিয়াক্ট",
-        href: "/courses/thinking-in-react",
-        icon: "/courses/react.svg",
-      },
-      {
-        id: "fullstack-with-nextjs",
-        title: "ফুলস্ট্যাক উইথ নেক্সট জেএস",
-        href: "/courses/fullstack-with-nextjs",
-        icon: "/courses/nextjs.svg",
-      },
-    ],
+    sub: [],
   },
   {
     id: "why-our-course",
