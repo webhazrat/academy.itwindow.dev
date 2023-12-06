@@ -9,7 +9,7 @@ export function CoursesContextProvider({ children }) {
     data: courses,
     isLoading,
     mutate,
-  } = useSWR(`/api/courses?sortBy=createdAt&sortOrder=asc`, fetcher);
+  } = useSWR(`/api/courses?sortBy=order&sortOrder=asc`, fetcher);
 
   return (
     <CoursesContext.Provider

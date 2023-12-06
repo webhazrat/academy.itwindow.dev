@@ -21,7 +21,7 @@ export default function Courses() {
   });
   const [globalFilter, setGlobalFilter] = useState(search || "");
   const { data, isLoading, mutate } = useSWR(
-    `/api/courses?pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=createdAt&sortOrder=asc`,
+    `/api/courses?pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}&search=${globalFilter}&sortBy=order&sortOrder=asc`,
     fetcher
   );
 

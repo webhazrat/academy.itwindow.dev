@@ -73,10 +73,12 @@ export default function Seminar() {
     <>
       <Layout border>
         <div className="container my-20">
-          <div className="max-w-3xl space-y-3">
+          <div className="space-y-3">
             {seminars?.length > 0 ? (
-              <div>
-                <h1>{seminars?.[0]?.shortDescription}</h1>
+              <div className="space-y-4">
+                <h1 className="text-[16px] font-medium">
+                  {seminars?.[0]?.shortDescription}
+                </h1>
                 <p className="dark:text-slate-400">
                   {seminars?.[0]?.description}
                 </p>
@@ -85,7 +87,7 @@ export default function Seminar() {
                   className="space-y-4"
                   onSubmit={handleSubmit(handleParticipant)}
                 >
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                     <div className="space-y-2">
                       <Label htmlFor="name">
                         নাম <span className="text-red-400">*</span>
@@ -122,7 +124,7 @@ export default function Seminar() {
                         </p>
                       )}
                     </div>
-                    <div className="col-span-2 space-y-2">
+                    <div className="space-y-2">
                       <Label htmlFor="address">
                         ঠিকানা <span className="text-red-400">*</span>
                       </Label>
@@ -162,7 +164,7 @@ export default function Seminar() {
                         )}
                       />
                     </div>
-                    <div className="space-y-2 col-span-2">
+                    <div className="space-y-2">
                       <Label htmlFor="institute">প্রতিষ্ঠান</Label>
                       <Controller
                         name="institute"
@@ -193,7 +195,7 @@ export default function Seminar() {
                 </form>
               </div>
             ) : (
-              <h1>কোন সেমিনার চলমান নাই।</h1>
+              <h1 className="text-center">দুঃখিত! কোন সেমিনার চলমান নাই।</h1>
             )}
           </div>
         </div>

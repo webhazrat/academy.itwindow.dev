@@ -29,6 +29,12 @@ export const mainNavs = [
     href: "/#student-feedback",
     sub: [],
   },
+  {
+    id: "about",
+    title: "আমাদের সম্পর্কে",
+    href: "/about",
+    sub: [],
+  },
 ];
 
 export const whyUs = [

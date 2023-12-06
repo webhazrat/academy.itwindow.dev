@@ -76,11 +76,13 @@ export default function HeaderNavigation() {
                                 href={`/courses/${course.slug}`}
                               >
                                 <a className="flex items-center gap-3 transition-all hover:text-gradient">
-                                  <Image
-                                    src={`/courses/${course.image}`}
-                                    width={18}
-                                    height={18}
-                                  />{" "}
+                                  {course.image && (
+                                    <Image
+                                      src={`/courses/${course.image}`}
+                                      width={18}
+                                      height={18}
+                                    />
+                                  )}
                                   {course.title}
                                 </a>
                               </Link>
