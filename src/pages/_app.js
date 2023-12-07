@@ -9,6 +9,9 @@ import { APP_URL } from "../lib/utils";
 import { CoursesContextProvider } from "../context/CoursesContext";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const title = "ITWINDOW - Enhance Yourself";
+  const description =
+    "Unlock your potential with ITWINDOW's HSC ICT and freelancing skill development courses. Dive into the world of web design, development, and web application development. Master the art of WordPress theme and plugin development. Elevate your career with hands-on learning and personalized guidance. Join us and empower yourself for success in the ever-evolving landscape of technology and freelancing.";
   return (
     <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
       <SessionProvider session={session}>
@@ -16,14 +19,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           <UserProfileProvider>
             <UserEnrollsProvider>
               <DefaultSeo
-                title="ITWINDOW - Enhance Yourself"
-                description="Unlock your potential with ITWINDOW's HSC ICT and freelancing skill development courses. Dive into the world of web design, development, and web application development. Master the art of WordPress theme and plugin development. Elevate your career with hands-on learning and personalized guidance. Join us and empower yourself for success in the ever-evolving landscape of technology and freelancing."
+                title={title}
+                description={description}
                 canonical={APP_URL}
                 openGraph={{
                   url: APP_URL,
-                  title: "ITWINDOW - Enhance Yourself",
-                  description:
-                    "Unlock your potential with ITWINDOW's HSC ICT and freelancing skill development courses. Dive into the world of web design, development, and web application development. Master the art of WordPress theme and plugin development. Elevate your career with hands-on learning and personalized guidance. Join us and empower yourself for success in the ever-evolving landscape of technology and freelancing.",
+                  title: title,
+                  description: description,
                   images: [
                     {
                       url: `${APP_URL}/itwindow-cover.svg`,

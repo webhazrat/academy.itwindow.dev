@@ -41,7 +41,7 @@ export default function Home() {
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {isLoading &&
-              [1, 2, 3, 4, 5, 6].map((index) => (
+              [1, 2, 3, 4, 5, 6, 7].map((index) => (
                 <div key={index} className="p-7 space-y-3 bg-card rounded-md">
                   <Skeleton className="h-12 w-12" />
                   <Skeleton className="h-8" />

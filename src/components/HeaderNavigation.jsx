@@ -18,11 +18,28 @@ import LoggedDropdown from "./LoggedDropdown";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
 import { useCourses } from "../hook/useCourses";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function HeaderNavigation() {
+  const router = useRouter();
+  const [currentPath, setCurrentPath] = useState("");
   const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
   const { courses } = useCourses();
+
+  useEffect(() => {
+    setCurrentPath(router.asPath);
+  }, [router.asPath]);
+
+  const isActive = (href) => {
+    return currentPath === href;
+  };
+
+  const isParentActive = (href) => {
+    return currentPath.split("/")[1] === href;
+  };
+
   return (
     <div className="py-4 flex justify-between items-center dark:text-white text-[15px]">
       <Link href={"/"}>
@@ -50,7 +67,7 @@ export default function HeaderNavigation() {
               </a>
             </Link>
           </Button>
-          <MobileMenu navLinks={mainNavs} />
+          <MobileMenu navLinks={mainNavs} courses={courses} />
         </div>
         <div className="hidden lg:flex items-center gap-1">
           <NavigationMenu>
@@ -59,23 +76,39 @@ export default function HeaderNavigation() {
                 const menu = link.href ? (
                   <Link href={link.href} legacyBehavior passHref>
                     <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
+                      className={`${navigationMenuTriggerStyle()} ${
+                        isActive(link.href) ? "bg-accent" : ""
+                      }`}
                     >
                       {link.title}
                     </NavigationMenuLink>
                   </Link>
                 ) : (
                   <>
-                    <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
+                    <NavigationMenuTrigger
+                      className={`${
+                        isParentActive("courses") ? "bg-accent" : ""
+                      }`}
+                    >
+                      {link.title}
+                    </NavigationMenuTrigger>
                     <NavigationMenuContent className="dark:bg-background">
-                      <div className="grid grid-cols-2 gap-4 p-10 w-[600px]">
-                        {link.id === "courses" && courses?.length > 0
-                          ? courses.map((course) => (
+                      <div className="grid grid-cols-2 p-6 w-[600px]">
+                        {link.id === "courses"
+                          ? courses?.length > 0 &&
+                            courses.map((course) => (
                               <Link
                                 key={course._id}
                                 href={`/courses/${course.slug}`}
                               >
-                                <a className="flex items-center gap-3 transition-all hover:text-gradient">
+                                <Button
+                                  variant={`${
+                                    isActive(`/courses/${course.slug}`)
+                                      ? "secondary"
+                                      : "ghost"
+                                  }`}
+                                  className="justify-start gap-2"
+                                >
                                   {course.image && (
                                     <Image
                                       src={`/courses/${course.image}`}
@@ -84,7 +117,7 @@ export default function HeaderNavigation() {
                                     />
                                   )}
                                   {course.title}
-                                </a>
+                                </Button>
                               </Link>
                             ))
                           : link.sub.map((subLink) => (

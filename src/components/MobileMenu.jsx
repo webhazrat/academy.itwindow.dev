@@ -11,7 +11,7 @@ import {
 } from "./ui/accordion";
 import { useSession } from "next-auth/react";
 
-export default function MobileMenu({ navLinks }) {
+export default function MobileMenu({ navLinks, courses }) {
   const { data: session } = useSession();
   return (
     <Sheet>
@@ -46,11 +46,21 @@ export default function MobileMenu({ navLinks }) {
                     </AccordionTrigger>
                     <AccordionContent className="border-t pt-3 mt-3">
                       <div className="flex flex-col gap-4 dark:text-slate-400">
-                        {link.sub.map((subLink) => (
-                          <Link key={subLink.id} href={subLink.href}>
-                            <a>{subLink.title}</a>
-                          </Link>
-                        ))}
+                        {link.id === "courses"
+                          ? courses?.length > 0 &&
+                            courses.map((course) => (
+                              <Link
+                                key={course._id}
+                                href={`/courses/${course.slug}`}
+                              >
+                                <a>{course.title}</a>
+                              </Link>
+                            ))
+                          : link.sub.map((subLink) => (
+                              <Link key={subLink.id} href={subLink.href}>
+                                <a>{subLink.title}</a>
+                              </Link>
+                            ))}
                       </div>
                     </AccordionContent>
                   </>
