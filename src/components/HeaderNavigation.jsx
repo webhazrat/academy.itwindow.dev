@@ -100,7 +100,10 @@ export default function HeaderNavigation() {
                               >
                                 <Button
                                   variant={`${
-                                    isActive(`/courses/${course.slug}`)
+                                    isActive(
+                                      currentPath,
+                                      `/courses/${course.slug}`
+                                    )
                                       ? "secondary"
                                       : "ghost"
                                   }`}
