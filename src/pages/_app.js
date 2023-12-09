@@ -28,8 +28,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                   description: description,
                   images: [
                     {
-                      url: `${APP_URL}/itwindow-cover.svg`,
-                      alt: "ITWINDOW",
+                      url: `${APP_URL}/itwindow-academy-cover.jpg`,
+                      alt: title,
                     },
                   ],
                 }}
