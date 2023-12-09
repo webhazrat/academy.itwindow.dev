@@ -6,7 +6,7 @@ export function cn(...inputs) {
 }
 
 export const isActive = (path, href) => {
-  return path == href ? true : false;
+  return path === href;
 };
 
 export const APP_URL = "https://academy.itwindow.dev";

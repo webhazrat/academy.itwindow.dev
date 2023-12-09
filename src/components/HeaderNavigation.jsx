@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { useCourses } from "../hook/useCourses";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { isActive } from "../lib/utils";
 
 export default function HeaderNavigation() {
   const router = useRouter();
@@ -31,10 +32,6 @@ export default function HeaderNavigation() {
   useEffect(() => {
     setCurrentPath(router.asPath);
   }, [router.asPath]);
-
-  const isActive = (href) => {
-    return currentPath === href;
-  };
 
   const isParentActive = (href) => {
     return currentPath.split("/")[1] === href;
@@ -77,7 +74,7 @@ export default function HeaderNavigation() {
                   <Link href={link.href} legacyBehavior passHref>
                     <NavigationMenuLink
                       className={`${navigationMenuTriggerStyle()} ${
-                        isActive(link.href) ? "bg-accent" : ""
+                        isActive(currentPath, link.href) ? "bg-accent" : ""
                       }`}
                     >
                       {link.title}

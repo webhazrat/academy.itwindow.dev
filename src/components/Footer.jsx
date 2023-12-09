@@ -38,7 +38,7 @@ export default function Footer() {
           <div className="dark:text-slate-400 flex flex-col gap-3">
             {quickLinks.length > 0 &&
               quickLinks.map((link) => (
-                <Link href={link.href}>
+                <Link key={link.id} href={link.href}>
                   <a
                     className={`${
                       isActive(router.asPath, link.href) && "text-gradient"
