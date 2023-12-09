@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { isActive } from "../lib/utils";
+import { quickLinks } from "../constants";
 
 export default function Footer() {
   const { theme } = useTheme();
@@ -33,35 +34,34 @@ export default function Footer() {
           </p>
         </div>
         <div>
-          <h3 className="text-xl font-semibold mb-6">কুইজ লিংক</h3>
+          <h3 className="text-xl font-semibold mb-6">কুইক লিংক</h3>
           <div className="dark:text-slate-400 flex flex-col gap-3">
-            <Link href={"/"}>আপকামিং লাইভ ব্যাচ</Link>
-            <Link href={"/seminar"}>
-              <a
-                className={`${
-                  isActive(router.asPath, "/seminar") && "text-gradient"
-                }`}
-              >
-                ফ্রি সেমিনার
-              </a>
-            </Link>
-            <Link href={"/"}>রিফান্ড পলিসি</Link>
-            <Link href={"/"}>প্রাইভেসী পলিসি</Link>
-            <Link href={"/"}>টার্মস এবং শর্তাবলী</Link>
+            {quickLinks.length > 0 &&
+              quickLinks.map((link) => (
+                <Link href={link.href}>
+                  <a
+                    className={`${
+                      isActive(router.asPath, link.href) && "text-gradient"
+                    }`}
+                  >
+                    {link.title}
+                  </a>
+                </Link>
+              ))}
           </div>
         </div>
         <div>
           <h3 className="text-xl font-semibold mb-6">যোগাযাগ</h3>
           <div className="dark:text-slate-400 flex flex-col gap-3 mb-5">
-            <a href="#" className="flex items-center gap-2">
+            <a href="#" className="flex items-center gap-3">
               <Phone size={16} className="flex-shrink-0" /> +8801712 122501
             </a>
-            <a href="#" className="flex items-center gap-2">
+            <a href="#" className="flex items-center gap-3">
               <Mail size={16} className="flex-shrink-0" /> support@itwindow.dev
             </a>
-            <a href="#" className="flex items-center gap-2">
-              <MapPin size={16} className="flex-shrink-0" /> মহিশালবাড়ী,
-              গোদাগাড়ী, রাজশাহী - 6290
+            <a href="#" className="flex items-center gap-3">
+              <MapPin size={16} className="flex-shrink-0" /> মহিশালবাড়ী গোরস্থান
+              মেইন গেটের বিপরীতে, রেলবাজার রোড, গোদাগাড়ী, রাজশাহী - 6290
             </a>
           </div>
           <div className="flex items-center gap-4">

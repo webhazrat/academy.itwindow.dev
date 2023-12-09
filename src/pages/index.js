@@ -141,7 +141,7 @@ export default function Home() {
                   {seminars?.[0]?.shortDescription}
                 </p>
               </div>
-              <Link href={"/seminar"}>
+              <Link href={"/free-seminar"}>
                 <Button className="bg-gradient text-white flex-shrink-0">
                   ফ্রি সেমিনার
                 </Button>

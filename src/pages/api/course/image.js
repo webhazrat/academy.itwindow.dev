@@ -1,5 +1,5 @@
 import connectDB from "@/src/lib/connect";
-import { multerStorage, uId, unlinkPhoto } from "@/src/lib/helpers";
+import { multerStorage, unlinkPhoto } from "@/src/lib/helpers";
 import { checkAdmin } from "@/src/middleware/serverAuth";
 import courseModel from "@/src/models/courseModel";
 
@@ -14,21 +14,37 @@ export default async function handler(req, res) {
     const destination = "public/courses";
     try {
       const session = await checkAdmin(req, res);
-      const upload = await multerStorage(uId(), destination);
-      upload.single("file")(req, {}, async (error) => {
+
+      const upload = await multerStorage(destination);
+      upload.any()(req, {}, async (error) => {
         if (error) {
           throw new Error(error);
         }
-        const { id } = req.body;
         await connectDB();
+        const { id } = req.body;
         // previous image name find from db
-        const course = await courseModel.findOne({ _id: id }).select("image");
-        // previous image unlink
-        unlinkPhoto(course.image, destination);
-        // new image name update
+        const course = await courseModel
+          .findOne({ _id: id })
+          .select("icon image");
+
+        const updateData = {};
+        if (req.files.length > 0) {
+          req.files.map((file) => {
+            if (file.fieldname === "icon") {
+              unlinkPhoto(course.icon, destination);
+              updateData.icon = file.filename;
+            } else {
+              unlinkPhoto(course.image, destination);
+              updateData.image = file.filename;
+            }
+          });
+        }
+
         await courseModel.updateOne(
           { _id: id },
-          { $set: { image: req.file.filename } }
+          {
+            $set: updateData,
+          }
         );
         return res.status(200).json({
           status: 200,
@@ -46,3 +62,5 @@ export default async function handler(req, res) {
       .json({ status: 405, message: "Request method not allowed" });
   }
 }
+
+const uploadPhoto = () => {};

@@ -6,7 +6,11 @@ export default function Layout({ children, border }) {
   return (
     <>
       <main>
-        <div className={`${border && "border-b"}`}>
+        <div
+          className={`${
+            border && "border-b"
+          } sticky top-0 backdrop-filter backdrop-blur-lg z-10`}
+        >
           <div className="container">
             <HeaderNavigation />
           </div>

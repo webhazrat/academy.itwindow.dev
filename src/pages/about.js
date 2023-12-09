@@ -4,7 +4,8 @@ import { APP_URL } from "../lib/utils";
 import { Button } from "../components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-export default function Commission() {
+
+export default function About() {
   const title = "About | ITWINDOW - Enhance Yourself";
   const url = `${APP_URL}/about`;
   const description =

@@ -15,6 +15,7 @@ const courseSchema = new Schema(
         answer: String,
       },
     ],
+    icon: String,
     image: String,
     requirements: [{ _id: false, value: String }],
     knows: [{ _id: false, value: String }],

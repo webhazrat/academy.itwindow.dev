@@ -134,12 +134,26 @@ export const CourseSchema = z.object({
 
 // course image form validation
 export const CourseImageSchema = z.object({
-  file: z.any().refine(
-    (file) => {
-      if (!file) {
+  icon: z.any().refine(
+    (icon) => {
+      if (
+        icon &&
+        (!icon.type.startsWith("image/") || icon.size > 1 * 1024 * 1024)
+      ) {
         return false;
       }
-      if (!file.type.startsWith("image/") || file.size > 1 * 1024 * 1024) {
+      return true;
+    },
+    {
+      message: "আইকন টাইপ (jpg, jpeg, png or svg) এবং সাইজ 1MB এর কম হতে হবে",
+    }
+  ),
+  image: z.any().refine(
+    (image) => {
+      if (
+        image &&
+        (!image.type.startsWith("image/") || image.size > 1 * 1024 * 1024)
+      ) {
         return false;
       }
       return true;

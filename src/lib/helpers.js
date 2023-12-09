@@ -29,22 +29,24 @@ export async function sendSMS(phone, msg) {
   }
 }
 
-export function multerStorage(name, dest) {
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      const uploadsDir = path.join(process.cwd(), dest);
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir);
-      }
-      cb(null, uploadsDir);
-    },
-    filename: function (req, file, cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, name + ext);
-    },
-  });
+export function multerStorage(dest) {
+  const createStorage = () => {
+    return multer.diskStorage({
+      destination: function (req, file, cb) {
+        const uploadsDir = path.join(process.cwd(), dest);
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir);
+        }
+        cb(null, uploadsDir);
+      },
+      filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        cb(null, uId() + ext);
+      },
+    });
+  };
 
-  const upload = multer({ storage });
+  const upload = multer({ storage: createStorage() });
   return Promise.resolve(upload);
 }
 

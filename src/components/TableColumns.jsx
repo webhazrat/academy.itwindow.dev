@@ -300,7 +300,7 @@ export const CoursesTableColumns = (setPhoto, setCourse) => [
                 setPhoto(course);
               }}
             >
-              ফটো
+              ইমেজ
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

@@ -9,31 +9,26 @@ export const mainNavs = [
     id: "home",
     title: "হোম",
     href: "/",
-    sub: [],
   },
   {
     id: "courses",
     title: "কোর্সসমূহ",
     href: false,
-    sub: [],
   },
   {
     id: "why-our-course",
     title: "কেন আমাদের কোর্স",
     href: "/#why-our-course",
-    sub: [],
   },
   {
     id: "student-feedback",
     title: "স্টুডেন্ট ফিডব্যাক",
     href: "/#student-feedback",
-    sub: [],
   },
   {
     id: "about",
     title: "আমাদের সম্পর্কে",
     href: "/about",
-    sub: [],
   },
 ];
 
@@ -187,6 +182,39 @@ export const profileSideNav = [
     id: 7,
     title: "পাসওয়ার্ড পরিবর্তন",
     href: "/profile/change-password",
+  },
+];
+
+export const quickLinks = [
+  {
+    id: "upcoming-live-batch",
+    titleE: "Upcoming Live Batch",
+    title: "আপকামিং লাইভ ব্যাচ",
+    href: "/upcoming-live-batch",
+  },
+  {
+    id: "free-seminar",
+    titleE: "Free Seminar",
+    title: "ফ্রি সেমিনার",
+    href: "/free-seminar",
+  },
+  {
+    id: "refund-policy",
+    titleE: "Refund Policy",
+    title: "রিফান্ড পলিসি",
+    href: "/refund-policy",
+  },
+  {
+    id: "privacy-policy",
+    titleE: "Privacy Policy",
+    title: "প্রাইভেসী পলিসি",
+    href: "/privacy-policy",
+  },
+  {
+    id: "terms-and-conditions",
+    titleE: "Terms and Conditions",
+    title: "টার্মস এবং শর্তাবলী",
+    href: "/terms-and-conditions",
   },
 ];
 

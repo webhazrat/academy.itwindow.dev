@@ -109,9 +109,9 @@ export default function HeaderNavigation() {
                                   }`}
                                   className="justify-start gap-2"
                                 >
-                                  {course.image && (
+                                  {course.icon && (
                                     <Image
-                                      src={`/courses/${course.image}`}
+                                      src={`/courses/${course.icon}`}
                                       width={18}
                                       height={18}
                                     />
