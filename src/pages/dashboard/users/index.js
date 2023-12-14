@@ -22,6 +22,8 @@ export default function Users() {
     fetcher
   );
 
+  console.log("index");
+
   return (
     <DashboardLayout>
       <div>

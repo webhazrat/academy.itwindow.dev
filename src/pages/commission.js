@@ -33,7 +33,9 @@ export default function Commission() {
               অ্যামাউন্ট আপনার প্রোফাইলে সংযুক্ত হবে।
             </p>
             <div className="space-y-3">
-              <h1 className="text-lg">কীভাবে প্লাটফর্মে সাইন আপ করতে হবে?</h1>
+              <h1>
+                <strong>কীভাবে প্লাটফর্মে সাইন আপ করতে হবে?</strong>
+              </h1>
               <ul className="dark:text-slate-400 space-y-3 list-inside list-disc">
                 <li>
                   প্রথমে সাইন আপ করুন বাটনে ক্লিক করলে একটি সাইন আপ ফরম পাওয়া
@@ -54,7 +56,9 @@ export default function Commission() {
               </ul>
             </div>
             <div className="space-y-3">
-              <h1 className="text-lg">কীভাবে রেফারেলে সংযুক্ত করতে হবে?</h1>
+              <h1>
+                <strong>কীভাবে রেফারেলে সংযুক্ত করতে হবে?</strong>
+              </h1>
               <p className="dark:text-slate-400">
                 যে মোবাইল নাম্বার ব্যবহার করে অ্যাকাউন্ট করা হয়েছে সেই মোবাইল
                 নাম্বার নতুন কোন অ্যাকাউন্ট করার সময় রেফারেল মোবাইল নাম্বার
@@ -62,7 +66,9 @@ export default function Commission() {
               </p>
             </div>
             <div className="space-y-3">
-              <h1 className="text-lg">কীভাবে কমিশন পাওয়া যাবে?</h1>
+              <h1>
+                <strong>কীভাবে কমিশন পাওয়া যাবে?</strong>
+              </h1>
               <p className="dark:text-slate-400">
                 আপনার অ্যাকাউন্ট মোবাইল নাম্বার রেফারেলে ব্যবহার করে কেউ যদি
                 অ্যাকাউন্ট করে এবং এই প্লাটফর্মের কোর্সে ইনরোল হয় এবং কোর্স ফি

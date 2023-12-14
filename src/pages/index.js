@@ -41,7 +41,7 @@ export default function Home() {
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {isLoading &&
-              [1, 2, 3, 4, 5, 6, 7].map((index) => (
+              [1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
                 <div key={index} className="p-7 space-y-3 bg-card rounded-md">
                   <Skeleton className="h-12 w-12" />
                   <Skeleton className="h-8" />
@@ -68,7 +68,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div id="why-our-course" className="container my-20 scroll-mt-10">
+        <div id="why-our-course" className="container my-20 scroll-mt-28">
           <div className="grid md:grid-cols-2 items-center gap-8 md:gap-0">
             <div className="space-y-8">
               <h2 className="text-3xl font-semibold">
@@ -151,7 +151,7 @@ export default function Home() {
         )}
 
         {feedbacks?.length > 0 && (
-          <div id="student-feedback" className="container mb-20 scroll-mt-10">
+          <div id="student-feedback" className="container mb-20 scroll-mt-28">
             <div>
               <h2 className="text-3xl font-semibold text-center mb-6">
                 শিক্ষার্থীদের অভিমত

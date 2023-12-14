@@ -1,5 +1,5 @@
 import connectDB from "@/src/lib/connect";
-import { multerStorage, uId, unlinkPhoto } from "@/src/lib/helpers";
+import { multerStorage, unlinkPhoto } from "@/src/lib/helpers";
 import { checkLogin } from "@/src/middleware/serverAuth";
 import userModel from "@/src/models/userModel";
 
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const destination = "public/uploads";
     try {
       const session = await checkLogin(req, res);
-      const upload = await multerStorage(uId(), destination);
+      const upload = await multerStorage(destination);
       upload.single("file")(req, {}, async (error) => {
         if (error) {
           throw new Error(error);

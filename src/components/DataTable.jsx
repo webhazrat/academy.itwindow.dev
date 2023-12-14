@@ -1,6 +1,7 @@
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -12,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -33,10 +34,11 @@ export function DataTable({
   globalFilter,
   setGlobalFilter,
   columnVisible,
+  onRowSelected,
 }) {
+  console.log("datatable");
   const [sorting, setSorting] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [rowSelection, setRowSelection] = useState({});
   const [inputValue, setInputValue] = useState("");
 
   const table = useReactTable({
@@ -46,7 +48,6 @@ export function DataTable({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     manualPagination: true,
     onPaginationChange: setPagination,
     pageCount: data?.page,
@@ -55,11 +56,12 @@ export function DataTable({
     state: {
       sorting,
       columnVisibility: columnVisible,
-      rowSelection,
       pagination,
       globalFilter,
     },
   });
+
+  const filteredSelectedRows = table.getFilteredSelectedRowModel().flatRows;
 
   useEffect(() => {
     const timer = setTimeout(() => {
